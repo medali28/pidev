@@ -121,6 +121,9 @@ class User
     #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reclamation::class, orphanRemoval: true)]
     private Collection $reclame;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Medicament::class)]
+    private Collection $medicaments;
+
 
 
     public function __construct()
@@ -131,6 +134,7 @@ class User
         $this->questions = new ArrayCollection();
         $this->reponses = new ArrayCollection();
         $this->reclame = new ArrayCollection();
+        $this->medicaments = new ArrayCollection();
 
     }
 
@@ -655,6 +659,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($reclame->getMedecin() === $this) {
                 $reclame->setMedecin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Medicament>
+     */
+    public function getMedicaments(): Collection
+    {
+        return $this->medicaments;
+    }
+
+    public function addMedicament(Medicament $medicament): static
+    {
+        if (!$this->medicaments->contains($medicament)) {
+            $this->medicaments->add($medicament);
+            $medicament->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedicament(Medicament $medicament): static
+    {
+        if ($this->medicaments->removeElement($medicament)) {
+            // set the owning side to null (unless already changed)
+            if ($medicament->getUser() === $this) {
+                $medicament->setUser(null);
             }
         }
 
