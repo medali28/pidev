@@ -1,0 +1,76 @@
+#specificSection 
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f8f8;
+    width: 70%;
+}
+
+#specificSection .container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#specificSection .header {
+    background-color: #80d0c7;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+#specificSection form {
+    display: flex;
+    margin: 10%;
+    flex-direction: column;
+    padding: 2%;
+    background-color: white;
+}
+
+#specificSection label {
+    margin-bottom: 8px;
+}
+
+#specificSection input, select, textarea {
+    margin-bottom: 16px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#specificSection .file-upload {
+    position: relative;
+}
+
+#specificSection .file-label {
+    background-color: #80d0c7;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#specificSection .location-section {
+    margin-top: 20px;
+}
+
+#specificSection button {
+    background-color: #80d0c7;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#specificSection button:hover {
+    background-color: #80d0c7;
+}
