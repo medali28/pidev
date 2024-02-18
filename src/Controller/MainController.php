@@ -3,15 +3,27 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
     #[Route('/tabeuser', name: 'tableUser')]
-    public function index( CategoryRepository $categoryRepository): Response
-    { $categories = $categoryRepository->findAll();
+    public function index( Request $request,CategoryRepository $categoryRepository,PaginatorInterface $paginator): Response
+    {
+
+        $query = $categoryRepository->findAll();
+
+
+        $categories = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), /*page number*/
+            4 /*limit per page*/
+        );
+
         return $this->render('main/tableuser.html.twig',[
             'categories' => $categories,
         ] );
