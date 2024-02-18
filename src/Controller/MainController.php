@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,9 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/tabeuser', name: 'tableUser')]
-    public function index(): Response
-    {
-        return $this->render('main/tableuser.html.twig', );
+    public function index( CategoryRepository $categoryRepository): Response
+    { $categories = $categoryRepository->findAll();
+        return $this->render('main/tableuser.html.twig',[
+            'categories' => $categories,
+        ] );
     }
 
     #[Route('/admin', name: 'app_main_admin')]
@@ -24,6 +27,9 @@ class MainController extends AbstractController
     {
         return $this->render('main/userdashbord.html.twig');
     }
+
+
+
 
 
 }
