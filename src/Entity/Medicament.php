@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MedicamentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MedicamentRepository::class)]
@@ -22,14 +23,15 @@ class Medicament
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $posted_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'medicaments')]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'medicaments')]
     private ?User $user = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_fin = null;
 
     public function getId(): ?int
     {
@@ -72,17 +74,9 @@ class Medicament
         return $this;
     }
 
-    public function getPostedAt(): ?\DateTimeImmutable
-    {
-        return $this->posted_at;
-    }
 
-    public function setPostedAt(\DateTimeImmutable $posted_at): static
-    {
-        $this->posted_at = $posted_at;
 
-        return $this;
-    }
+
 
     public function getCategory(): ?Category
     {
@@ -104,6 +98,18 @@ class Medicament
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->date_fin;
+    }
+
+    public function setDateFin(\DateTimeInterface $date_fin): static
+    {
+        $this->date_fin = $date_fin;
 
         return $this;
     }

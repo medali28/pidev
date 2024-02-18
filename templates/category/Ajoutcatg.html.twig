@@ -1,0 +1,27 @@
+{% extends 'baseback.html.twig' %}
+
+
+{% block body %}
+    <br><br><br><br><br>
+    <div class="container">
+        <div class ="row">
+            {% for message in app.flashes('notice') %}
+                <div class ="alert alert-success">
+                    {{message}}
+                </div>
+            {% endfor %}
+            <div class ="col-md-6 offset-md-3 ">
+                {{ form_start(form, {'attr':{'novalidate':'novalidate'}}) }}
+                <div class ="form-group">
+                    {{ form_label(form.nom_ctg) }}
+                    {{ form_widget(form.nom_ctg,{'attr':{'class':'form-control'}})}}
+                    {{ form_errors (form.nom_ctg)}}
+                </div>
+                <div class ="form-group">
+                    <button class="btn btn-info mt-2 text-white" >Ajouter</button>
+                </div>
+                {{ form_end (form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
