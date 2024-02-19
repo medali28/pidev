@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Multi Step Form | CodingNepal</title>
+{#    <link rel="stylesheet" href="{{ asset('/css/style_profile.css') }}">#}
+    <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css') }}">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            background: url('{{ asset('/css/images/bg.png') }}'), -webkit-linear-gradient(bottom, #529CA7, #529CA7);
+        }
+        ::selection{
+            color: #fff;
+            background: #529CA7;
+        }
+        .container{
+            width: 800px;
+            background: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 30px 35px 10px 35px;
+        }
+        .container header{
+            font-size: 35px;
+            font-weight: 600;
+            margin: 0 0 0 0;
+        }
+        .container .form-outer{
+            width: 100%;
+            overflow: hidden;
+        }
+        .container .form-outer form{
+            display: flex;
+            width: 400%;
+        }
+        .form-outer form .page{
+            width: 25%;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .form-outer form .page .title{
+            text-align: left;
+            font-size: 25px;
+            font-weight: 500;
+        }
+        .form-outer form .page .field{
+            width: 700px;
+            height: 60px;
+            margin: 15px 0 5px 0;
+            display: flex;
+            position: relative;
+        }
+        form .page .field .label{
+            position: relative;
+            top: -10px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        /*form .page .field .row .inputf{*/
+        /*    height: 100%;*/
+        /*    width: 100%;*/
+        /*    border: 1px solid lightgrey;*/
+        /*    border-radius: 5px;*/
+        /*    margin-right: 30px;*/
+        /*    padding-left: 15px;*/
+        /*    font-size: 18px;*/
+        /*}*/
+        form .page .field input{
+            height: 100%;
+            width: 100%;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            margin-right: 30px;
+
+            padding-left: 15px;
+            font-size: 18px;
+        }
+
+        form .page .field select{
+            width: 100%;
+            height: 100%;
+            margin-right: 40px;
+            padding-left: 15px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        form .page .field .reset{
+            width: 120px;
+            height: calc(100%);
+            border: none;
+            background: #529CA7;
+            margin-right: 30px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 100;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.5s ease;
+        }
+        form .page .field .firstNext{
+            width: 50%;
+            height: calc(100% + 0px);
+            border: none;
+            background: #529CA7;
+            margin-bottom: 10px;
+            margin-left: 50%;
+            margin-right: 30px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.5s ease;
+        }
+        form .page .field .SecondButton{
+            width: 100%;
+            height: calc(100% + 5px);
+            border: none;
+            background: #529CA7;
+            margin-top: 10px;
+            margin-left: 10px;
+            margin-right: 30px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.5s ease;
+        }
+        form .page .field button:hover{
+            background: #000;
+        }
+        form .page .btns button{
+            margin-top: 20px!important;
+        }
+        form .page .btns .SecondButton.prev{
+            margin-right: 3px;
+            font-size: 17px;
+            width: 50%;
+        }
+        form .page .btns .SecondButton.next{
+            width: 50%;
+            margin-left: 3px;
+        }
+        form .page .btns .SecondButton.submit{
+            width: 50%;
+            margin-left: 3px;
+        }
+        .container .progress-bar{
+            display: flex;
+            margin: 10px 0;
+            user-select: none;
+        }
+        .container .progress-bar .step{
+            text-align: center;
+            width: 100%;
+            position: relative;
+        }
+        .container .progress-bar .step p{
+            font-weight: 500;
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 8px;
+        }
+        .progress-bar .step .bullet{
+            height: 30px;
+            width: 30px;
+            border: 2px solid #000;
+            display: inline-block;
+            border-radius: 50%;
+            position: relative;
+            transition: 0.2s;
+            font-weight: 500;
+            font-size: 17px;
+            line-height: 30px;
+        }
+        .progress-bar .step .bullet.active{
+            border-color: #529CA7;
+            background: #529CA7;
+        }
+        .progress-bar .step .bullet span{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .progress-bar .step .bullet.active span{
+            display: none;
+        }
+        .progress-bar .step .bullet:before,
+        .progress-bar .step .bullet:after{
+            position: absolute;
+            content: '';
+            bottom: 11px;
+            right: -170px;
+            height: 3px;
+            width: 170px;
+            background: #262626;
+        }
+        .progress-bar .step .bullet.active:after{
+            background: #529CA7;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: animate 0.3s linear forwards;
+        }
+        @keyframes animate {
+            100%{
+                transform: scaleX(1);
+            }
+        }
+        .progress-bar .step:last-child .bullet:before,
+        .progress-bar .step:last-child .bullet:after{
+            display: none;
+        }
+        .progress-bar .step p.active{
+            color: #529CA7;
+            transition: 0.2s linear;
+        }
+        .progress-bar .step .check{
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            font-size: 15px;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .progress-bar .step .check.active{
+            display: block;
+            color: #fff;
+        }
+        .field .row {
+            align-items: center;
+            padding: revert;
+            width: 100%;
+            display: flex;
+
+        }
+        .field .row .div1{
+            height: 80%;
+            width:305px;
+        }
+        .field .row .div2{
+            height: 80%;
+            margin-left: 45px;
+            width:305px;
+        }
+
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+        }
+
+        .image {
+            text-align: center;
+        }
+
+        .image-input {
+            display: inline-block;
+        }
+
+    </style>
+    <script src="{{ asset('https://kit.fontawesome.com/a076d05399.js') }}"></script>
+</head>
+<body>
+<div class="container">
+    <header>Signup Form</header>
+    <div class="progress-bar">
+        <div class="step">
+            <p>Info</p>
+            <div class="bullet">
+                <span>1</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+
+        <div class="step">
+            <p>Role</p>
+            <div class="bullet">
+                <span>2</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+        <div class="step">
+            <p>Password</p>
+            <div class="bullet">
+                <span>3</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+        <div class="step">
+            <p>Submit</p>
+            <div class="bullet">
+                <span>4</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+    </div>
+    <div class="form-outer">
+        {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
+
+            <div class="page slide-page">
+                <div class="image-container">
+                    <div class="image">
+                        <div class="row">
+                            <label>Image:</label>
+                            {{ form_widget(form.image) }}
+                            {{ form_errors(form.image) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="row">
+                        <div class="div1">
+                            {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Enter your first name'}})  }}
+                            {{ form_errors(form.first_name , {'attr': {"class":"text-danger" }} ) }}
+                        </div>
+                        <div class="div2">
+                            {{ form_widget(form.last_name ,  {'attr': {'placeholder': 'Enter your last name'}})  }}
+                            {{ form_errors(form.last_name, {'attr': {"class":"text-danger" }} ) }}
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="field">
+                    <div class="row">
+                       <div class="div1">
+                           {{ form_widget(form.email ,  {'attr': {'placeholder': 'Enter your Email'}})  }}
+                           {{ form_errors(form.email) }}</div>
+                     <div class="div2">
+                         {{ form_widget(form.num_tel ,  {'attr': {'placeholder': 'Enter your Telphone'}} ) }}
+                         {{ form_errors(form.num_tel) }}</div>
+
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="row">
+                       <div class="div1">  <select name="gender">
+                               <option value="male">Male</option>
+                               <option value="female">Female</option>
+                           </select></div>
+                       <div class="div2"> {{ form_widget(form.address ,  {'attr': {'placeholder': 'Enter your Address'}})  }}
+                           {{ form_errors(form.address) }}</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="row">
+                      <div class="div1"> <select name="role" id="roleSelect">
+                              <option value="patient">Patient</option>
+                              <option value="doctor">Medecin</option>
+
+                          </select></div>
+{#                        {{ form_widget(form.date_naissance ,  {'attr': {'placeholder': 'Enter your Date de naissance'}}) }}#}
+{#                        {{ form_errors(form.date_naissance) }}#}
+                        <div class="div2">
+                            <input type="date" id="date_naissance"  name="date_naissance" placeholder="Date of Birth">
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <button class="firstNext next"  id="nextButton">Next</button>
+                </div>
+            </div>
+
+            <div class="page">
+                <!-- Champs supplémentaires pour le rôle "patient" -->
+                <div class="patient-fields" style="display: none;">
+                    <div class="field">
+                        <div class="row">
+                           <div class="div1"> <select name="maladie_chronique" id="maladie_chronique">
+                                   <option value="none">None</option>
+                                   <option value="Cardiaques">Cardiaques</option>
+                                   <option value="Diabète">Diabète</option>
+                                   <option value="Cancer">Cancer</option>
+                                   <option value="respiratoires chroniques">Respiratoires Chroniques</option>
+                                   <option value="rénales chroniques">Rénales Chroniques</option>
+                               </select></div>
+                           <div class="div1"> <select name="groupe_sanguin" id="groupe_sanguin">
+                                   <option value="None">None</option>
+                                   <option value="A+">A+</option>
+                                   <option value="A-">A-</option>
+                                   <option value="B+">B+</option>
+                                   <option value="B-">B-</option>
+                                   <option value="AB+">AB+</option>
+                                   <option value="AB-">AB-</option>
+                                   <option value="O+">O+</option>
+                                   <option value="O-">O-</option>
+                               </select></div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="row">
+                            <div class="div1" >{{ form_widget(form.antecedent_maladie,  { 'id':'antecedent_maladie', 'attr': {'placeholder': 'Enter your Antecedent Maladie'}}) }}
+                                {{ form_errors(form.antecedent_maladie) }}</div>
+                            <div class="div2">{{ form_widget(form.antecedent_medicaux,  { 'id':'antecedent_medicaux','attr': {'placeholder': 'Enter your Antecedent Medicaux'}}) }}
+                                {{ form_errors(form.antecedent_medicaux) }} </div>
+
+                        </div>
+                    </div>
+                    <div class="field">
+                      <div class="row">
+                          <div class="div1">
+                              {{ form_widget(form.allergies ,  {'id':'allergies','attr': {'placeholder': 'Enter your Allergies'}}) }}
+                              {{ form_errors(form.allergies) }}
+                          </div>
+                      </div>
+
+                    </div>
+                </div>
+                <!-- Champs supplémentaires pour le rôle "medecin" -->
+                <div class="medecin-fields" style="display: none;">
+                    <div >
+                        <div class="row">
+                            <label>Diplômes:</label>
+                           <div class="div1"> {{ form_widget(form.diplomes ,  {'id':'diplomes' ,'attr': {'placeholder': 'Enter your doplomes'}} ) }}
+                               {{ form_errors(form.diplomes) }}</div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="row">
+                            <div class="div1">{{ form_widget(form.specialite ,  {'id':'specialite', 'attr': {'placeholder': 'Enter Specialite' }}) }}
+                                {{ form_errors(form.specialite) }}
+                               </div>
+                            <div class="div2"> {{ form_widget(form.num_tel2 ,  { 'id':'num_tel2' ,'attr': {'placeholder': 'Enter 2eme num Telephone'}}) }}
+                                {{ form_errors(form.num_tel2) }}</div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="row " >
+                            <input type="time" id="date_debut" name="date_debut" >
+                            <input type="time"   id="date_fin" name="date_fin">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="row">
+                            <div class="div1">{{ form_widget(form.prix_c ,  {'id':'prix_c' ,'attr': {'placeholder': 'Enter your prix',}}) }}
+                                {{ form_errors(form.prix_c) }}</div>
+                           <div class="div2"> <select name="dure_rdv" id="dure_rdv">
+                                   <option value="15">15 min</option>
+                                   <option value="20">20 min</option>
+                                   <option value="30">30 min</option>
+                                   <option value="40">40 min</option>
+                                   <option value="50">50 min</option>
+                                   <option value="50">60 min</option>
+                               </select></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="field btns ">
+                    <button class="prev-1 SecondButton prev">Previous</button>
+                    <button class="next-1 SecondButton next">Next </button>
+                </div>
+            </div>
+
+            <div class="page">
+                    <div class="field" style="height: 30% ; ">
+                     <div class="row" >
+                             <div style="height: 40% ;width: 100%;">
+                                 {{ form_widget(form.password ,  {'attr': {'placeholder': 'Enter Password'}}) }}
+                                 {{ form_errors(form.password) }}
+                             </div>
+                     </div>
+                    </div>
+                <div class="field" style="height: 30% ">
+                    <div class="row">
+                        <div style="height: 40% ; width: 120%;">{{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Enter Confirm Password'}}) }}
+                            {{ form_errors(form.confirm_password) }}</div>
+                    </div>
+                </div>
+
+                <div class="field btns">
+                    <button class="prev-2 SecondButton prev">Previous</button>
+                    <button class="next-2 SecondButton next">Send Code</button>
+                </div>
+            </div>
+
+            <div class="page">
+                <div class="title" >Validation Email:</div>
+                <div class="field"  >
+                    <input type="number" name="code" placeholder="Code" style=" width: 250px;">
+                    <button class="reset" type="button" name="reset" style="vertical-align: middle;"><i class="fas fa-sync-alt"></i> Reset Code</button>
+                </div>
+
+                <div class="field btns ">
+                    <button class="prev-3 SecondButton prev">Previous</button>
+                    <button class="SecondButton submit" > Submit</button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+<script src="{{ asset('js/script.js') }}"></script>
+<script>
+    function toggleFields() {
+        const roleSelect = document.getElementById('roleSelect');
+        const patientFields = document.querySelector('.page .patient-fields');
+        const medecinFields = document.querySelector('.page .medecin-fields');
+        console.log(roleSelect.value);
+        if (roleSelect.value === 'patient') {
+            patientFields.style.display = 'block';
+            medecinFields.style.display = 'none';
+            document.getElementById('diplomes').value = '';
+            document.getElementById('specialite').value = '';
+            document.getElementById('num_tel2').value = '';
+            document.getElementById('date_debut').value = '';
+            document.getElementById('date_fin').value = '';
+            document.getElementById('prix_c').value = '';
+            document.getElementById('dure_rdv').value = '15';
+        } else if (roleSelect.value === 'doctor') {
+            patientFields.style.display = 'none';
+            medecinFields.style.display = 'block';
+            console.log(document.getElementById('antecedent_maladie').value);
+            document.getElementById('maladie_chronique').value = 'None';
+            document.getElementById('groupe_sanguin').value = 'None';
+            document.getElementById('antecedent_maladie').value = '';
+            document.getElementById('antecedent_medicaux').value = '';
+            document.getElementById('allergies').value = '';
+            console.log(document.getElementById('antecedent_maladie').value);
+        }
+    }
+    document.getElementById('nextButton').addEventListener('click', toggleFields);
+</script>
+<script>
+    // Attach an event listener to the "Submit" button
+    document.querySelector('.submit').addEventListener('click', function() {
+        // Trigger form submission
+        document.querySelector('form').submit();
+    });
+</script>
+</body>
+</html>

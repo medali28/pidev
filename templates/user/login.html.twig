@@ -1,0 +1,19 @@
+
+{#<form method="POST" action="{{ path('app_login') }}">#}
+{#    <label for="inputEmail" class="form-label">Email</label>#}
+{#    <input type="email" value="" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>#}
+{#    <label for="inputPassword" class="form-label">Password</label>#}
+{#    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>#}
+{#    <button type="submit">Login</button>#}
+{#</form>#}
+
+
+{# Afficher le formulaire #}
+{{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
+<label for="inputText" class="" >Email</label>
+{{ form_widget(form.email) }}
+{{ form_errors(form.email) }}<br>
+<label for="inputText" class="" >Password</label>
+{{ form_widget(form.password) }}
+{{ form_errors(form.password) }}<br>
+{{ form_end(form) }}

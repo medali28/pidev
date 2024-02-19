@@ -7,62 +7,79 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name:"email", type:"string", length:255)]
+    #[Assert\Email(message:"email invalid format")]
+    #[Assert\NotBlank(message:"le email ne doit pas être vide")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"le mot de passe ne doit pas être vide")]
     private ?string $password = null;
 
+    #[Assert\EqualTo(propertyPath:"Password", message:"Vous n'avez pas tapé le méme mot de passe")]
+    public $confirm_password;
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"First name must be non-empty")]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Last name must be non-empty")]
     private ?string $last_name = null;
 
-    #[ORM\Column]
-    private ?int $role = null;
+    #[ORM\Column(nullable: true)]
+    private ?string $role = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255 , nullable: true)]
     private ?string $gender = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Tel must be non-empty")]
     private ?int $num_tel = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE , nullable: true)]
     private ?\DateTimeInterface $date_create_compte = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $last_modify_date = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE , nullable: true)]
+    private ?\DateTimeInterface $last_modify_password = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE , nullable: true)]
     private ?\DateTimeInterface $last_modify_data = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE , nullable: true)]
+//    #[Assert\NotBlank(message:"date de naissance must be non-empty")]
+//    #[Assert\LessThanOrEqual("today", message:"Date of birth cannot be in the future")]
     private ?\DateTimeInterface $date_naissance = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\File( maxSize:"1M" , mimeTypes: ["image/jpeg", "image/png"] ,  mimeTypesMessage:"Veuillez télécharger une image au format JPG ou PNG" ) ]
+    #[Assert\NotBlank(message:"image must be non-empty")]
+    #[ORM\Column(length: 255 , nullable: true)]
     private ?string $image = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255 , nullable: true)]
+    #[Assert\NotBlank(message:"Address must be non-empty")]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $maladie_chronique = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
+//    #[Assert\NotBlank(message:"Tel must be non-empty")]
     private ?int $num_tel2 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+//    #[Assert\NotBlank(message:"Specialite must be non-empty")]
     private ?string $specialite = null;
 
     #[ORM\Column(nullable: true)]
@@ -81,21 +98,29 @@ class User
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(nullable: true)]
+//    #[Assert\NotBlank(message:"prix must be non-empty")]
+//    #[Assert\Positive(message:"prix must be positive")]
     private ?float $prix_c = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+//    #[Assert\File( maxSize:"5M" , mimeTypes: ["image/jpeg", "image/png"] ,  mimeTypesMessage:"Veuillez télécharger une image au format JPG ou PNG" ) ]
+//    #[Assert\NotBlank(message:"images must be non-empty")]
     private ?string $diplomes = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+//    #[Assert\NotBlank(message:"duree de rendez-vous must be non-empty")]
     private ?\DateTimeInterface $dure_rdv = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+//    #[Assert\NotBlank(message:"allergies must be non-empty")]
     private ?string $allergies = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+//    #[Assert\NotBlank(message:"antecedent maladie must be non-empty")]
     private ?string $antecedent_maladie = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+//    #[Assert\NotBlank(message:"antecedent maladie must be non-empty")]
     private ?string $antecedent_medicaux = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -104,7 +129,7 @@ class User
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]
     private Collection $id_patient;
 
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: RendezVous::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'medicin', targetEntity: RendezVous::class, orphanRemoval: true)]
     private Collection $id_medecin;
 
     #[ORM\OneToMany(mappedBy: 'expert', targetEntity: RendezVous::class)]
@@ -195,12 +220,12 @@ class User
         return $this;
     }
 
-    public function getRole(): ?int
+    public function getRole(): ?string
     {
         return $this->role;
     }
 
-    public function setRole(int $role): static
+    public function setRole(string $role): static
     {
         $this->role = $role;
 
@@ -243,17 +268,19 @@ class User
         return $this;
     }
 
-    public function getLastModifyDate(): ?\DateTimeInterface
+    public function getLastModifyPassword(): ?\DateTimeInterface
     {
-        return $this->last_modify_date;
+        return $this->last_modify_password;
     }
 
-    public function setLastModifyDate(\DateTimeInterface $last_modify_date): static
+    public function setLastModifyPassword(?\DateTimeInterface $last_modify_password): static
     {
-        $this->last_modify_date = $last_modify_date;
-
-        return $this;
+        $this->last_modify_password = $last_modify_password;
+        return $this ;
     }
+
+
+
 
     public function getLastModifyData(): ?\DateTimeInterface
     {
