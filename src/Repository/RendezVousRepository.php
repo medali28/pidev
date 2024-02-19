@@ -45,4 +45,8 @@ class RendezVousRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findRendezVousById(int $id): ?RendezVous
+    {
+        return $this->find($id);
+    }
 }

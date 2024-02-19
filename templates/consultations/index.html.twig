@@ -1,0 +1,418 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ConsultationsController!{% endblock %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="css/styles.css">
+
+
+    <main>
+
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <i class="bi-back"></i>
+                    <span>Topic</span>
+                </a>
+
+                <div class="d-lg-none ms-auto me-4">
+                    <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_1">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_2">Browse Topics</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_3">How it works</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_4">FAQs</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_5">Contact</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                <li><a class="dropdown-item" href="topics-listing.html">Topics Listing</a></li>
+
+                                <li><a class="dropdown-item" href="contact.html">Contact Form</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="d-none d-lg-block">
+                        <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+        <header class="site-header d-flex flex-column justify-content-center align-items-center">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+
+                    <div class="col-lg-5 col-12 mb-5">
+                        <h2 class="text-white">Consultation</h2>
+                    </div>
+
+                    <div class="col-lg-5 col-12" style="display: flex; align-items: center; justify-content: center;">
+                        <div class="topics-detail-block bg-white shadow-lg" style="text-align: center;">
+                            <img src="images/contact-img.jpg" class="topics-detail-block-image img-fluid" style="width: 70%; height: 70%;">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </header>
+
+
+
+        <section class="section-padding section-bg">
+            <div class="container_app" id="specificSection">
+                <div class="header">
+                    <h1>Partagez pour un Monde en Meilleure Santé</h1>
+                    <p>Ensemble, construisons une base de données médicale collaborative</p>
+                </div>
+
+                <form action="" method="post" enctype="multipart/form-data" id="donationForm" onsubmit=" return validateForm()">
+                        <!-- Champs du formulaire -->
+                        <p id="Nom">Nom du patient :</p>
+                         <p  id="nom">foulen</p>
+                <!--input type="text" id="nom" name="nom" placeholder="Votre nom de patient" readonly-->
+
+
+                <p id="Prenom">Prénom du patient :</p>
+                <!--input type="text" id="Prenom" name="Prenom" placeholder="Votre Prenom de patient" readonly-->
+                <p id="Prenom" >ben foulen</p>
+
+                <p id="maladie">Maladie chronique :</p>
+                <!--input type="text" id="Maladie chronique" name="Maladie chronique"  placeholder="Votre Maladie chronique "readonly-->
+                <p  id="maladie">tension</p>
+
+                <p id="Groupe sanguin">Groupe sanguin :</p>
+                <!--input id="groupe-sanguin" name="groupe-sanguin" readonly-->
+                <p  id="sanguin">A+</p>
+
+
+                <span class="error-message" id="groupe-sanguin-error"></span>
+
+                <label for="Description de maladie">Description de maladie :</label>
+                <textarea id="Description_de_maladie" name="Description_de_maladie" rows="4" maxlength="200" placeholder="L'état de patient" required></textarea>
+                <span class="error-message" id="description-error"></span>
+
+                <label for="Duré de maladie">Durée de maladie :</label>
+                <input type="tel" id="phone" name="Duré de maladie" placeholder="La durée de maladie"  >
+                <label for="Poids de patient">Le poids de votre patient :</label>
+                <input type="number" id="poids" name="Poids de patient" placeholder="Votre Poids" min="45" required>
+                <span class="error-message" id="poids-error"></span>
+
+                <label for="Taille de patient">La taille de votre patient :</label>
+                <input type="number" id="taille" name="taille" placeholder="Votre taille" min="130" required>
+                <span class="error-message" id="taille-error"></span>
+                <label for="Temprature de patient">La température de votre patient :</label>
+                <input type="tel" id="temperature" name="temperature" placeholder="Votre température exacte (entre 35 et 42 degrés Celsius)" required>
+                <span class="error-message" id="temperature-error"></span>
+
+                <label for="Frequence cardiaque de patient">La fréquence cardiaque de votre patient :</label>
+                <input type="tel" id="frequence-cardiaque" name="frequence-cardiaque" placeholder="Votre fréquence cardiaque exacte (entre 30 et 200 battements par minute)" required>
+                <span class="error-message" id="frequence-cardiaque-error"></span>
+
+                <label for="Respiration de patient">La respiration de votre patient :</label>
+                <input type="tel" id="respiration" name="respiration" placeholder="Votre respiration exacte (entre 10 et 40 respirations par minute)" required>
+                <span class="error-message" id="respiration-error"></span>
+
+                <label for="Conseils de maladie">Conseils de maladie :</label>
+                <textarea id="Conseils_de_maladie" name="Conseils_de_maladie" placeholder="Votre conseils Dr" required></textarea>
+                <span class="error-message" id="conseils-error"></span>
+
+                <label for="nomMedicament">Nom du médicament :</label>
+                <input type="text" id="nomMedicament" name="nomMedicament"  placeholder="Votre médicament" required>
+                <span class="error-message" id="nom-medicament-error"></span>
+
+
+                <label for="date-consultation">Date de la consultation :</label>
+                <input type="date" id="date-consultation" name="date-consultation" required>
+                <span class="error-message" id="date-error"></span>
+
+
+
+
+
+
+                    <label for="urgence">Ajout CNAM</label>
+                    <input type="checkbox" id="urgence" name="urgence">
+                    <button type="button">Annuler  une Consultation</button>
+                    <button type="submit" class="btn custom-btn mt-3 mt-lg-4 submit-btn">Faire une Consultation</button>
+                </form>
+
+
+
+
+
+</div>
+
+
+        </section>
+    </main>
+    <div id="urgenceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUrgenceModal()">&times;</span>
+            <h2>Ajout de dossier CNAM</h2>
+            <form id="cnamForm">
+                <div class="form-group">
+                    <label for="nomPatient">Nom du patient :</label>
+                    <input type="text" id="nomPatient" name="nomPatient" required>
+                </div>
+                <div class="form-group">
+                    <label for="numeroDossierCNAM">Numéro de dossier CNAM :</label>
+                    <input type="text" id="numeroDossierCNAM" name="numeroDossierCNAM" required>
+                </div>
+                <div class="form-group">
+                    <label for="dateFinDossier">Date de fin de dossier :</label>
+                    <input type="date" id="dateFinDossier" name="dateFinDossier" required>
+                </div>
+                <button type="submit">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-3 col-12 mb-4 pb-2">
+                    <a class="navbar-brand mb-2" href="index.html" >
+                        <img src="images/logo_my_eDR-removebg-preview.png" width="25%" height="auto">
+                        <span>My eDR</span>
+                    </a>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h6 class="site-footer-title mb-3">Resources</h6>
+
+                    <ul class="site-footer-links">
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Home</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">How it works</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">FAQs</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                    <h6 class="site-footer-title mb-3">Information</h6>
+
+                    <p class="text-white d-flex mb-1">
+                        <a href="tel: 305-240-9671" class="site-footer-link">
+                            305-240-9671
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex">
+                        <a href="mailto:info@company.com" class="site-footer-link">
+                            info@company.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            English</button>
+
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" type="button">Thai</button></li>
+
+                            <li><button class="dropdown-item" type="button">Myanmar</button></li>
+
+                            <li><button class="dropdown-item" type="button">Arabic</button></li>
+                        </ul>
+                    </div>
+
+                    <p class="copyright-text mt-lg-5 mt-4">Copyright © 2048 Topic Listing Center. All rights reserved.
+                        <br><br>Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
+
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/custom.js"></script>
+
+    <script>
+        document.getElementById("donationForm").addEventListener("submit", function(event) {
+            var nomInput = document.getElementById("nom");
+            var prenomInput = document.getElementById("Prenom");
+            var groupeSanguinInput = document.getElementById("groupe-sanguin");
+
+            var nomError = document.getElementById("nom-error");
+            var prenomError = document.getElementById("prenom-error");
+            var groupeSanguinError = document.getElementById("groupe-sanguin-error");
+
+
+
+
+
+            if (descriptionInput.value.length > 200) {
+                event.preventDefault();
+                descriptionError.textContent = "La description ne peut pas dépasser 200 mots";
+            } else {
+                descriptionError.textContent = "";
+            }
+
+            if (poidsInput.value < 45) {
+                event.preventDefault();
+                poidsError.textContent = "Le poids doit être supérieur ou égal à 45";
+            } else {
+                poidsError.textContent = "";
+            }
+
+            if (tailleInput.value < 130) {
+                event.preventDefault();
+                tailleError.textContent = "La taille doit être supérieure ou égale à 130";
+            } else {
+                tailleError.textContent = "";
+            }
+
+            var today = new Date();
+            var selectedDate = new Date(dateInput.value);
+            var minDate = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
+            var maxDate = new Date(today.getTime() + 15 * 24 * 60 * 60 * 1000);
+
+            if (selectedDate < minDate || selectedDate > maxDate) {
+                event.preventDefault();
+                dateError.textContent = "La date doit être comprise entre 3 et 15 jours à partir d'aujourd'hui";
+            } else {
+                dateError.textContent = "";
+            }
+        });
+
+        document.getElementById("donationForm").addEventListener("submit", function(event) {
+            var temperatureInput = document.getElementById("temperature");
+            var frequenceCardiaqueInput = document.getElementById("frequence-cardiaque");
+            var respirationInput = document.getElementById("respiration");
+            var conseilsInput = document.getElementById("Conseils_de_maladie");
+            var nomMedicamentInput = document.getElementById("nomMedicament");
+            var photoMedicamentInput = document.getElementById("photoMedicament");
+
+            var temperatureError = document.getElementById("temperature-error");
+            var frequenceCardiaqueError = document.getElementById("frequence-cardiaque-error");
+            var respirationError = document.getElementById("respiration-error");
+            var conseilsError = document.getElementById("conseils-error");
+            var nomMedicamentError = document.getElementById("nom-medicament-error");
+            var photoMedicamentError = document.getElementById("photoMedicament-error");
+
+            // Expression régulière pour une température valide (entre 35 et 42 degrés Celsius)
+            var temperatureRegex = /^([3][5-9]|[4][0-1])(\.\d{1})?$/;
+
+            if (!temperatureRegex.test(temperatureInput.value)) {
+                event.preventDefault();
+                temperatureError.textContent = "Veuillez entrer une température valide (entre 35 et 42 degrés Celsius)";
+            } else {
+                temperatureError.textContent = "";
+            }
+
+            // Expression régulière pour une fréquence cardiaque valide (entre 30 et 200 battements par minute)
+            var frequenceCardiaqueRegex = /^([3-9]\d|[1]\d{2})(\.\d{1})?$/;
+
+            if (!frequenceCardiaqueRegex.test(frequenceCardiaqueInput.value)) {
+                event.preventDefault();
+                frequenceCardiaqueError.textContent = "Veuillez entrer une fréquence cardiaque valide (entre 30 et 200 battements par minute)";
+            } else {
+                frequenceCardiaqueError.textContent = "";
+            }
+
+            // Expression régulière pour une respiration valide (entre 10 et 40 respirations par minute)
+            var respirationRegex = /^([1-3]\d|[4][0])(\.\d{1})?$/;
+
+            if (!respirationRegex.test(respirationInput.value)) {
+                event.preventDefault();
+                respirationError.textContent = "Veuillez entrer une respiration valide (entre 10 et 40 respirations par minute)";
+            } else {
+                respirationError.textContent = "";
+            }
+
+            // Vérification de la longueur des conseils de maladie
+            if (conseilsInput.value.length > 200) {
+                event.preventDefault();
+                conseilsError.textContent = "La description ne peut pas dépasser 200 caractères";
+            } else {
+                conseilsError.textContent = "";
+            }
+
+            // Vérification du nom du médicament
+            if (nomMedicamentInput.value.length === 0) {
+                event.preventDefault();
+                nomMedicamentError.textContent = "Veuillez entrer le nom du médicament";
+            } else {
+                nomMedicamentError.textContent = "";
+            }
+
+            // Vérification de l'upload du scanner ou bilan
+            if (photoMedicamentInput.files.length === 0) {
+                event.preventDefault();
+                photoMedicamentError.textContent = "Veuillez télécharger le scanner ou le bilan du patient";
+            } else {
+                photoMedicamentError.textContent = "";
+            }
+        });
+        function validateForm() {
+            // Code de validation existant
+
+            // Vérifie si c'est un rendez-vous en urgence
+            var urgenceCheckbox = document.getElementById("urgence");
+            if (urgenceCheckbox.checked) {
+                // Afficher la fenêtre modale d'appel d'ambulance
+                openUrgenceModal();
+                return false; // Empêcher la soumission du formulaire principal
+            }
+
+            return true; // Autoriser la soumission du formulaire principal
+        }
+
+        function openUrgenceModal() {
+            var urgenceModal = document.getElementById("urgenceModal");
+            urgenceModal.style.display = "block";
+        }
+
+        function closeUrgenceModal() {
+            var urgenceModal = document.getElementById("urgenceModal");
+            urgenceModal.style.display = "none";
+        }
+
+    </script>
+{% endblock %}
