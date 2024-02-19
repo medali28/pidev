@@ -35,13 +35,13 @@ class AjoutmedType extends AbstractType
                     ])
                 ],
             ])
-            ->add('posted_at')
+            ->add('date_fin')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name', // Use the 'name' property of the Category entity as the label
             ])
 
-            ->add('submit',SubmitType::class)
+
 
         ;
 

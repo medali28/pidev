@@ -1,1 +1,116 @@
-{{ form(form) }}
+{% extends 'home_page/home.html.twig' %}
+
+{% block body %}
+    <head>
+
+
+    </head>
+    <main>
+
+        <header class="site-header d-flex flex-column justify-content-center align-items-center">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-5 col-12 mb-5">
+                        <h2 class="text-white">Donate</h2>
+                    </div>
+                    <div class="col-lg-5 col-12" style="display: flex; align-items: center; justify-content: center;">
+                        <div class="topics-detail-block bg-white shadow-lg" style="text-align: center;"><img src="/images/logo.png" class="topics-detail-block-image img-fluid" style="width: 70%; height: 70%;" alt="logo"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section-padding section-bg">
+            <div class="container_app" id="specificSection">
+                <div class="header">
+                    <h1>Partagez pour un Monde en Meilleure Santé</h1>
+                    <p>Ensemble, construisons une base de données médicale collaborative</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-6 offset-md-3">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+                    <div class="form-group">
+                        {{ form_label(form.name) }} {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }} {{ form_errors(form.name) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.Description) }} {{ form_widget(form.Description, {'attr': {'class': 'form-control'}}) }} {{ form_errors(form.Description) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.image) }} {{ form_widget(form.image, {'attr': {'class': 'form-control-file'}}) }} {{ form_errors(form.image) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.date_fin) }} {{ form_widget(form.date_fin, {'attr': {'class': 'form-control-file'}}) }} {{ form_errors(form.date_fin) }}
+                    </div>
+                    <div class="form-group"  >
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" >
+                            {{ form_label(form.category) }} {{ form_widget(form.category, {'attr': {'class': 'form-control-file'}}) }} {{ form_errors(form.category) }}
+                        </button>
+
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+
+
+                    <div class="form-group">
+
+                    </div>{{ form_end(form) }}
+                </div>
+
+
+            </div>
+        </div>
+    </footer><!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+
+
+        document.getElementById('typeDon').addEventListener('change', function() {
+            var donMedicamentFields = document.getElementById('donMedicamentFields');
+            var donSangFields = document.getElementById('donSangFields');
+
+            if (this.value === 'medicament') {
+                donMedicamentFields.style.display = 'block';
+                donSangFields.style.display = 'none';
+            } else if (this.value === 'sang') {
+                donMedicamentFields.style.display = 'none';
+                donSangFields.style.display = 'block';
+            }
+        });
+
+        // Gérer l'affichage des champs en fonction de la préférence de contact
+        document.getElementById('contactPreference').addEventListener('change', function() {
+            var emailField = document.getElementById('email');
+            var phoneField = document.getElementById('phone');
+
+            if (this.value === 'email') {
+                emailField.style.display = 'block';
+                phoneField.style.display = 'none';
+            } else if (this.value === 'phone') {
+                emailField.style.display = 'none';
+                phoneField.style.display = 'block';
+            } else if (this.value === 'both') {
+                emailField.style.display = 'block';
+                phoneField.style.display = 'block';
+            }
+        });
+        document.getElementById('typeDon').addEventListener('change', function() {
+            var donMedicamentFields = document.getElementById('donMedicamentFields');
+            var donSangFields = document.getElementById('donSangFields');
+
+            if (this.value === 'medicament') {
+                donMedicamentFields.style.display = 'block';
+                donSangFields.style.display = 'none';
+            } else if (this.value === 'sang') {
+                donMedicamentFields.style.display = 'none';
+                donSangFields.style.display = 'block';
+            }
+        });
+    </script>
+{% endblock %}
