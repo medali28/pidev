@@ -4,13 +4,13 @@
 
 {% block body %}
     <h1>Ambulance</h1>
-
+    {{ include('navigateur.html.twig') }}
+    {{ include('header.html.twig') }}
+<section class="section-padding">
+    <div class="container">
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ ambulance.id }}</td>
-            </tr>
+
             <tr>
                 <th>Local_actuel_patient</th>
                 <td>{{ ambulance.localActuelPatient }}</td>
@@ -22,9 +22,12 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_ambulance_index') }}">back to list</a>
+    <a href="{{ path('app_ambulance_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">edit</a>
+    <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">Modifier</a>
 
     {{ include('ambulance/_delete_form.html.twig') }}
+    </div>
+</section>
+    {{ include('footer.html.twig') }}
 {% endblock %}

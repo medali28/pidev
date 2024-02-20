@@ -27,7 +27,7 @@ class RendezVousController extends AbstractController
     }
 
 
-        #[Route('/new', name: 'app_rendez_vous_new', methods: ['GET', 'POST'])]
+
 
         /*
                        $userRepository = $this->getDoctrine()->getRepository(User::class);
@@ -38,7 +38,7 @@ class RendezVousController extends AbstractController
                        }
 
                        */
-
+    #[Route('/new', name: 'app_rendez_vous_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
         {
 
@@ -56,37 +56,35 @@ class RendezVousController extends AbstractController
         $rendezvous->setMedecin($user);
         $rendezvous->setExpert($user);
 
-
-        // Vérification si le formulaire a été soumis
         if ($request->isMethod('POST')) {
-            // Récupération des données du formulaire
+
             $date = $request->request->get('date');
             $time = $request->request->get('time');
             $message = $request->request->get('description');
             $urgence = $request->request->get('urgence');
-            // Setters pour définir les valeurs dans l'entité RendezVous
+            $besoinAmbulance = $request->request->get('besoinAmbulance');
             $rendezvous->setDate(new \DateTime($date));
             $rendezvous->setTime(new \DateTime($time));
             $rendezvous->setDescription($message);
             $rendezvous->setUrgence($urgence === 'on');
-
-
-
-                // Persist et flush pour sauvegarder dans la base de données
                 $entityManager->persist($rendezvous);
                 $entityManager->flush();
-
-
-            }
+            if($besoinAmbulance === 'on'){
+                 return $this->redirectToRoute('app_ambulance_new' , ['id' => $rendezvous->getId()]);
+                }
+            return $this->redirectToRoute('app_rendez_vous_index' );
+        }
+            return $this->render('rendez_vous/new.html.twig');
+        }
 
             // Always pass the $rendezvous variable to the template
-            $rendezvousId = $rendezvous->getId();
+          //  $rendezvousId = $rendezvous->getId();
 
             // Redirect to the ambulance form with rendezvous ID as a parameter
-            return $this->redirectToRoute('app_rendez_vous_index', [
-                'rendezVous' => $rendezvous,
-            ]);
-        }
+           // return $this->redirectToRoute('app_rendez_vous_new', [
+           //     'rendezVous' => $rendezvous,
+           // ]);
+      //  }
 
             // Persist et flush pour sauvegarder dans la base de données
            /* $entityManager->persist($rendezvous);

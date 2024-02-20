@@ -3,6 +3,8 @@
 {% block title %}Edit RendezVous{% endblock %}
 
 {% block body %}
+    {{ include('navigation.html.twig') }}
+    {{ include('header.html.twig') }}
     <h1>Edit RendezVous</h1>
 
     <section class="section-padding">
@@ -11,7 +13,7 @@
                 <div class="col-lg-8 col-12 mt-3 mx-auto">
                     <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
                         <div class="d-flex">
-                            <img src="doc.png" class="custom-block-image img-fluid" alt="">
+                            <img src="{{ asset('images/doc.png') }}" class="custom-block-image img-fluid" alt="">
                             <div class="custom-block-topics-listing-info d-flex">
                                 <div>
                                     <section id="appointment">
@@ -30,4 +32,6 @@
             </div>
         </div>
     </section>
+    {{ include('footer.html.twig') }}
+
 {% endblock %}

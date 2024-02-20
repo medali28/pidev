@@ -3,25 +3,28 @@
 {% block title %}Ambulance index{% endblock %}
 
 {% block body %}
-    <h1>Ambulance index</h1>
 
+    {{ include('navigation.html.twig') }}
+    {{ include('header.html.twig') }}
+<section class="section-padding">
+    <div class="container">
     <table class="table">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Patient Position</th>
-            <th>Medecin Address</th>
-            <th>Besoin_infirmier</th>
+            <th></th>
+            <th>Position du patient</th>
+            <th>Adresse du médecin</th>
+            <th>Besoin d'infirmier</th>
 
-            <th>RendezVous Date</th>
-            <th>RendezVous Time</th>
+            <th>Date du rendez-vous </th>
+            <th>Heure du rendez-vous</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for ambulance in ambulances %}
+        {% for key ,ambulance in ambulances %}
             <tr>
-                <td>{{ ambulance.id }}</td>
+                <td>{{ key + 1 }}</td>
                 <td>{{ ambulance.localActuelPatient }}</td>
                 <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
                 <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
@@ -30,18 +33,20 @@
                 <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
                 <td>{{ ambulance.getRdv().time|date('H:i:s') }}</td>
                 <td>
-                    <a href="{{ path('app_ambulance_show', {'id': ambulance.id}) }}">show</a>
-                    <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">edit</a>
+                    <a href="{{ path('app_ambulance_show', {'id': ambulance.id}) }}">Afficher</a>
+                    <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">Aucun enregistrement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    </div>
+</section>
 
-    <a href="{{ path('app_ambulance_new') }}">Create new</a>
+    {{ include('footer.html.twig') }}
 
 {% endblock %}

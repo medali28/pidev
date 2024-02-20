@@ -3,9 +3,16 @@
 {% block title %}New Ambulance{% endblock %}
 
 {% block body %}
-    <h1>Create new Ambulance</h1>
+    {{ include('navigation.html.twig') }}
+    {{ include('header.html.twig') }}
+<section class="section-padding">
+    <div class="container">
 
     {{ include('ambulance/_form.html.twig') }}
 
-    <a href="{{ path('app_ambulance_index') }}">back to list</a>
+    <a href="{{ path('app_ambulance_index') }}">Retour à la liste</a>
+    </div>
+</section>
+    {{ include('footer.html.twig') }}
+
 {% endblock %}

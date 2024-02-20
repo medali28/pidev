@@ -24,12 +24,12 @@ class AmbulanceController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{rendezVous}', name: 'app_ambulance_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, $id,RendezVousRepository $rendezVousRepository): Response
+    #[Route('/new/{id}', name: 'app_ambulance_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, RendezVous $rendezVous,RendezVousRepository $rendezVousRepository): Response
     {
         $ambulance = new Ambulance();
 
-        $rendezVous= $rendezVousRepository->findRendezVousById($id);
+       // $rendezVous= $rendezVousRepository->findRendezVousById($id);
         $ambulance->setRdv($rendezVous);
         $form = $this->createForm(AmbulanceType::class, $ambulance);
         $form->handleRequest($request);
