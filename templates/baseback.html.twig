@@ -36,6 +36,7 @@
     <!-- We use those styles to show code examples, you should remove them in your application.-->
     <link href="{{ asset('backadmin/css/examples.css') }}" rel="stylesheet">
     <link href="{{ asset('backadmin/vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
+    <link rel="canonical" href="https://coreui.io/docs/content/tables/">
     {% endblock %}
 
     {% block javascripts %}
@@ -98,7 +99,7 @@
                     <li class="nav-item"><a class="nav-link" href="base/progress.html"><span class="nav-icon"></span> Progress</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/scrollspy.html"><span class="nav-icon"></span> Scrollspy</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/spinners.html"><span class="nav-icon"></span> Spinners</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/tables.html"><span class="nav-icon"></span> Tables</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('tableUser')}}"><span class="nav-icon"></span> Tables</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/tooltips.html"><span class="nav-icon"></span> Tooltips</a></li>
                 </ul>
             </li>
@@ -196,7 +197,7 @@
     </div>
 {% endblock %}
 
-{% block tarf el dashboard el foukani  m3ah taswiret el profil  %}
+ {% block ven %}
 <div class="wrapper d-flex flex-column min-vh-100 bg-light">
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
@@ -287,6 +288,7 @@
     </header>
 </div>
 {% endblock %}
+
 {% block body %}
 {% endblock %}
 
