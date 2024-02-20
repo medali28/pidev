@@ -14,11 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/cnam')]
 class CnamController extends AbstractController
 {
+
+
+
     #[Route('/', name: 'app_cnam_index', methods: ['GET'])]
     public function index(CnamRepository $cnamRepository): Response
     {
         return $this->render('cnam/index.html.twig', [
             'cnams' => $cnamRepository->findAll(),
+
         ]);
     }
 
