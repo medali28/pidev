@@ -1,0 +1,250 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RendezVous{% endblock %}
+
+{% block body %}
+    <main>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="main/main.html.twig">
+                    <i class="bi-back"></i>
+                    <span>Topic</span>
+                </a>
+
+                <div class="d-lg-none ms-auto me-4">
+                    <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_1">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_2">Browse Topics</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_3">How it works</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_4">FAQs</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_5">Contact</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                <li><a class="dropdown-item active" href="topics-listing.html">Topics Listing</a></li>
+
+                                <li><a class="dropdown-item" href="contact.html">Contact Form</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="d-none d-lg-block">
+                        <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="site-header d-flex flex-column justify-content-center align-items-center">
+            <div class="container">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-5 col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Page d'accueil</a></li>
+
+                                <li class="breadcrumb-item active" aria-current="page">Appointment</li>
+                            </ol>
+                        </nav>
+
+                        <h2 class="text-white">Appointment</h2>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+
+        <!-- Form Section -->
+        <section class="section-padding" style=" text-align: -webkit-center;">
+            <div class="container">
+                <div style="width: 40%;">
+                <h1>RendezVous</h1>
+
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>medecin</th>
+                        <td>{{ rendez_vou.medecin.getFirstName() }} {{ rendez_vou.medecin.getLastName() }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>patient</th>
+                        <td>{{ rendez_vou.patient.getFirstName() }} {{ rendez_vou.patient.getLastName() }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>heure</th>
+                        <td>{{ rendez_vou.time ? rendez_vou.time|date('H:i') : ''  }}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ rendez_vou.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status_rdv</th>
+                        <td>{{ rendez_vou.statusRdv }}</td>
+                    </tr>
+                    <tr>
+                        <th>Expert</th>
+                        <td>
+                            {% if rendez_vou.expert is not null %}
+                                {{ rendez_vou.expert.getFirstName() }} {{ rendez_vou.expert.getLastName() }}
+                            {% else %}
+                                La demande n'est pas encore traitée
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if rendez_vou.reponseRefuse is not null and rendez_vou.reponseRefuse != '' %}
+                        <tr>
+                            <th>Reponse_refuse</th>
+                            <td>{{ rendez_vou.reponseRefuse }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Urgence</th>
+                        <td>{{ rendez_vou.urgence ? 'Yes' : 'No' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <a href="{{ path('app_rendez_vous_index') }}">back to list</a>
+
+                <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">edit</a>
+
+                {{ include('rendez_vous/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </section>
+
+        <!-- Urgence Modal -->
+        <div id="urgenceModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeUrgenceModal()">&times;</span>
+                <h2>Appel d'ambulance</h2>
+                <form id="urgenceForm">
+                    <label for="nomAmbulance">Nom</label>
+                    <input type="text" id="nomAmbulance" name="nomAmbulance" required>
+
+                    <label for="telAmbulance">Numéro de téléphone</label>
+                    <input type="tel" id="telAmbulance" name="telAmbulance" required>
+
+                    <label for="adresseAmbulance">Adresse</label>
+                    <input type="text" id="adresseAmbulance" name="adresseAmbulance" required>
+
+                    <label for="messageAmbulance">Message d'urgence</label>
+                    <textarea id="messageAmbulance" name="messageAmbulance" required></textarea>
+
+                    <button type="submit" onclick="submitUrgenceForm()">Envoyer l'appel</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-3 col-12 mb-4 pb-2">
+                    <a class="navbar-brand mb-2" href="index.html">
+                        <i class="bi-back"></i>
+                        <span>Topic</span>
+                    </a>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h6 class="site-footer-title mb-3">Resources</h6>
+
+                    <ul class="site-footer-links">
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Home</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">How it works</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">FAQs</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                    <h6 class="site-footer-title mb-3">Information</h6>
+
+                    <p class="text-white d-flex mb-1">
+                        <a href="tel: 305-240-9671" class="site-footer-link">
+                            305-240-9671
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex">
+                        <a href="mailto:info@company.com" class="site-footer-link">
+                            info@company.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            English</button>
+
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" type="button">Thai</button></li>
+
+                            <li><button class="dropdown-item" type="button">Myanmar</button></li>
+
+                            <li><button class="dropdown-item" type="button">Arabic</button></li>
+                        </ul>
+                    </div>
+
+                    <p class="copyright-text mt-lg-5 mt-4">Copyright © 2048 Topic Listing Center. All rights reserved.
+                        <br><br>Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
+
+                </div>
+
+            </div>
+        </div>
+    </footer>
+{% endblock %}

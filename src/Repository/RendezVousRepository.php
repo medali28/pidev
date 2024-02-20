@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\RendezVous;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,7 +21,17 @@ class RendezVousRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, RendezVous::class);
     }
-
+    public function findRendezVousById($Id)
+    {
+        try {
+            return $this->createQueryBuilder('RDV')
+                ->andWhere('RDV.id = :Id')
+                ->setParameter('Id', $Id)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+        }
+    }
 //    /**
 //     * @return RendezVous[] Returns an array of RendezVous objects
 //     */

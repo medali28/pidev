@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ambulance index{% endblock %}
+
+{% block body %}
+    <h1>Ambulance index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Patient Position</th>
+            <th>Medecin Address</th>
+            <th>Besoin_infirmier</th>
+
+            <th>RendezVous Date</th>
+            <th>RendezVous Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ambulance in ambulances %}
+            <tr>
+                <td>{{ ambulance.id }}</td>
+                <td>{{ ambulance.localActuelPatient }}</td>
+                <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
+                <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
+
+
+                <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
+                <td>{{ ambulance.getRdv().time|date('H:i:s') }}</td>
+                <td>
+                    <a href="{{ path('app_ambulance_show', {'id': ambulance.id}) }}">show</a>
+                    <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ambulance_new') }}">Create new</a>
+
+{% endblock %}

@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\RendezVousRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\True_;
+use PhpParser\Node\Scalar\String_;
 
 #[ORM\Entity(repositoryClass: RendezVousRepository::class)]
 class RendezVous
@@ -22,11 +24,12 @@ class RendezVous
     #[ORM\JoinColumn(nullable: false)]
     private ?User $medecin = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_heure = null;
-
-    #[ORM\Column]
-    private ?int $status_rdv = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date = null;
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $time = null;
+    #[ORM\Column(length: 50)]
+    private ?string $status_rdv = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
@@ -35,7 +38,7 @@ class RendezVous
     private ?string $reponse_refuse = null;
 
     #[ORM\ManyToOne(inversedBy: 'id_expert')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $expert = null;
 
     #[ORM\Column]
@@ -85,24 +88,34 @@ class RendezVous
         return $this;
     }
 
-    public function getDateHeure(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->date_heure;
+        return $this->date;
     }
 
-    public function setDateHeure(\DateTimeInterface $date_heure): static
+    public function setDate(?\DateTimeInterface $date): void
     {
-        $this->date_heure = $date_heure;
-
-        return $this;
+        $this->date = $date;
     }
 
-    public function getStatusRdv(): ?int
+    public function getTime(): ?\DateTimeInterface
+    {
+        return $this->time;
+    }
+
+    public function setTime(?\DateTimeInterface $time): void
+    {
+        $this->time = $time;
+    }
+
+
+
+    public function getStatusRdv(): ?string
     {
         return $this->status_rdv;
     }
 
-    public function setStatusRdv(int $status_rdv): static
+    public function setStatusRdv(string $status_rdv): static
     {
         $this->status_rdv = $status_rdv;
 
@@ -156,7 +169,20 @@ class RendezVous
 
         return $this;
     }
+    public function __toString(): string
+    {
+        $patientName = $this->getPatient() ? $this->getPatient()->getFirstName() : 'Unknown Patient';
+        $medecinName = $this->getMedecin() ? $this->getMedecin()->getLastName() : 'Unknown Medecin';
+        $medecinLocation = $this->getMedecin() ? $this->getMedecin()->getAddress() : 'Unknown Location';
 
+        return sprintf(
+            'RendezVous #%d - Patient: %s, Medecin: %s, Location: %s',
+            $this->getId(),
+            $patientName,
+            $medecinName,
+            $medecinLocation
+        );
+    }
 
 
 

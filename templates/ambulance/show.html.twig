@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ambulance{% endblock %}
+
+{% block body %}
+    <h1>Ambulance</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ambulance.id }}</td>
+            </tr>
+            <tr>
+                <th>Local_actuel_patient</th>
+                <td>{{ ambulance.localActuelPatient }}</td>
+            </tr>
+            <tr>
+                <th>Besoin_infirmier</th>
+                <td>{{ ambulance.besoinInfirmier ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ambulance_index') }}">back to list</a>
+
+    <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">edit</a>
+
+    {{ include('ambulance/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,291 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RendezVousController!{% endblock %}
+
+{% block body %}
+    <main>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="main/main.html.twig">
+                    <i class="bi-back"></i>
+                    <span>Topic</span>
+                </a>
+
+                <div class="d-lg-none ms-auto me-4">
+                    <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_1">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_2">Browse Topics</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_3">How it works</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_4">FAQs</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.html#section_5">Contact</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                <li><a class="dropdown-item active" href="topics-listing.html">Topics Listing</a></li>
+
+                                <li><a class="dropdown-item" href="contact.html">Contact Form</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="d-none d-lg-block">
+                        <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="site-header d-flex flex-column justify-content-center align-items-center">
+            <div class="container">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-5 col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Page d'accueil</a></li>
+
+                                <li class="breadcrumb-item active" aria-current="page">Appointment</li>
+                            </ol>
+                        </nav>
+
+                        <h2 class="text-white">Appointment</h2>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+
+        <!-- Form Section -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-12 mt-3 mx-auto">
+                        <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+                            <div class="d-flex">
+                                <img src="{{ asset('images/doc.png') }}" class="custom-block-image img-fluid" alt="">
+                                <div class="custom-block-topics-listing-info d-flex">
+                                    <div>
+                                        <section id="appointment">
+                                            <h3>Prendre un rendez-vous</h3>
+                                            <div class="container">
+                                                <form action="{{ path('app_rendez_vous_new') }}" method="post" onsubmit="return validateForm()">
+                                                    <input name="date" id="selectedDate" type="date" required="" class="date" onchange="updateTimeOptions()">
+                                                    <p style="color: black;">Entrer l'horaire souhaité</p>
+                                                    <select id="horaire" name="time" class="horaire"> </select>
+                                                    <div class="form-floating">
+                                                        <textarea class="form-control" id="message" name="description" placeholder="Tell me about the project"></textarea>
+                                                        <label for="floatingTextarea">Parlez-moi des symptômes que vous avez</label>
+                                                    </div>
+                                                    <label for="urgence">Rendez-vous en urgence</label>
+                                                    <input type="checkbox" id="urgence" name="urgence">
+
+                                                    <button  type="submit" class="btn custom-btn mt-3 mt-lg-4 submit-btn">Soumettre</button>
+                                                </form>
+
+
+
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Urgence Modal -->
+        <div id="urgenceModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeUrgenceModal()">&times;</span>
+                <h2>Appel d'ambulance</h2>
+                <form id="urgenceForm">
+                    <h2>Ambulance Information</h2>
+
+                    <a href="{{ path('app_ambulance_new', {'rendezVous': rendezVous.id}) }}" class="btn custom-btn mt-3 mt-lg-4 submit-btn">Soumettre</a>
+
+
+
+                </form>
+            </div>
+        </div>
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-3 col-12 mb-4 pb-2">
+                    <a class="navbar-brand mb-2" href="index.html">
+                        <i class="bi-back"></i>
+                        <span>Topic</span>
+                    </a>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h6 class="site-footer-title mb-3">Resources</h6>
+
+                    <ul class="site-footer-links">
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Home</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">How it works</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">FAQs</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                    <h6 class="site-footer-title mb-3">Information</h6>
+
+                    <p class="text-white d-flex mb-1">
+                        <a href="tel: 305-240-9671" class="site-footer-link">
+                            305-240-9671
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex">
+                        <a href="mailto:info@company.com" class="site-footer-link">
+                            info@company.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            English</button>
+
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" type="button">Thai</button></li>
+
+                            <li><button class="dropdown-item" type="button">Myanmar</button></li>
+
+                            <li><button class="dropdown-item" type="button">Arabic</button></li>
+                        </ul>
+                    </div>
+
+                    <p class="copyright-text mt-lg-5 mt-4">Copyright © 2048 Topic Listing Center. All rights reserved.
+                        <br><br>Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
+
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+        function updateTimeOptions() {
+            var selectedDate = document.getElementById("selectedDate").value;
+            var horaireSelect = document.getElementById("horaire");
+
+            // Supprimer les options existantes
+            horaireSelect.innerHTML = "";
+
+            // Ajouter des options en fonction de n'importe quelle date
+            addOption("9:00");
+            addOption("9:30");
+            addOption("11:00");
+            addOption("14:00");
+        }
+
+        function addOption(time) {
+            var horaireSelect = document.getElementById("horaire");
+            var option = document.createElement("option");
+            option.text = time;
+            option.value = time;
+            horaireSelect.add(option);
+        }
+
+        function validateForm() {
+            // Récupérer la date et l'horaire
+            var selectedDate = document.getElementById("selectedDate").value;
+            var selectedTime = document.getElementById("horaire").value;
+
+            // Vérifier si l'utilisateur a sélectionné une date
+            if (!selectedDate) {
+                alert("Veuillez sélectionner une date.");
+                return false; // Empêcher la soumission du formulaire
+            }
+
+            // Vérifier si l'utilisateur a sélectionné un horaire
+            if (!selectedTime) {
+                alert("Veuillez sélectionner un horaire.");
+                return false; // Empêcher la soumission du formulaire
+            }
+
+            // Vérifier si la date sélectionnée est un week-end (samedi ou dimanche)
+            var selectedDay = new Date(selectedDate).getDay();
+            if (selectedDay === 0 || selectedDay === 6) {
+                alert("La date sélectionnée est un week-end. Veuillez choisir une autre date.");
+                return false; // Empêcher la soumission du formulaire
+            }
+
+            // Si toutes les vérifications sont réussies, le formulaire peut être soumis
+
+            var urgenceCheckbox = document.getElementById("urgence");
+            if (urgenceCheckbox.checked) {
+                // Afficher la fenêtre modale d'appel d'ambulance
+                openUrgenceModal();
+
+            }
+            return true;
+        }
+        function openUrgenceModal() {
+            var urgenceModal = document.getElementById("urgenceModal");
+            urgenceModal.style.display = "block";
+        }
+
+        function closeUrgenceModal() {
+            var urgenceModal = document.getElementById("urgenceModal");
+            urgenceModal.style.display = "none";
+        }
+    </script>
+
+{% endblock %}
