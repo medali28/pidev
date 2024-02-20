@@ -45,4 +45,13 @@ class ReponseRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findByQuestion($questionId)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->join('c.question', 'q')
+            ->andWhere('q.id = :questionId')
+            ->setParameter('questionId', $questionId);
+
+        return $qb->getQuery()->getResult();
+    }
 }

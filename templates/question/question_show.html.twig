@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<nav class="bg-gradient-faded-info">
+<h1 class="text-lg">Welcome to the Blog!</h1>
+    </nav>
+{% if question is not empty %}
+        <ul class="table" >
+            {% for question in question %}
+                <li class="list-group-item-light">
+                    <fieldset>
+                   <a href ="{{ path('app_question_show_id', {'id': question.id})}}" ><h2 class="link-secondary">{{ question.title }} </h2></a>
+                        <h3><a href ="{{ path('app_question_edit', {'id': question.id})}}" ><field class="bi-envelope-plus"></field> </a><a href ="{{ path('app_question_delete', {'id': question.id})}}" ><field class="bi-x"></field></a></h3>
+
+                    </fieldset>
+                   <p> <img src="/uploads/image/{{question.image}}" height="200" width="300" alt="{{question.image}}e"></p>
+                    <p>Published on {{ question.datetempQ()|date('d/m/Y g:i:s a' ) }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No blog posts available.</p>
+    {% endif %}
+    <a href="{{ path('app_question_add') }}"><h5 class="link-primary">add your question</h5></a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <h1> {{ question.title }}</h1>
+
+<h3 class="text-md-start" >{{ question.description }}</h3>
+    <img src="/uploads/image/{{question.image}}" height="300" width="680" alt="{{question.image}}e">
+
+
+    {% for reponse in reponse %}
+        <h2>{{ reponse.descriptionR }}   </h2><p>commented on {{ reponse.datetempR()|date('d/m/Y g:i:s a' ) }}</p>
+        <a href="{{ path('app_reponse_delete',{'id': reponse.id})}}) }}"><fieldset class="bi-x"></fieldset></a>
+        <a href="{{ path('app_reponse_edit',{'id': reponse.id})}}) }}"><fieldset class="bi-envelope-plus"></fieldset></a>
+    {% endfor %}
+    <fieldset>
+        <input type="text">
+        <h5><a href="{{ path('app_reponse_add',{'id': question.id})}}) }}"><fieldset class="bi-send-plus"></fieldset></a></h5>
+    </fieldset>
+
+{% endblock %}

@@ -25,17 +25,13 @@ class Question
     #[ORM\Column(length: 400)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $DateQ = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $tempQ = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datetempQ = null;
+    private ?\DateTimeInterface $datetempQ ;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $patient = null;
 
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Reponse::class, orphanRemoval: true)]
@@ -83,30 +79,6 @@ class Question
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getDateQ(): ?\DateTimeInterface
-    {
-        return $this->DateQ;
-    }
-
-    public function setDateQ(\DateTimeInterface $DateQ): static
-    {
-        $this->DateQ = $DateQ;
-
-        return $this;
-    }
-
-    public function getTempQ(): ?\DateTimeInterface
-    {
-        return $this->tempQ;
-    }
-
-    public function setTempQ(\DateTimeInterface $tempQ): static
-    {
-        $this->tempQ = $tempQ;
 
         return $this;
     }

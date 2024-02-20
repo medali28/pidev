@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section id="contact" class="contact">
+    <div class="container center" data-aos="fade-up">
+
+        <header class="section-header">
+            <p>
+                Modifiez votre question  !
+            </p>
+        </header>
+
+        <div class="row gy-4">
+
+
+            <div class="col-lg-122">
+                {{ form_start(f, {'attr':{'novalidate':'novalidate'}}) }}
+
+                <div class="row gy-4">
+
+
+
+                    <div class="col-md-6 ">
+                        {{ form_label(f.title)}}
+                        {{ form_widget(f.title,{'attr':{'class':'form-control'}})}}
+                        {{ form_errors(f.title, {'attr': {'class': 'text-danger','placeholder': 'titre'}}) }}
+
+                    </div>
+
+                    <div class="col-md-12">
+                        {{ form_label(f.description)}}
+                        {{ form_widget(f.description,{'attr':{'class':'form-control'}})}}
+                        {{ form_errors(f.description, {'attr': {'class': 'text-danger','placeholder': 'titre'}}) }}
+
+                    </div>
+
+
+                    <div class="col-md-12 text-center">
+                        <button type="submit">Modifier
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+                {{ form_end(f) }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}
