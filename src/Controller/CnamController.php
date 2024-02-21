@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cnam;
+use App\Entity\Consultation;
 use App\Form\CnamType;
 use App\Repository\CnamRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,10 +27,11 @@ class CnamController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_cnam_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{id}', name: 'app_cnam_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager,consultation $consultation): Response
     {
         $cnam = new Cnam();
+        $cnam->setConsultation($consultation);
         $form = $this->createForm(CnamType::class, $cnam);
         $form->handleRequest($request);
 

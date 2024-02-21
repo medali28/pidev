@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CnamRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: CnamRepository::class)]
 class Cnam
@@ -67,5 +68,27 @@ class Cnam
         $this->consultation = $consultation;
 
         return $this;
+    }
+    private $user;// Initialisé à null
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+    private ?RendezVous $rdv = null;
+    public function getRdv(): ?RendezVous
+    {
+        return $this->rdv;
+    }
+
+    public function setRdv(?RendezVous $rdv): void
+    {
+        $this->rdv = $rdv;
     }
 }

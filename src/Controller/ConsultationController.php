@@ -58,6 +58,7 @@ class ConsultationController extends AbstractController
             $respiration = $request->request->get('respiration');
             $conseilsMaladie = $request->request->get('Conseils_de_maladie');
             $nomMedicament = $request->request->get('nomMedicament');
+            $cnam = $request->request->get('cnam');
             $dateConsultation = new \DateTime($request->request->get('date-consultation'));
 
             // Setters pour définir les valeurs dans l'entité RendezVous
@@ -90,6 +91,9 @@ class ConsultationController extends AbstractController
             // Persist et flush pour sauvegarder dans la base de données
             $entityManager->persist($consultation);
             $entityManager->flush();
+if($cnam === 'on'){
+    return $this->redirectToRoute('app_cnam_new', ['id' => $consultation->getId()]);
+}
 
             // Redirection vers une page de confirmation ou autre
             return $this->redirectToRoute('app_consultation_index');

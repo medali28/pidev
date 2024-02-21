@@ -53,7 +53,17 @@ class RendezVous
     {
         $this->consultation = $consultation;
     }
+    private ?cnam $cnam = null;
 
+    public function getcnam(): ?cnam
+    {
+        return $this->cnam;
+    }
+
+    public function setcnam(?cnam $cnam): void
+    {
+        $this->cnam = $cnam;
+    }
 
 
     public function getId(): ?int

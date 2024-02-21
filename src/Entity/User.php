@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -695,7 +696,45 @@ class User
         return $this;
     }
 
+    private $cnams;
 
+    // Constructor to initialize $cnams property
+
+
+
+    // Getter and setter for cnams property
+
+    public function getCnams(): Collection
+    {
+        return $this->cnams;
+    }
+
+    // Add method to add a Cnam to the collection
+
+    public function addCnam(Cnam $cnam): self
+    {
+        if (!$this->cnams->contains($cnam)) {
+            $this->cnams[] = $cnam;
+            $cnam->setUser($this);
+        }
+
+        return $this;
+    }
+
+    // Remove method to remove a Cnam from the collection
+
+    public function removeCnam(Cnam $cnam): self
+    {
+        if ($this->cnams->contains($cnam)) {
+            $this->cnams->removeElement($cnam);
+            // set the owning side to null (unless already changed)
+            if ($cnam->getUser() === $this) {
+                $cnam->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 
 
 

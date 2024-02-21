@@ -73,9 +73,9 @@
                         <h2 class="text-white">Consultation</h2>
                     </div>
 
-                    <div class="col-lg-5 col-12" style="display: flex; align-items: center; justify-content: center;">
-                        <div class="topics-detail-block bg-white shadow-lg" style="text-align: center;">
-                            <img src="images/contact-img.jpg" class="topics-detail-block-image img-fluid" style="width: 70%; height: 70%;">
+                    <div class="col-lg-5 col-12 d-flex align-items-center justify-content-center">
+                        <div class="topics-detail-block bg-white shadow-lg text-center">
+                            <img src="{{ asset('images/contact-img.jpg') }}" class="topics-detail-block-image img-fluid" style="width: 70%; height: auto;">
                         </div>
                     </div>
 
@@ -87,10 +87,10 @@
 
 
         <section class="section-padding section-bg">
-            <div class="container_app" id="specificSection">
-                <div class="header">
-                    <h1>Partagez pour un Monde en Meilleure Santé</h1>
-                    <p>Ensemble, construisons une base de données médicale collaborative</p>
+                        <div class="container_app" id="specificSection">
+                            <div class="header">
+                                <h1>Partagez pour un Monde en Meilleure Santé</h1>
+                                <p>Ensemble, construisons une base de données médicale collaborative</p>
                 </div>
 
                 <form action="" method="post" enctype="multipart/form-data" id="donationForm" onsubmit=" return validateForm()">
@@ -158,8 +158,8 @@
 
 
 
-                    <label for="urgence">Ajout CNAM</label>
-                    <input type="checkbox" id="urgence" name="urgence">
+                    <label for="cnam">Ajout CNAM</label>
+                    <input type="checkbox" id="cnam" name="cnam">
                     <button type="button" onclick="window.location.reload()">Annuler une Consultation</button>
 
                     <button type="submit" class="btn custom-btn mt-3 mt-lg-4 submit-btn">Faire une Consultation</button>
@@ -174,27 +174,7 @@
 
         </section>
     </main>
-    <div id="urgenceModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeUrgenceModal()">&times;</span>
-            <h2>Ajout de dossier CNAM</h2>
-            <form id="cnamForm">
-                <div class="form-group">
-                    <label for="nomPatient">Nom du patient :</label>
-                    <input type="text" id="nomPatient" name="nomPatient" required>
-                </div>
-                <div class="form-group">
-                    <label for="numeroDossierCNAM">Numéro de dossier CNAM :</label>
-                    <input type="text" id="numeroDossierCNAM" name="numeroDossierCNAM" required>
-                </div>
-                <div class="form-group">
-                    <label for="dateFinDossier">Date de fin de dossier :</label>
-                    <input type="date" id="dateFinDossier" name="dateFinDossier" required>
-                </div>
-                <button type="submit">Ajouter</button>
-            </form>
-        </div>
-    </div>
+
 
     <footer class="site-footer section-padding">
         <div class="container">

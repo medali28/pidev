@@ -67,14 +67,16 @@
             <div class="row justify-content-center align-items-center">
 
                 <div class="col-lg-5 col-12 mb-5">
-                    <h2 class="text-white">Consultation</h2>
+                    <h2 class="text-white">cnam</h2>
                 </div>
 
-                <div class="col-lg-5 col-12" style="display: flex; align-items: center; justify-content: center;">
-                    <div class="topics-detail-block bg-white shadow-lg" style="text-align: center;">
-                        <img src="images/contact-img.jpg" class="topics-detail-block-image img-fluid" style="width: 70%; height: 70%;">
+                <div class="col-lg-5 col-12 d-flex align-items-center justify-content-center">
+                    <div class="topics-detail-block bg-white shadow-lg text-center">
+                        <img src="{{ asset('images/contact-img.jpg') }}" class="topics-detail-block-image img-fluid" style="width: 70%; height: auto;">
                     </div>
                 </div>
+
+
 
 
             </div>
@@ -88,120 +90,131 @@
                 <p>Ensemble, construisons une base de données médicale collaborative</p>
             </div>
             <section class="section-padding section-bg text-center">
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Numéro Carnet</th>
+                                <th scope="col">Prix Consultation</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if cnams is not empty %}
+                                {% for cnam in cnams %}
+                                    <tr>
+                                        <td>
+                                            {% if cnam.user is not null %}
+                                                {{ dump(cnam.user) }}
 
-    <h1>Cnam index</h1>
-            </section>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Numero Carnet</th>
-                    <th scope="col">Prix Consultation</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for cnam in cnams %}
-                    <tr>
-                        <td>{{ cnam.id }}</td>
-                        <td>{{ cnam.NumeroCarnet }}</td>
-                        <td>{{ cnam.PrixConsultation }}</td>
-                        <td>
-                            <a href="{{ path('app_cnam_show', {'id': cnam.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
-                            <a href="{{ path('app_cnam_edit', {'id': cnam.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4">Aucun enregistrement trouvé</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-
-            <a href="{{ path('app_cnam_new') }}">Create new</a>
-        </div>
-            <footer class="site-footer section-padding">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-lg-3 col-12 mb-4 pb-2">
-                            <a class="navbar-brand mb-2" href="index.html" >
-                                <img src="images/logo_my_eDR-removebg-preview.png" width="25%" height="auto">
-                                <span>My eDR</span>
-                            </a>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-6">
-                            <h6 class="site-footer-title mb-3">Resources</h6>
-
-                            <ul class="site-footer-links">
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">Home</a>
-                                </li>
-
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">How it works</a>
-                                </li>
-
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">FAQs</a>
-                                </li>
-
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">Contact</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
-                            <h6 class="site-footer-title mb-3">Information</h6>
-
-                            <p class="text-white d-flex mb-1">
-                                <a href="tel: 305-240-9671" class="site-footer-link">
-                                    305-240-9671
-                                </a>
-                            </p>
-
-                            <p class="text-white d-flex">
-                                <a href="mailto:info@company.com" class="site-footer-link">
-                                    info@company.com
-                                </a>
-                            </p>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    English</button>
-
-                                <ul class="dropdown-menu">
-                                    <li><button class="dropdown-item" type="button">Thai</button></li>
-
-                                    <li><button class="dropdown-item" type="button">Myanmar</button></li>
-
-                                    <li><button class="dropdown-item" type="button">Arabic</button></li>
-                                </ul>
-                            </div>
-
-                            <p class="copyright-text mt-lg-5 mt-4">Copyright © 2048 Topic Listing Center. All rights reserved.
-                                <br><br>Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
-
-                        </div>
+                                            {% else %}
+                                                Non assigné
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ cnam.NumeroCarnet }}</td>
+                                        <td>{{ cnam.PrixConsultation }}</td>
+                                        <td>
+                                            <a href="{{ path('app_cnam_show', {'id': cnam.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
+                                            <a href="{{ path('app_cnam_edit', {'id': cnam.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">Aucun enregistrement trouvé</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
 
                     </div>
+
+
+
+
+
+
                 </div>
-            </footer>
-
-            <!-- JAVASCRIPT FILES -->
-            <script src="js/jquery.min.js"></script>
-            <script src="js/bootstrap.bundle.min.js"></script>
-            <script src="js/jquery.sticky.js"></script>
-            <script src="js/custom.js"></script>
-
-
-
-    </section>
+            </section>
 </main>
-    {% endblock %}
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-3 col-12 mb-4 pb-2">
+                    <a class="navbar-brand mb-2" href="index.html" >
+                        <img src="images/logo_my_eDR-removebg-preview.png" width="25%" height="auto">
+                        <span>My eDR</span>
+                    </a>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h6 class="site-footer-title mb-3">Resources</h6>
+
+                    <ul class="site-footer-links">
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Home</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">How it works</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">FAQs</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                    <h6 class="site-footer-title mb-3">Information</h6>
+
+                    <p class="text-white d-flex mb-1">
+                        <a href="tel: 305-240-9671" class="site-footer-link">
+                            305-240-9671
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex">
+                        <a href="mailto:info@company.com" class="site-footer-link">
+                            info@company.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            English</button>
+
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" type="button">Thai</button></li>
+
+                            <li><button class="dropdown-item" type="button">Myanmar</button></li>
+
+                            <li><button class="dropdown-item" type="button">Arabic</button></li>
+                        </ul>
+                    </div>
+
+                    <p class="copyright-text mt-lg-5 mt-4">Copyright © 2048 Topic Listing Center. All rights reserved.
+                        <br><br>Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
+
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/custom.js"></script>
+
+{% endblock %}

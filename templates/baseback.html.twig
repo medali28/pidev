@@ -284,7 +284,7 @@
         </div>
     </header>
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Description</th>
@@ -326,21 +326,53 @@
         {% endfor %}
         </tbody>
     </table>
-    <table class="table border mb-0">
-        <thead class="table-light fw-semibold">
-        <tr class="align-middle">
-            <th class="text-center">
-                ID
-            </th>
-            <th>
-                Numero Carnet
-            </th>
-            <th>
-                Prix Consultation
-            </th>
-            <th>
-                Actions
-            </th>
+    <div class="my-4 text-center">
+        <hr class="my-4"> <!-- Barre horizontale décorative -->
+        <h3>Autres données</h3> <!-- Titre pour séparer visuellement -->
+    </div>
+    <div class="my-4">
+        <h3 class="text-center">Statistiques de santé</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre total de consultations</h5>
+                        <p class="card-text">100</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre de patients</h5>
+                        <p class="card-text">50</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre de médicaments prescrits</h5>
+                        <p class="card-text">80</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphique -->
+    <div class="my-4">
+        <h3 class="text-center">Graphique de consultations par mois</h3>
+        <canvas id="consultationsChart" width="400" height="200"></canvas>
+    </div>
+
+    <table class="table table-striped border mb-0">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Numero Carnet</th>
+            <th scope="col">Prix Consultation</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -351,7 +383,7 @@
                 <td>{{ cnam.PrixConsultation }}</td>
                 <td>
                     <a href="{{ path('app_cnam_show', {'id': cnam.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
-                    <a href="{{ path('app_cnam_delete', {'id': cnam.id}) }}" class="btn btn-warning btn-sm">supprimer</a>
+                    <a href="{{ path('app_cnam_delete', {'id': cnam.id}) }}" class="btn btn-warning btn-sm">Supprimer</a>
                 </td>
             </tr>
         {% else %}
