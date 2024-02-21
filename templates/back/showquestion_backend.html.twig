@@ -1,0 +1,161 @@
+{% extends 'baseback.html.twig' %}
+
+{% block body %}
+
+    <body class="bg-light">
+
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <header class="header header-sticky mb-4">
+            <div class="container-fluid">
+                <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                    <svg class="icon icon-lg">
+                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
+                    </svg>
+                </button>
+                <a class="header-brand d-md-none" href="#">
+                    <svg width="118" height="46" alt="CoreUI Logo">
+                        <use xlink:href="assets/brand/coreui.svg#full"></use>
+                    </svg>
+                </a>
+
+                <ul class="header-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg class="icon icon-lg">
+                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg class="icon icon-lg">
+                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list-rich"></use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg">
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <strong>Tables</strong><span class="small ms-1">Table Blog</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-coreui-toggle="tab" href="#preview-1018" role="tab">
+                                        Preview Table Blog</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+
+
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
+                                    <table class="table table-striped">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Question id</th>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Date&time</th>
+                                            <th scope="col">Suprimer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for question in question %}
+                                            <tr>
+                                                <td>{{ question.id }}</td>
+                                                <td>{{ question.title }}</td>
+                                                <td>
+                                                    <img src="/uploads/image/{{ question.image }}" class="img-fluid" alt="{{ question.image }}">
+                                                </td>
+                                                <td>{{ question.description }}</td>
+                                                <td>{{ question.datetempQ|date('d/m/Y g:i:s a') }}</td>
+
+
+                                                <td>
+                                                    <a href="{{ path('app_questionback_delete', {'id': question.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to Delete?')">
+                                                        <svg class="icon icon-sm me-1">
+                                                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                                                        </svg>
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <strong>Tables</strong><span class="small ms-1">Table Commentaire</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-coreui-toggle="tab" href="#preview-1018" role="tab">
+                                        Preview Table Commentaire</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
+                                    <table class="table table-striped">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Reponse id</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Date&time</th>
+                                            <th scope="col">Question</th>
+
+                                            <th scope="col">Suprimer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for reponse in reponse %}
+                                            <tr>
+                                                <td>{{ reponse.id }}</td>
+                                                <td>{{ reponse.descriptionR }}</td>
+                                                <td>{{ reponse.datetempR|date('d/m/Y g:i:s a') }}</td>
+                                                <td>{{ reponse.question.title }}</td>
+
+                                                <td>
+                                                    <a href="{{ path('app_reponseback_delete', {'id': reponse.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to Delete?')">
+                                                        <svg class="icon icon-sm me-1">
+                                                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                                                        </svg>
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- CoreUI and necessary plugins-->
+        <script src="{{ asset('backadmin/vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
+        <script src="{{ asset('backadmin/vendors/simplebar/js/simplebar.min.js') }}"></script>
+    </div>
+
+    </body>
+
+{% endblock %}

@@ -1,25 +1,60 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
 
-<nav class="bg-gradient-faded-info">
-<h1 class="text-lg">Welcome to the Blog!</h1>
-    </nav>
-{% if question is not empty %}
-        <ul class="table" >
-            {% for question in question %}
-                <li class="list-group-item-light">
-                    <fieldset>
-                   <a href ="{{ path('app_question_show_id', {'id': question.id})}}" ><h2 class="link-secondary">{{ question.title }} </h2></a>
-                        <h3><a href ="{{ path('app_question_edit', {'id': question.id})}}" ><field class="bi-envelope-plus"></field> </a><a href ="{{ path('app_question_delete', {'id': question.id})}}" ><field class="bi-x"></field></a></h3>
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-3 mb-4">Poser Vos Questions Aux Experts</h1>
 
-                    </fieldset>
-                   <p> <img src="/uploads/image/{{question.image}}" height="200" width="300" alt="{{question.image}}e"></p>
-                    <p>Published on {{ question.datetempQ()|date('d/m/Y g:i:s a' ) }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No blog posts available.</p>
-    {% endif %}
-    <a href="{{ path('app_question_add') }}"><h5 class="link-primary">add your question</h5></a>
+                    <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bi-search" id="basic-addon1"></span>
+                            <input name="keyword" type="search" class="form-control" id="keyword" placeholder="Recherchez des sujets..." aria-label="Recherche">
+                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mt-5">
+        <div class="card border-0 shadow-lg rounded bg-light p-4 text-center">
+            <a href="{{ path('app_question_add') }}" class="text-decoration-none text-dark">
+                <h1 class="display-2 text-primary bi bi-file-earmark-plus"></h1>
+                <p class="lead">Posez votre question</p>
+            </a>
+        </div>
+
+        {% if question is not empty %}
+            <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+                {% for question in question %}
+                    <div class="col">
+                        <div class="card border-0 shadow-sm bg-light h-100 p-4">
+                            <a href="{{ path('app_question_show_id', {'id': question.id}) }}" class="text-decoration-none text-dark">
+                            <img src="/uploads/image/{{question.image}}" class="card-img-top rounded" alt="{{question.image}}">
+                            <div class="card-body">
+
+                                    <h5 class="card-title link-primary">{{ question.title }}</h5>
+                                </a>
+                                <p class="card-text">{{ question.description }}</p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
+                                <small class="text-muted">Publié le {{ question.datetempQ()|date('d/m/Y à H:i:s' ) }}</small>
+                                <div class="text-muted">
+                                    <a href="{{ path('app_question_edit', {'id': question.id}) }}" class="text-dark"><i class="bi bi-pencil"></i> Modifier</a>
+                                    <a href="{{ path('app_question_delete', {'id': question.id}) }}" class="text-dark"><i class="bi bi-trash"></i> Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="lead text-muted text-center mt-4">Aucun article de blog disponible.</p>
+        {% endif %}
+    </div>
+
 {% endblock %}

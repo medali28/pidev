@@ -22,7 +22,6 @@ class ReponseController extends AbstractController
         $reponse = new Reponse();
         $currentDateTime = new \DateTime();
         $form = $this->createForm(ReponseType::class, $reponse);
-        $form->add('ajouter', submittype::class);
         $reponse->setDatetempR($currentDateTime);
         $reponse->setQuestion($qestionid);
 
@@ -52,7 +51,7 @@ class ReponseController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('app_question_show_id',['id'=>$question]);
         }
-        return $this->render('reponse/edit.html.twig', ['f' => $form->createView()]);
+        return $this->render('reponse/reponse_edit.html.twig', ['f' => $form->createView()]);
     }
 
     #[Route('/reponse/delete/{id}', name: 'app_reponse_delete')]
@@ -66,14 +65,5 @@ class ReponseController extends AbstractController
         return $this->redirectToRoute('app_question_show_id',['id'=>$question]);
     }
 
-    #[Route('/reponse/show/{id}', name: 'app_reponse_show')]
-    function show(ReponseRepository $repository, ManagerRegistry $managerRegistry , QuestionRepository $questionRepository , Request $request): Response
-    {
 
-        $em=$managerRegistry->getManager();
-        $reponse = $repository->findAll();
-
-        return $this->render('reponse/reponse.show.html.twig');
-
-    }
 }

@@ -25,7 +25,7 @@ class QuestionController extends AbstractController
         $question=$repository->find($id);
         $reponse=$reponseRepository->findByQuestion($question);
         $comment= new Reponse();
-        return $this->render('question/afficher_question.html.twig',['question'=>$question,'reponse'=>$reponse]);
+        return $this->render('question/afficher_question.html.twig',['question'=>$question,'reponse'=>$reponse],);
     }
 
     #[Route('/question/show', name: 'app_question_show')]
@@ -40,7 +40,6 @@ class QuestionController extends AbstractController
         $currentDateTime = new \DateTime();
         $question= new Question();
         $form=$this->createForm(QuestionType::class,$question);
-        $form->add('ajouter',submittype::class);
         $question->setDatetempQ($currentDateTime);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
@@ -66,21 +65,38 @@ class QuestionController extends AbstractController
         return $this->render('question/question_add.html.twig',['f'=>$form->createview()]);
     }
     #[Route('/question/edit/{id}', name: 'app_question_edit')]
-    function edit(QuestionRepository $repository,$id,Request $request ,ManagerRegistry $managerRegistry)
+    function edit(QuestionRepository $repository,$id,Request $request ,ManagerRegistry $managerRegistry,sluggerinterface $slugger)
     {
-        $question= $repository->find($id);
+        $question = $repository->find($id);
         $currentDateTime = new \DateTime();
-        $form=$this->createForm(QuestionType::class,$question);
+        $form = $this->createForm(QuestionType::class, $question);
         $question->setDatetempQ($currentDateTime);
         $form->handleRequest($request);
-        if ( $form->isSubmitted() && $form->isValid() )
-        {
-            $em=$managerRegistry->getManager();
-            $em->flush();
-            return $this->redirectToRoute('app_question_show');
+        if ($form->isSubmitted() && $form->isValid()) {
+            {
+                $image = $form->get('image')->getData();
+                if ($image) {
+                    $originalFilename = pathinfo($image, PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
+                    try {
+                        $image->move(
+                            $this->getParameter('images_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                    }
+                    $question->setImage($newFilename);
+                }
+                $em = $managerRegistry->getManager();
+                $em->flush();
+                return $this->redirectToRoute('app_question_show');
+            }
         }
-        return $this->render('question/edit.html.twig',['f'=>$form->createView()]);
-    }
+
+            return $this->render('question/edit.html.twig', ['f' => $form->createView()]);
+        }
+
     #[Route('/question/delete/{id}', name: 'app_question_delete')]
     function delete($id,QuestionRepository $repository,ManagerRegistry $managerRegistry)
     {

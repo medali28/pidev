@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Question;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -21,17 +23,18 @@ class QuestionType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
+                        'maxSize' => '5124k',
                         'mimeTypes' => [
                             'image/png',
                             'image/jpg',
-                            'image/jpeg',
+                            'image/jpeg'
                         ],
                         'mimeTypesMessage' => 'déposez votre image',
                     ])
                 ],
             ])
-            ->add('description')
+            ->add('description',TextareaType::class)
+
         ;
     }
 
