@@ -7,120 +7,174 @@
     {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
     {% block stylesheets %}
         <!--     Fonts and icons     -->
-        <link href="{{ asset('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700') }}" rel="stylesheet" />
-        <!-- Nucleo Icons -->
-        <link href="{{ asset('/css/nucleo-icons.css') }}" rel="stylesheet" />
-        <link href="{{ asset('/css/nucleo-svg.css') }}" rel="stylesheet" />
-        <!-- Font Awesome Icons -->
-        <script src="{{ asset('https://kit.fontawesome.com/42d5adcbca.js') }}" crossorigin="anonymous"></script>
-        <link href="{{ asset('/css/nucleo-svg.css') }}" rel="stylesheet" />
-        <!-- CSS Files -->
-        <link id="pagestyle" href="{{ asset('/css/argon-dashboard.css') }}" rel="stylesheet" />
-
+        <link rel="stylesheet" href="{{ asset('/vendors/simplebar/css/simplebar.css') }}">
+        <link rel="stylesheet" href="{{ asset('/css/vendors/simplebar.css') }}">
+        <!-- Main styles for this application-->
+        <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+        <!-- We use those styles to show code examples, you should remove them in your application.-->
+        <link href="{{ asset('/css/examples.css') }}" rel="stylesheet">
+        <link href="{{ asset('/vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 
     {% block javascripts %}
-
-    <script src="{{ asset('/js/core/popper.min.js') }}"></script>
-    <script src="{{ asset('/js/core/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('/js/plugins/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('/js/plugins/smooth-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('/js/plugins/chartjs.min.js') }}"></script>
-        <script src="{{ asset('/js/argon-dashboard.min.js') }}"></script>
-        <script src="{{ asset('/js/argon-dashboard.js') }}"></script>
+        <script src="{{ asset('/vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
+        <script src="{{ asset('/vendors/simplebar/js/simplebar.min.js') }}"></script>
+        <!-- Plugins and scripts required by this view-->
+        <script src="{{ asset('/vendors/chart.js/js/chart.min.js') }}"></script>
+        <script src="{{ asset('/vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
+        <script src="{{ asset('/vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
+        <script src="{{ asset('/js/main.js') }}"></script>
+        <script>
+        </script>
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
+    <style>
+        body{
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(-135deg, #529CA7, #014954);
+            {#background: url('{{ asset('/images/i10.jpg') }}');#}
+            {#background-size: cover;#}
+            {#background-repeat: no-repeat;#}
+            {#background-position: center;#}
+        }
+    </style>
 </head>
 <body>
 
+<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+    <div class="sidebar-brand d-none d-md-flex">
+        <svg class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
+            <use xlink:href="assets/brand/coreui.svg#full"></use>
+        </svg>
+        <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
+            <use xlink:href="assets/brand/coreui.svg#signet"></use>
+        </svg>
+    </div>
+    <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-item"><a class="nav-link" href="{{ path('dashboard') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
+                </svg> Dashboard<span class="badge badge-sm bg-info ms-auto">NEW</span></a></li>
+        <li class="nav-title">Theme</li>
+        <li class="nav-item"><a class="nav-link" href="colors.html">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-drop"></use>
+                </svg> Colors</a></li>
+        <li class="nav-item"><a class="nav-link" href="typography.html">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
+                </svg> Typography</a></li>
+        <li class="nav-title">Components</li>
+        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-puzzle"></use>
+                </svg> User Managment</a>
+            <ul class="nav-group-items">
+                <li class="nav-item"><a class="nav-link" href="{{ path('all_user') }}"><span class="nav-icon"></span>All User</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('Add_Expert') }}"><span class="nav-icon"></span>Add an expert</a></li>
+            </ul>
+        </li>
+        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cursor"></use>
+                </svg> Buttons</a>
+            <ul class="nav-group-items">
+                <li class="nav-item"><a class="nav-link" href="buttons/buttons.html"><span class="nav-icon"></span> Buttons</a></li>
+                <li class="nav-item"><a class="nav-link" href="buttons/button-group.html"><span class="nav-icon"></span> Buttons Group</a></li>
+                <li class="nav-item"><a class="nav-link" href="buttons/dropdowns.html"><span class="nav-icon"></span> Dropdowns</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="charts.html">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-chart-pie"></use>
+                </svg> Charts</a></li>
+        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
+                </svg> Forms</a>
+            <ul class="nav-group-items">
+                <li class="nav-item"><a class="nav-link" href="forms/form-control.html"> Form Control</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/select.html"> Select</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/checks-radios.html"> Checks and radios</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/range.html"> Range</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/input-group.html"> Input group</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/floating-labels.html"> Floating labels</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/layout.html"> Layout</a></li>
+                <li class="nav-item"><a class="nav-link" href="forms/validation.html"> Validation</a></li>
+            </ul>
+        </li>
+        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-star"></use>
+                </svg> Icons</a>
+            <ul class="nav-group-items">
+                <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-free.html"> CoreUI Icons<span class="badge badge-sm bg-success ms-auto">Free</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-brand.html"> CoreUI Icons - Brand</a></li>
+                <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-flag.html"> CoreUI Icons - Flag</a></li>
+            </ul>
+        </li>
+        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
+                </svg> Notifications</a>
+            <ul class="nav-group-items">
+                <li class="nav-item"><a class="nav-link" href="notifications/alerts.html"><span class="nav-icon"></span> Alerts</a></li>
+                <li class="nav-item"><a class="nav-link" href="notifications/badge.html"><span class="nav-icon"></span> Badge</a></li>
+                <li class="nav-item"><a class="nav-link" href="notifications/modals.html"><span class="nav-icon"></span> Modals</a></li>
+                <li class="nav-item"><a class="nav-link" href="notifications/toasts.html"><span class="nav-icon"></span> Toasts</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="widgets.html">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-calculator"></use>
+                </svg> Widgets<span class="badge badge-sm bg-info ms-auto">NEW</span></a></li>
+        <li class="nav-divider"></li>
+        <li class="nav-title">Extras</li>
+        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-star"></use>
+                </svg> Pages</a>
+            <ul class="nav-group-items">
+                <li class="nav-item"><a class="nav-link" href="login.html" target="_top">
+                        <svg class="nav-icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
+                        </svg> Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="register.html" target="_top">
+                        <svg class="nav-icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
+                        </svg> Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="404.html" target="_top">
+                        <svg class="nav-icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bug"></use>
+                        </svg> Error 404</a></li>
+                <li class="nav-item"><a class="nav-link" href="500.html" target="_top">
+                        <svg class="nav-icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bug"></use>
+                        </svg> Error 500</a></li>
+            </ul>
+        </li>
+        <li class="nav-item mt-auto"><a class="nav-link" href="https://coreui.io/docs/templates/installation/" target="_blank">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-description"></use>
+                </svg> Docs</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-danger" href="https://coreui.io/pro/" target="_top">
+                <svg class="nav-icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-layers"></use>
+                </svg> Try CoreUI
+                <div class="fw-semibold">PRO</div>
+            </a></li>
+    </ul>
+    <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+</div>
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
 
-{%  block sidebar %}
-        <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
-            <div class="sidenav-header">
-                <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-                <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html " target="_blank">
-                    <img src="{{ asset('/images/logo-ct-dark.png') }}" class="navbar-brand-img h-100" alt="main_logo">
-                    <span class="ms-1 font-weight-bold">My eDr</span>
-                </a>
-            </div>
-            <hr class="horizontal dark mt-0">
-            <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ path('dashboard') }}">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{ path('tableUser') }}">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Tables</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="../pages/billing.html">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Billing</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="../pages/virtual-reality.html">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-app text-info text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Virtual Reality</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="../pages/rtl.html">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">RTL</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-3">
-                        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="../pages/profile.html">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Profile</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="../pages/sign-in.html">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Sign In</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="../pages/sign-up.html">
-                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-collection text-info text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Sign Up</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </aside>
-
-{% endblock %}
-{% block body %}
-    {% endblock %}
+{#{% block body %}#}
+{# #}
+{#{% endblock %}#}
 
 
 </body>

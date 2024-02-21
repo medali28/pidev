@@ -9,8 +9,11 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class UserController extends AbstractController
 {
@@ -137,7 +141,6 @@ class UserController extends AbstractController
 
                 ]
             ])
-//            ->add('submit', SubmitType::class, ['label' => 'Login'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -171,5 +174,53 @@ class UserController extends AbstractController
         $em->remove($user);
         $em->flush();
         return $this->redirectToRoute('app_home_page');
+    }
+
+
+    #[Route('/dashboard', name: 'dashboard')]
+    public function dashboard(): Response
+    {
+
+        return $this->render('admin/dashboard.html.twig');
+    }
+
+    #[Route('/dashborad/alluser', name: 'all_user')]
+    public function allUser(UserRepository $repository,ManagerRegistry $managerRegistry): Response
+    {
+        $users = $repository ->findAll();
+        return $this->render('admin/tableuser.html.twig', [
+            'users' =>$users
+        ]);
+//        return $this->redirectToRoute('app_home_page');
+    }
+
+    #[Route('/dashborad/addexpert', name: 'Add_Expert')]
+    public function addExpert(Request $request ,UserPasswordHasherInterface $passwordHasher ,UserRepository $repository ,ManagerRegistry $managerRegistry): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user, [
+            'expert' => true,
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() &&  $form->isValid()) {
+            $emailexist = $repository->findOneBy(['email' => $user->getEmail()]);
+            if ($emailexist){
+                $form->get('email')->addError(new \Symfony\Component\Form\FormError('This email is already existe.'));
+                return $this->render('admin/addExpert.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
+            $user->setDateCreateCompte(new \DateTimeImmutable());
+            $user->setRoles(['ROLE_EXPERT']);
+            $user->setRate(100);
+            $user->setValidation(1);
+            $em = $managerRegistry->getManager();
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('all_user');
+        }
+        return $this->render('admin/addExpert.html.twig', ['form' => $form->createView()]);
     }
 }

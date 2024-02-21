@@ -30,12 +30,12 @@ class UserType extends AbstractType
             ->add('confirm_password' , PasswordType::class)
             ->add('first_name' , TextType::class , [
                 'constraints' => [
-                    new Regex('/^[a-zA-Z\-\' ]+$/' , message: ' Le name  n\'est pas valide.')
+                    new Regex('/^[a-zA-Z\-\' ]+$/' , message: 'The first name is invalid.')
                 ]
             ])
             ->add('last_name' , TextType::class , [
                 'constraints' => [
-                    new Regex('/^[a-zA-Z\-\' ]+$/' , message: ' Le prenom  n\'est pas valide.')
+                    new Regex('/^[a-zA-Z\-\' ]+$/' , message: 'The last name is invalid.')
                 ]
             ])
 //            ->add('role')
@@ -77,7 +77,6 @@ class UserType extends AbstractType
 //            ->add('date_debut',  TimeType::class)
 //            ->add('date_fin',  TimeType::class)
             ->add('prix_c')
-
             ->add('diplomes', FileType::class )
 //            ->add('dure_rdv')
             ->add('allergies' )
@@ -87,7 +86,7 @@ class UserType extends AbstractType
             ->add('Submit' , SubmitType::class)
         ;
 
-        if (!$options['password']) {
+        if ($options['password']) {
             $builder->remove('email');
             $builder->remove('first_name');
             $builder->remove('last_name');
@@ -102,20 +101,35 @@ class UserType extends AbstractType
             $builder->remove('antecedent_medicaux');
         }
 
-        if (!$options['patient']) {
+        if ($options['patient']) {
             $builder->remove('password');
             $builder->remove('confirm_password');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
             $builder->remove('specialite');
             $builder->remove('num_tel2');
+            $builder->remove('Submit');
         }
-        if (!$options['medecin']) {
+        if ($options['expert']) {
+            $builder->remove('image');
+//            $builder->remove('address');
+//            $builder->remove('num_tel');
+            $builder->remove('diplomes');
+            $builder->remove('prix_c');
+            $builder->remove('specialite');
+            $builder->remove('num_tel2');
+            $builder->remove('allergies');
+            $builder->remove('antecedent_maladie');
+            $builder->remove('antecedent_medicaux');
+//            $builder->remove('Submit');
+        }
+        if ($options['medecin']) {
             $builder->remove('password');
             $builder->remove('confirm_password');
             $builder->remove('allergies');
             $builder->remove('antecedent_maladie');
             $builder->remove('antecedent_medicaux');
+            $builder->remove('Submit');
         }
     }
 
@@ -123,9 +137,10 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'password' => true,
-            'patient' => true,
-            'medecin' => true,
+            'password' => false,
+            'patient' => false,
+            'medecin' => false,
+            'expert'=> false
         ]);
     }
 }

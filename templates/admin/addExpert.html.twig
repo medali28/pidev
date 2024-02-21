@@ -1,0 +1,112 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+{%  block content %}
+    <style>
+        .bodyadd{
+            margin-top: 5%;
+        }
+    </style>
+    <body>
+
+    <div class="bodyadd" >
+        {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card mb-4 mx-4">
+                        <div class="card-body p-4">
+                            <h1>Add Expert</h1>
+                            <p class="text-medium-emphasis">Create account expert</p>
+                            <div class="div2">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">
+                                <svg class="icon">
+                                  <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
+                                </svg>
+                                </span>
+                                              {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Enter your first name' , 'class':'form-control'}}) }}
+                            </div>
+                                {{ form_errors(form.first_name) }}
+                            </div>
+                            <div class="div2">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">
+                                <svg class="icon">
+                                  <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
+                                </svg>
+                                </span>
+                                {{ form_widget(form.last_name,  {'attr': {'placeholder': 'Enter your last name', 'class':'form-control' }} ) }}
+                            </div>
+                                {{ form_errors(form.last_name) }}
+                            </div>
+                            <div class="div2">
+                                    <div class="input-group mb-3">
+                                <span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg></span>
+                                            {{ form_widget(form.email ,  {'attr': {'placeholder': 'Enter your email' , 'class':'form-control'}}) }}
+                                    </div>
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            <div class="div2">
+                                <div class="input-group mb-3">
+                                <span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg></span>
+                                    {{ form_widget(form.address ,  {'attr': {'placeholder': 'Enter Address' , 'class':'form-control'}}) }}
+                                </div>
+                                {{ form_errors(form.address) }}
+                            </div>
+                            <div class="div2">
+                                <div class="input-group mb-3">
+                                <span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg></span>
+                                    {{ form_widget(form.num_tel ,  {'attr': {'placeholder': 'Enter  Phone Number' , 'class':'form-control'}}) }}
+                                </div>
+                                {{ form_errors(form.num_tel) }}
+                            </div>
+                            <div class="div2">
+                                <div class="input-group mb-3">
+                                <span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg></span>
+                                        {{ form_widget(form.password ,  {'attr': {'placeholder': 'Enter your password' , 'class':'form-control'}}) }}
+                                </div>
+                                {{ form_errors(form.password) }}
+                            </div>
+                            <div class="div2">
+                            <div class="input-group mb-4">
+                                <span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
+                    </svg></span>
+                                {{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Enter your password' , 'class':'form-control'}}) }}
+                            </div>
+                                {{ form_errors(form.confirm_password) }}
+                            </div>
+                            <button  class="btn btn-block btn-success submit" >Submit</button>
+{#                            {{ form_widget(form.Submit ,  {'attr': {'class':'btn btn-block btn-success submit'}}) }}#}
+{#                            <button class="btn btn-block btn-success submit" type="submit">Create Account</button>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+
+    <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="vendors/simplebar/js/simplebar.min.js"></script>
+    <script>
+        document.querySelector('.submit').addEventListener('click', function() {
+            console.log("it's work")
+            document.querySelector('form').submit();
+        });
+    </script>
+    </body>
+{% endblock %}
