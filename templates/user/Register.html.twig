@@ -19,9 +19,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-            background: url('{{ asset('/css/images/bg.png') }}'), -webkit-linear-gradient(bottom, #529CA7, #529CA7);
+            /*min-height: 100vh;*/
+            /*overflow: hidden;*/
+            background: url('{{ asset('/images/i5.png') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
         }
         ::selection{
             color: #fff;
@@ -118,7 +121,7 @@
             border: none;
             background: #529CA7;
             margin-bottom: 10px;
-            margin-left: 50%;
+            margin-left: 20px;
             margin-right: 30px;
             border-radius: 5px;
             color: #fff;
@@ -128,6 +131,14 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: 0.5s ease;
+        }
+        form .page .field .login-link{
+            width: 50%;
+            color: #262626;
+            margin-left: 20px;
+            margin-right: 30px;
+            margin-top: 20px;
+            text-align: center;
         }
         form .page .field .SecondButton{
             width: 100%;
@@ -261,8 +272,16 @@
             height: 80%;
             margin-left: 45px;
             width:305px;
+            /*display: block;*/
         }
+        .date{
+            display: inline;
+            align-items: baseline;
 
+            text-align: start;
+            margin-left: 45px;
+            width: 100px;
+        }
 
         .image-container {
             display: flex;
@@ -280,9 +299,10 @@
         }
 
     </style>
-    <script src="{{ asset('https://kit.fontawesome.com/a076d05399.js') }}"></script>
+
 </head>
 <body>
+<script src="{{ asset('https://kit.fontawesome.com/a076d05399.js') }}"></script>
 <div class="container">
     <header>Signup Form</header>
     <div class="progress-bar">
@@ -358,7 +378,7 @@
                 </div>
                 <div class="field">
                     <div class="row">
-                       <div class="div1">  <select name="gender">
+                       <div class="div1">  <select name="gender" id="gender">
                                <option value="male">Male</option>
                                <option value="female">Female</option>
                            </select></div>
@@ -373,16 +393,20 @@
                               <option value="doctor">Medecin</option>
 
                           </select></div>
-{#                        {{ form_widget(form.date_naissance ,  {'attr': {'placeholder': 'Enter your Date de naissance'}}) }}#}
-{#                        {{ form_errors(form.date_naissance) }}#}
+
                         <div class="div2">
-                            <input type="date" id="date_naissance"  name="date_naissance" placeholder="Date of Birth">
+{#                          {{ form_widget(form.date_naissance,  { 'id':'date_naissance','attr': {'placeholder': 'Enter your Antecedent Medicaux'}}) }}#}
+{#                                {{ form_errors(form.date_naissance) }}#}
+                            <input type="date" id="date_naissance" name="date_naissance" placeholder="Date of Birth">
+                            <div id="dateError" style="color: red; display: none;">Date of birth must be in the past</div>
                         </div>
                     </div>
                 </div>
                 <div class="field">
-                    <button class="firstNext next"  id="nextButton">Next</button>
-                </div>
+                    <div class="login-link" >
+                        Have an account? <a href="{{ path('app_login') }}" type="button" id="login">Login</a>
+                    </div>
+                       <button class="firstNext next"  id="nextButton">Next</button></div>
             </div>
 
             <div class="page">
@@ -391,7 +415,7 @@
                     <div class="field">
                         <div class="row">
                            <div class="div1"> <select name="maladie_chronique" id="maladie_chronique">
-                                   <option value="none">None</option>
+                                   <option value="None">None</option>
                                    <option value="Cardiaques">Cardiaques</option>
                                    <option value="Diabète">Diabète</option>
                                    <option value="Cancer">Cancer</option>
@@ -450,10 +474,12 @@
                     </div>
                     <div class="field">
                         <div class="row " >
-                            <input type="time" id="date_debut" name="date_debut" >
-                            <input type="time"   id="date_fin" name="date_fin">
+                            <div class="div1" style="align-items: start"><label>Date debut</label>
+                                <input type="time" id="date_debut" name="date_debut" ></div>
+                            <div class="div2"><label>Date fin</label><input type="time"  id="date_fin" name="date_fin"></div>
                         </div>
                     </div>
+                    <br>
                     <div class="field">
                         <div class="row">
                             <div class="div1">{{ form_widget(form.prix_c ,  {'id':'prix_c' ,'attr': {'placeholder': 'Enter your prix',}}) }}
@@ -507,7 +533,7 @@
 
                 <div class="field btns ">
                     <button class="prev-3 SecondButton prev">Previous</button>
-                    <button class="SecondButton submit" > Submit</button>
+                    <button  class="SecondButton submit" >Submit</button>
                 </div>
             </div>
         {{ form_end(form) }}
@@ -515,6 +541,18 @@
 </div>
 <script src="{{ asset('js/script.js') }}"></script>
 <script>
+    document.getElementById('date_naissance').addEventListener('change', function() {
+        var selectedDate = new Date(this.value);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate > today) {
+            document.getElementById('dateError').style.display = 'block';
+            document.getElementById('nextButton').disabled = true;
+        } else {
+            document.getElementById('dateError').style.display = 'none';
+            document.getElementById('nextButton').disabled = false;
+        }
+    });
     function toggleFields() {
         const roleSelect = document.getElementById('roleSelect');
         const patientFields = document.querySelector('.page .patient-fields');
@@ -543,13 +581,18 @@
         }
     }
     document.getElementById('nextButton').addEventListener('click', toggleFields);
-</script>
-<script>
-    // Attach an event listener to the "Submit" button
     document.querySelector('.submit').addEventListener('click', function() {
-        // Trigger form submission
+        console.log("it's work")
         document.querySelector('form').submit();
     });
+    // function login() {
+    //     console.log("here")
+    //     window.location.href = `https://127.0.0.1:8000/login` ;
+    // }
+    // document.getElementById('login').addEventListener('click', login);
+
+
 </script>
+
 </body>
 </html>

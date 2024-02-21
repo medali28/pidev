@@ -7,7 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Json;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -20,26 +22,30 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
 
     #[ORM\Column(name:"email", type:"string", length:255)]
     #[Assert\Email(message:"email invalid format")]
-    #[Assert\NotBlank(message:"le email ne doit pas être vide")]
+    #[Assert\NotBlank(message:" email must be non-empty")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"le mot de passe ne doit pas être vide")]
+    #[Assert\NotBlank(message:"password must be non-empty")]
     private ?string $password = null;
 
-    #[Assert\EqualTo(propertyPath:"Password", message:"Vous n'avez pas tapé le méme mot de passe")]
+    #[Assert\EqualTo(propertyPath:"password", message:"You did not type the same password")]
     public $confirm_password;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"First name must be non-empty")]
     private ?string $first_name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255 , )]
     #[Assert\NotBlank(message:"Last name must be non-empty")]
     private ?string $last_name = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $role = null;
+    #[ORM\Column(type: "json" , nullable: true)]
+    private array $roles = [];
+
+    #[ORM\Column(type: "string", length: 180 , nullable: true)]
+    private string $activationToken;
+
 
     #[ORM\Column(length: 255 , nullable: true)]
     private ?string $gender = null;
@@ -63,9 +69,9 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     private ?\DateTimeInterface $date_naissance = null;
 
     #[Assert\File( maxSize:"1M" , mimeTypes: ["image/jpeg", "image/png"] ,  mimeTypesMessage:"Veuillez télécharger une image au format JPG ou PNG" ) ]
-    #[Assert\NotBlank(message:"image must be non-empty")]
-    #[ORM\Column(length: 255 , nullable: true)]
-    private ?string $image = null;
+//    #[Assert\NotBlank(message:"image must be non-empty")]
+    #[ORM\Column(  length: 255 , nullable: true)]
+    private ?string $image;
 
     #[ORM\Column(length: 255 , nullable: true)]
     #[Assert\NotBlank(message:"Address must be non-empty")]
@@ -126,42 +132,42 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $groupe_sanguin = null;
 
-    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]
-    private Collection $id_patient;
+//    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]
+//    private Collection $id_patient;
+//
+//    #[ORM\OneToMany(mappedBy: 'medicin', targetEntity: RendezVous::class, orphanRemoval: true)]
+//    private Collection $id_medecin;
+//
+//    #[ORM\OneToMany(mappedBy: 'expert', targetEntity: RendezVous::class)]
+//    private Collection $id_expert;
 
-    #[ORM\OneToMany(mappedBy: 'medicin', targetEntity: RendezVous::class, orphanRemoval: true)]
-    private Collection $id_medecin;
-
-    #[ORM\OneToMany(mappedBy: 'expert', targetEntity: RendezVous::class)]
-    private Collection $id_expert;
-
-
-
-    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Question::class, orphanRemoval: true)]
-    private Collection $questions;
-
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reponse::class, orphanRemoval: true)]
-    private Collection $reponses;
-
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reclamation::class, orphanRemoval: true)]
-    private Collection $reclame;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Medicament::class)]
-    private Collection $medicaments;
-
-
-
-    public function __construct()
-    {
-        $this->id_patient = new ArrayCollection();
-        $this->id_medecin = new ArrayCollection();
-        $this->id_expert = new ArrayCollection();
-        $this->questions = new ArrayCollection();
-        $this->reponses = new ArrayCollection();
-        $this->reclame = new ArrayCollection();
-        $this->medicaments = new ArrayCollection();
-
-    }
+//
+//
+//    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Question::class, orphanRemoval: true)]
+//    private Collection $questions;
+//
+//    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reponse::class, orphanRemoval: true)]
+//    private Collection $reponses;
+//
+//    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reclamation::class, orphanRemoval: true)]
+//    private Collection $reclame;
+//
+//    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Medicament::class)]
+//    private Collection $medicaments;
+//
+//
+//
+//    public function __construct()
+//    {
+//        $this->id_patient = new ArrayCollection();
+//        $this->id_medecin = new ArrayCollection();
+//        $this->id_expert = new ArrayCollection();
+//        $this->questions = new ArrayCollection();
+//        $this->reponses = new ArrayCollection();
+//        $this->reclame = new ArrayCollection();
+//        $this->medicaments = new ArrayCollection();
+//
+//    }
 
 
 
@@ -220,17 +226,27 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         return $this;
     }
 
-    public function getRole(): ?string
+    public function getRoles(): array
     {
-        return $this->role;
+        return $this->roles;
     }
 
-    public function setRole(string $role): static
+    public function setRoles(array $roles): void
     {
-        $this->role = $role;
-
-        return $this;
+        $this->roles = $roles;
     }
+
+    public function getActivationToken(): string
+    {
+        return $this->activationToken;
+    }
+
+    public function setActivationToken(string $activationToken): void
+    {
+        $this->activationToken = $activationToken;
+    }
+
+
 
     public function getGender(): ?string
     {
@@ -510,218 +526,218 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         return $this;
     }
 
-    /**
-     * @return Collection<int, RendezVous>
-     */
-    public function getIdPatient(): Collection
-    {
-        return $this->id_patient;
-    }
-
-    public function addIdPatient(RendezVous $idPatient): static
-    {
-        if (!$this->id_patient->contains($idPatient)) {
-            $this->id_patient->add($idPatient);
-            $idPatient->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdPatient(RendezVous $idPatient): static
-    {
-        if ($this->id_patient->removeElement($idPatient)) {
-            // set the owning side to null (unless already changed)
-            if ($idPatient->getPatient() === $this) {
-                $idPatient->setPatient(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, RendezVous>
-     */
-    public function getIdMedecin(): Collection
-    {
-        return $this->id_medecin;
-    }
-
-    public function addIdMedecin(RendezVous $idMedecin): static
-    {
-        if (!$this->id_medecin->contains($idMedecin)) {
-            $this->id_medecin->add($idMedecin);
-            $idMedecin->setMedecin($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdMedecin(RendezVous $idMedecin): static
-    {
-        if ($this->id_medecin->removeElement($idMedecin)) {
-            // set the owning side to null (unless already changed)
-            if ($idMedecin->getMedecin() === $this) {
-                $idMedecin->setMedecin(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, RendezVous>
-     */
-    public function getIdExpert(): Collection
-    {
-        return $this->id_expert;
-    }
-
-    public function addIdExpert(RendezVous $idExpert): static
-    {
-        if (!$this->id_expert->contains($idExpert)) {
-            $this->id_expert->add($idExpert);
-            $idExpert->setExpert($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdExpert(RendezVous $idExpert): static
-    {
-        if ($this->id_expert->removeElement($idExpert)) {
-            // set the owning side to null (unless already changed)
-            if ($idExpert->getExpert() === $this) {
-                $idExpert->setExpert(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Collection<int, Question>
-     */
-    public function getQuestions(): Collection
-    {
-        return $this->questions;
-    }
-
-    public function addQuestion(Question $question): static
-    {
-        if (!$this->questions->contains($question)) {
-            $this->questions->add($question);
-            $question->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuestion(Question $question): static
-    {
-        if ($this->questions->removeElement($question)) {
-            // set the owning side to null (unless already changed)
-            if ($question->getPatient() === $this) {
-                $question->setPatient(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Reponse>
-     */
-    public function getReponses(): Collection
-    {
-        return $this->reponses;
-    }
-
-    public function addReponse(Reponse $reponse): static
-    {
-        if (!$this->reponses->contains($reponse)) {
-            $this->reponses->add($reponse);
-            $reponse->setMedecin($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReponse(Reponse $reponse): static
-    {
-        if ($this->reponses->removeElement($reponse)) {
-            // set the owning side to null (unless already changed)
-            if ($reponse->getMedecin() === $this) {
-                $reponse->setMedecin(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Reclamation>
-     */
-    public function getReclame(): Collection
-    {
-        return $this->reclame;
-    }
-
-    public function addReclame(Reclamation $reclame): static
-    {
-        if (!$this->reclame->contains($reclame)) {
-            $this->reclame->add($reclame);
-            $reclame->setMedecin($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReclame(Reclamation $reclame): static
-    {
-        if ($this->reclame->removeElement($reclame)) {
-            // set the owning side to null (unless already changed)
-            if ($reclame->getMedecin() === $this) {
-                $reclame->setMedecin(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Medicament>
-     */
-    public function getMedicaments(): Collection
-    {
-        return $this->medicaments;
-    }
-
-    public function addMedicament(Medicament $medicament): static
-    {
-        if (!$this->medicaments->contains($medicament)) {
-            $this->medicaments->add($medicament);
-            $medicament->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMedicament(Medicament $medicament): static
-    {
-        if ($this->medicaments->removeElement($medicament)) {
-            // set the owning side to null (unless already changed)
-            if ($medicament->getUser() === $this) {
-                $medicament->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
+//    /**
+//     * @return Collection<int, RendezVous>
+//     */
+//    public function getIdPatient(): Collection
+//    {
+//        return $this->id_patient;
+//    }
+//
+//    public function addIdPatient(RendezVous $idPatient): static
+//    {
+//        if (!$this->id_patient->contains($idPatient)) {
+//            $this->id_patient->add($idPatient);
+//            $idPatient->setPatient($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeIdPatient(RendezVous $idPatient): static
+//    {
+//        if ($this->id_patient->removeElement($idPatient)) {
+//            // set the owning side to null (unless already changed)
+//            if ($idPatient->getPatient() === $this) {
+//                $idPatient->setPatient(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection<int, RendezVous>
+//     */
+//    public function getIdMedecin(): Collection
+//    {
+//        return $this->id_medecin;
+//    }
+//
+//    public function addIdMedecin(RendezVous $idMedecin): static
+//    {
+//        if (!$this->id_medecin->contains($idMedecin)) {
+//            $this->id_medecin->add($idMedecin);
+//            $idMedecin->setMedecin($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeIdMedecin(RendezVous $idMedecin): static
+//    {
+//        if ($this->id_medecin->removeElement($idMedecin)) {
+//            // set the owning side to null (unless already changed)
+//            if ($idMedecin->getMedecin() === $this) {
+//                $idMedecin->setMedecin(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection<int, RendezVous>
+//     */
+//    public function getIdExpert(): Collection
+//    {
+//        return $this->id_expert;
+//    }
+//
+//    public function addIdExpert(RendezVous $idExpert): static
+//    {
+//        if (!$this->id_expert->contains($idExpert)) {
+//            $this->id_expert->add($idExpert);
+//            $idExpert->setExpert($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeIdExpert(RendezVous $idExpert): static
+//    {
+//        if ($this->id_expert->removeElement($idExpert)) {
+//            // set the owning side to null (unless already changed)
+//            if ($idExpert->getExpert() === $this) {
+//                $idExpert->setExpert(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//
+//
+//    /**
+//     * @return Collection<int, Question>
+//     */
+//    public function getQuestions(): Collection
+//    {
+//        return $this->questions;
+//    }
+//
+//    public function addQuestion(Question $question): static
+//    {
+//        if (!$this->questions->contains($question)) {
+//            $this->questions->add($question);
+//            $question->setPatient($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeQuestion(Question $question): static
+//    {
+//        if ($this->questions->removeElement($question)) {
+//            // set the owning side to null (unless already changed)
+//            if ($question->getPatient() === $this) {
+//                $question->setPatient(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection<int, Reponse>
+//     */
+//    public function getReponses(): Collection
+//    {
+//        return $this->reponses;
+//    }
+//
+//    public function addReponse(Reponse $reponse): static
+//    {
+//        if (!$this->reponses->contains($reponse)) {
+//            $this->reponses->add($reponse);
+//            $reponse->setMedecin($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeReponse(Reponse $reponse): static
+//    {
+//        if ($this->reponses->removeElement($reponse)) {
+//            // set the owning side to null (unless already changed)
+//            if ($reponse->getMedecin() === $this) {
+//                $reponse->setMedecin(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection<int, Reclamation>
+//     */
+//    public function getReclame(): Collection
+//    {
+//        return $this->reclame;
+//    }
+//
+//    public function addReclame(Reclamation $reclame): static
+//    {
+//        if (!$this->reclame->contains($reclame)) {
+//            $this->reclame->add($reclame);
+//            $reclame->setMedecin($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeReclame(Reclamation $reclame): static
+//    {
+//        if ($this->reclame->removeElement($reclame)) {
+//            // set the owning side to null (unless already changed)
+//            if ($reclame->getMedecin() === $this) {
+//                $reclame->setMedecin(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection<int, Medicament>
+//     */
+//    public function getMedicaments(): Collection
+//    {
+//        return $this->medicaments;
+//    }
+//
+//    public function addMedicament(Medicament $medicament): static
+//    {
+//        if (!$this->medicaments->contains($medicament)) {
+//            $this->medicaments->add($medicament);
+//            $medicament->setUser($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeMedicament(Medicament $medicament): static
+//    {
+//        if ($this->medicaments->removeElement($medicament)) {
+//            // set the owning side to null (unless already changed)
+//            if ($medicament->getUser() === $this) {
+//                $medicament->setUser(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
+//
 
 
 

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Doctrine\DBAL\Types\FloatType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -47,10 +48,19 @@ class UserType extends AbstractType
 //            ->add('last_modify_date')
 //            ->add('last_modify_data')
 //            ->add('date_naissance', DateType::class, [
-//                'format' => 'dd-MM-yyyy',
-//                'attr' => ['class' => 'datepicker'],
+////                'format' => 'dd/MM/yyyy',
+//
+//                'attr' => [
+////                    'class' => 'datepicker',
+//                'input'=> 'string',
+//                ],
 //            ])
-            ->add('image', FileType::class)
+            ->add('image', FileType::class , [
+                'multiple'=>false,
+                'mapped'=> false,
+                'required'=> false,
+
+            ])
             ->add('address')
 //            ->add('maladie_chronique')
             ->add('num_tel2',IntegerType::class , [
@@ -76,12 +86,46 @@ class UserType extends AbstractType
 //            ->add('groupe_sanguin')
             ->add('Submit' , SubmitType::class)
         ;
+
+        if (!$options['password']) {
+            $builder->remove('email');
+            $builder->remove('first_name');
+            $builder->remove('last_name');
+            $builder->remove('image');
+            $builder->remove('address');
+            $builder->remove('num_tel');
+            $builder->remove('prix_c');
+            $builder->remove('specialite');
+            $builder->remove('num_tel2');
+            $builder->remove('allergies');
+            $builder->remove('antecedent_maladie');
+            $builder->remove('antecedent_medicaux');
+        }
+
+        if (!$options['patient']) {
+            $builder->remove('password');
+            $builder->remove('confirm_password');
+            $builder->remove('diplomes');
+            $builder->remove('prix_c');
+            $builder->remove('specialite');
+            $builder->remove('num_tel2');
+        }
+        if (!$options['medecin']) {
+            $builder->remove('password');
+            $builder->remove('confirm_password');
+            $builder->remove('allergies');
+            $builder->remove('antecedent_maladie');
+            $builder->remove('antecedent_medicaux');
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'password' => true,
+            'patient' => true,
+            'medecin' => true,
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller\user;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -38,10 +39,34 @@ class UserController extends AbstractController
                 ]);
             }
 
+
             $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
             $user->setDateCreateCompte(new \DateTimeImmutable());
             $user->setLastModifyData(new \DateTimeImmutable());
             $user->setLastModifyPassword(new \DateTimeImmutable());
+             $user->setMaladieChronique($request->get('maladie_chronique'));
+            $user->setDateNaissance(DateTime::createFromFormat('Y-m-d', $request->get('date_naissance')));
+            $role = $request->get('roleSelect');
+            if ($role == 'patient'){
+                $user->setRoles(['ROLE_PATIENT']);
+            }else{
+                $user->setRoles(['ROLE_MEDECIN']);
+            }
+            $user->setGender($request->get('gender'));
+            $user->setGroupeSanguin($request->get('groupe_sanguin'));
+            $dateDebut = \DateTime::createFromFormat('H:i', $request->get('date_debut'));
+            if ($dateDebut instanceof \DateTime) {
+                $user->setDateDebut($dateDebut);
+            }else{
+                $user->setDateDebut(null);
+            }
+            $dateFin = \DateTime::createFromFormat('H:i', $request->get('date_fin'));
+            if ($dateFin instanceof \DateTime) {
+                $user->setDateFin($dateFin);
+            }else{
+                $user->setDateFin(null);
+            }
+//            $user->setDureRdv($request->get('dure_rdv'));
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 if ($imageFile->getMimeType() === 'image/jpeg' || $imageFile->getMimeType() === 'image/png') {
@@ -69,7 +94,8 @@ class UserController extends AbstractController
             $em = $managerRegistry->getManager();
             $em->persist($user);
             $em->flush();
-            return  new Response("user add");
+//            return  new Response($user->getId());
+            return $this->redirectToRoute('Update_data', ['id' => $user->getId()]);
         }
 
         return $this->render('user/Register.html.twig', [
@@ -90,18 +116,19 @@ class UserController extends AbstractController
             return  new Response("data update");
         }
 
-        return $this->render('user/modify.html.twig', [
+        return $this->render('user/Modify.html.twig', [
             'form' => $form->createView(),
+            'user'=>$user
         ]);
     }
 
-    #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
+    #[Route('/login', name: 'app_login')]
     public function login(Request $request , UserRepository $repository , UserPasswordHasherInterface $passwordEncoder): Response
     {
         $form = $this->createFormBuilder()
             ->add('email', EmailType::class ,[
                 'constraints' => [
-                    new NotBlank(message: 'email doit etre vide') ,
+                    new NotBlank(message: 'email doit etre non vide') ,
                 ]
             ])
             ->add('password', PasswordType::class ,[
@@ -110,7 +137,7 @@ class UserController extends AbstractController
 
                 ]
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Login'])
+//            ->add('submit', SubmitType::class, ['label' => 'Login'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -139,10 +166,10 @@ class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'delete_user')]
     public function delete($id,UserRepository $repository,ManagerRegistry $managerRegistry): Response
     {
-        $author = $repository ->find($id);
+        $user = $repository ->find($id);
         $em = $managerRegistry->getManager();
-        $em->remove($author);
+        $em->remove($user);
         $em->flush();
-        return  new Response("delete done ");
+        return $this->redirectToRoute('app_home_page');
     }
 }
