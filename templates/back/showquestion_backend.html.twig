@@ -1,7 +1,6 @@
 {% extends 'baseback.html.twig' %}
 
 {% block body %}
-
     <body class="bg-light">
 
     <div class="wrapper d-flex flex-column min-vh-100 bg-light">
@@ -54,17 +53,16 @@
                             </ul>
                             <div class="tab-content rounded-bottom">
 
-
                                 <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
                                     <table class="table table-striped">
                                         <thead class="table-light">
                                         <tr>
-                                            <th scope="col">Question id</th>
+                                            <th scope="col">Question ID</th>
                                             <th scope="col">Title</th>
                                             <th scope="col">Image</th>
                                             <th scope="col">Description</th>
-                                            <th scope="col">Date&time</th>
-                                            <th scope="col">Suprimer</th>
+                                            <th scope="col">Date & Time</th>
+                                            <th scope="col">Supprimer</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -73,11 +71,10 @@
                                                 <td>{{ question.id }}</td>
                                                 <td>{{ question.title }}</td>
                                                 <td>
-                                                    <img src="/uploads/image/{{ question.image }}" class="img-fluid" alt="{{ question.image }}">
+                                                    <img src="/uploads/image/{{ question.image }}" class="img-fluid rounded" alt="{{ question.image }}" style="max-width: 80px;">
                                                 </td>
                                                 <td>{{ question.description }}</td>
                                                 <td>{{ question.datetempQ|date('d/m/Y g:i:s a') }}</td>
-
 
                                                 <td>
                                                     <a href="{{ path('app_questionback_delete', {'id': question.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to Delete?')">
@@ -106,21 +103,20 @@
                         <div class="example">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-coreui-toggle="tab" href="#preview-1018" role="tab">
+                                    <a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
                                         Preview Table Commentaire</a>
                                 </li>
                             </ul>
                             <div class="tab-content rounded-bottom">
-                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1019">
                                     <table class="table table-striped">
                                         <thead class="table-light">
                                         <tr>
-                                            <th scope="col">Reponse id</th>
+                                            <th scope="col">Reponse ID</th>
                                             <th scope="col">Description</th>
-                                            <th scope="col">Date&time</th>
+                                            <th scope="col">Date & Time</th>
                                             <th scope="col">Question</th>
-
-                                            <th scope="col">Suprimer</th>
+                                            <th scope="col">Supprimer</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -155,7 +151,6 @@
         <script src="{{ asset('backadmin/vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
         <script src="{{ asset('backadmin/vendors/simplebar/js/simplebar.min.js') }}"></script>
     </div>
-
     </body>
 
 {% endblock %}
