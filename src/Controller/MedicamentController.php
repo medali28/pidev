@@ -127,6 +127,13 @@ class MedicamentController extends AbstractController
         $em = $managerRegistry->getManager();
         $em->remove($medciament);
         $em->flush() ;
+        $remainingMedicaments = $medicamentRepository->findAll();
+        foreach ($remainingMedicaments as $index => $remainingMedicament) {
+            $remainingMedicament->setId($index + 1);
+            $em->persist($remainingMedicament);
+        }
+        $em->flush();
+
         return $this->redirectToRoute('app_gestion_donation');
     }
 

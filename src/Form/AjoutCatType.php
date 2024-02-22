@@ -13,6 +13,7 @@ class AjoutCatType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('description')
         ;
     }
 

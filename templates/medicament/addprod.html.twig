@@ -11,7 +11,7 @@
             <div class="container">
                 <div class="row justify-content-center align-items-center">
                     <div class="col-lg-5 col-12 mb-5">
-                        <h2 class="text-white">Donate</h2>
+                        <h2 class="text-white">Aidez les gens en faisant don de médicaments</h2>
                     </div>
                     <div class="col-lg-5 col-12" style="display: flex; align-items: center; justify-content: center;">
                         <div class="topics-detail-block bg-white shadow-lg" style="text-align: center;"><img src="/images/logo.png" class="topics-detail-block-image img-fluid" style="width: 70%; height: 70%;" alt="logo"></div>
@@ -47,12 +47,16 @@
                         {{ form_label(form.date_fin) }} {{ form_widget(form.date_fin, {'attr': {'class': 'form-control-file'}}) }} {{ form_errors(form.date_fin) }}
                     </div>
                     <div class="form-group"  >
-                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" >
-                            {{ form_label(form.category) }} {{ form_widget(form.category, {'attr': {'class': 'form-control-file'}}) }} {{ form_errors(form.category) }}
-                        </button>
+
 
                     </div>
-                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                    <div class="input-group mb-3">
+
+                        {{ form_label(form.category, null, {'label_attr': {'class': 'input-group-text'}}) }}
+                        {{ form_widget(form.category, {'attr': {'class': 'form-select', 'id': 'inputGroupSelect01'}}) }}
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-primary" href="{{ 'app_gestion_donation' }}">Ajouter</button>
 
 
                     <div class="form-group">

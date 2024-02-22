@@ -25,6 +25,8 @@ class CategoryController extends AbstractController
         return $this->render('main/tableuser.html.twig', [
             'categories' => $categories,
         ]);
+
+
     }
 
 
@@ -54,7 +56,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         { $em = $managerRegistry->getManager();
             $em->flush();
-            return $this->redirectToRoute('app_gestioncategorie');
+            return $this->redirectToRoute('tableUser');
         }
         return $this->renderForm("category/updateCat.html.twig",
             ["form"=>$form]) ;
@@ -69,6 +71,6 @@ class CategoryController extends AbstractController
         $em = $managerRegistry->getManager();
         $em->remove($categorie);
         $em->flush() ;
-        return $this->redirectToRoute('app_gestioncategorie');
+        return $this->redirectToRoute('tableUser');
     }
 }
