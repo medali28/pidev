@@ -139,8 +139,11 @@ class User
     }
 
 
-
-
+    public function __toString(): string
+    {
+        return $this->id;
+        // TODO: Implement __toString() method.
+    }
 
     public function getId(): ?int
     {

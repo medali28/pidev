@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
@@ -18,12 +19,17 @@ class Reclamation
     private ?User $patient = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "le nom de medecin est obligatoire")]
     private ?string $medecin = null;
 
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "le sujet est obligatoire")]
     private ?string $sujet = null;
 
-    #[ORM\Column(length: 300)]
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "la description est obligatoire")]
     private ?string $description_rec = null;
 
     #[ORM\Column(length: 255)]

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer Réclamation{% endblock %}
+
+{% block body %}
+    <h1>Supprimer Réclamation</h1>
+
+    <p>Êtes-vous sûr de vouloir supprimer cette réclamation ?</p>
+
+    <form method="post" action="{{ path('delete_reclamation', {'id': reclamation.id, 'token': token}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+{% endblock %}
