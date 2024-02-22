@@ -1,57 +1,20 @@
-{#<!doctype html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <meta name="viewport"#}
-{#          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">#}
-{#    <meta http-equiv="X-UA-Compatible" content="ie=edge">#}
-{#    <title>Document</title>#}
-{#</head>#}
-{#<body>#}
-{#<h1>create account</h1>#}
 
-{#{{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}#}
-{#{{ form_widget(form.image)}}#}
-{#{{ form_errors(form.image) }}<br>#}
-{#<label for="inputText" class="" >Email</label>#}
-{#{{ form_widget(form.email) }}#}
-{#{{ form_errors(form.email) }}<br>#}
-{#<label for="inputText" class="" >First Name</label>#}
-{#{{ form_widget(form.first_name) }}#}
-{#{{ form_errors(form.first_name) }}<br>#}
-{#<label for="inputText" class="" >Last Name</label>#}
-{#{{ form_widget(form.last_name) }}#}
-{#{{ form_errors(form.last_name) }}<br>#}
-{#<label for="inputText" class="" >Gender</label>#}
-{#{{ form_widget(form.gender) }}#}
-{#{{ form_errors(form.gender) }}<br>#}
-{#<label for="inputText" class="" >Telphone</label>#}
-{#{{ form_widget(form.num_tel) }}#}
-{#{{ form_errors(form.num_tel) }}<br>#}
-{#<label for="inputText" class="" >Role</label>#}
-{#{{ form_widget(form.role) }}#}
-{#{{ form_errors(form.role) }}<br>#}
-{#<label for="inputText" class="" >Adress</label>#}
-{#{{ form_widget(form.address) }}#}
-{#{{ form_errors(form.address) }}<br>#}
-{#{{ form_end(form) }}#}
-
-
-
-{#</body>#}
-{#</html>#}
 {% extends 'user/profilebase.html.twig' %}
 {% block body %}
-
-    <main  class="main-content position-relative border-radius-lg ">
+    <main  class="main-content position-relative border-radius-lg">
 
         <div class="card shadow-lg mx-4 card-profile-bottom">
-            <div class="card-body p-3">
+            <div class="card-body p-3" >
                 <div class="row gx-4">
                     <div class="col-auto">
                         <div class="avatar avatar-xl position-relative">
-{#                            <label>{{ user.image }}</label>#}
-                            <img src="{{ asset('profile/images/' ~ user.image) }}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                            {% if form.vars.value.image is not empty %}
+                                <img class="w-100 border-radius-lg shadow-sm" alt="user1" src="{{ asset('/profile/images/'~ form.vars.value.image) }}" >
+                            {% else %}
+                                <img src="{{ asset('/profile/images/profilebase.png') }}" class="w-100 border-radius-lg shadow-sm"  alt="user1">
+                            {% endif %}
+
+
                         </div>
                     </div>
                     <div class="col-auto my-auto">
@@ -79,21 +42,17 @@
                                         <span class="ms-2">Messages</span>
                                     </a>
                                 </li>
-{#                                <li class="nav-item">#}
-{#                                    <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">#}
-{#                                        <i class="ni ni-settings-gear-65"></i>#}
-{#                                        <span class="ms-2">Settings</span>#}
-{#                                    </a>#}
-{#                                </li>#}
+
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container-fluid py-4">
+        <div class="container-fluid py-4 ">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
+                    {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
                     <div class="card">
                         <div class="card-header pb-0">
                             <div class="d-flex align-items-center">
@@ -102,87 +61,196 @@
                         </div>
                         <div class="card-body">
                             <p class="text-uppercase text-sm">User Information</p>
-                            <div class="row">
-                                <div class="col-md-6">
+                            <div class="row" >
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Username</label>
-                                        <input class="form-control" type="text" value="lucky.jesse">
+                                        <label for="example-text-input" class="form-control-label">Image</label>
+                                        {% if form.vars.value.image is not empty %}
+                                            <img class="form-control" style="height:80px ;width: 80px" alt="user1" src="{{ asset('/profile/images/'~ form.vars.value.image) }}" >
+                                        {% else %}
+                                            <img src="{{ asset('/profile/images/profilebase.png') }}" class="form-control" style="height:80px ;width: 80px" alt="user1">
+                                        {% endif %}
+                                        {{  form_widget(form.image,  {'attr': {'class':'form-control'}}) }}
+                                        {{ form_errors(form.image) }}
+
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Email address</label>
-                                        <input class="form-control" type="email" value="jesse@example.com">
+                                        <label for="example-text-input" class="form-control-label">First Name</label>
+                                        {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Enter your first name' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.first_name) }}
+
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">First name</label>
-                                        <input class="form-control" type="text" value="Jesse">
+                                        <label for="example-text-input" class="form-control-label">Last Name</label>
+                                        {{ form_widget(form.last_name ,  {'attr': {'placeholder': 'Enter your last name' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.last_name) }}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Last name</label>
-                                        <input class="form-control" type="text" value="Lucky">
+                                        <label for="example-text-input" class="form-control-label">Phone Number</label>
+                                        {{  form_widget(form.num_tel,  {'attr': {'placeholder': 'Enter your first name' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.num_tel) }}
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="horizontal dark">
-                            <p class="text-uppercase text-sm">Contact Information</p>
-                            <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Email</label>
+                                        {{  form_widget(form.email ,  {'attr': {'placeholder': 'Enter your Email' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Address</label>
-                                        <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                        {{  form_widget(form.address ,  {'attr': {'placeholder': 'Enter your Adress' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.address) }}
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">City</label>
-                                        <input class="form-control" type="text" value="New York">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Country</label>
-                                        <input class="form-control" type="text" value="United States">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Postal code</label>
-                                        <input class="form-control" type="text" value="437300">
-                                    </div>
-                                </div>
+
                             </div>
+
                             <hr class="horizontal dark">
-                            <p class="text-uppercase text-sm">About me</p>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">About me</label>
-                                        <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source.">
+                            <p class="text-uppercase text-sm">Specific Information</p>
+                            {% if role == "patient" %}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Antecedent Maladie</label>
+                                            {{ form_widget(form.antecedent_maladie ,  {'attr': {'placeholder': 'Enter Antecedent Maladie' , 'class':'form-control'}}) }}
+                                            {{ form_errors(form.antecedent_maladie) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Antecedent Medicaux</label>
+                                            {{ form_widget(form.antecedent_medicaux ,  {'attr': {'placeholder': 'Enter Antecedent Medicaux' , 'class':'form-control'}}) }}
+                                            {{ form_errors(form.antecedent_medicaux) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">allergies</label>
+                                            {{ form_widget(form.allergies ,  {'attr': {'placeholder': 'Enter allergies' , 'class':'form-control'}}) }}
+                                            {{ form_errors(form.allergies) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="">
+                                            <label for="example-text-input" class="form-control-label">Maladie Chronique</label>
+                                            <div class=""> <select name="maladie_chronique" id="maladie_chronique">
+                                                    <option value="None">None</option>
+                                                    <option value="Cardiaques">Cardiaques</option>
+                                                    <option value="Diabète">Diabète</option>
+                                                    <option value="Cancer">Cancer</option>
+                                                    <option value="respiratoires chroniques">Respiratoires Chroniques</option>
+                                                    <option value="rénales chroniques">Rénales Chroniques</option>
+                                                </select></div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Groupe Sanguin</label>
+                                            <div class=""> <select name="groupe_sanguin" id="groupe_sanguin">
+                                                    <option value="None">None</option>
+                                                    <option value="A+">A+</option>
+                                                    <option value="A-">A-</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="B-">B-</option>
+                                                    <option value="AB+">AB+</option>
+                                                    <option value="AB-">AB-</option>
+                                                    <option value="O+">O+</option>
+                                                    <option value="O-">O-</option>
+                                                </select></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% elseif role == "medecin" %}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Specialite</label>
+                                            {{  form_widget(form.specialite,  {'attr': {'placeholder': 'Enter specialite' , 'class':'form-control'}}) }}
+                                            {{ form_errors(form.specialite) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Phone Number</label>
+                                            {{  form_widget(form.num_tel2,  {'attr': {'placeholder': 'Enter Phone Number' , 'class':'form-control'}}) }}
+                                            {{ form_errors(form.num_tel2) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Prix Concultation</label>
+                                            {{  form_widget(form.prix_c,  {'attr': {'placeholder': 'Enter Prix Concultation' , 'class':'form-control'}}) }}
+                                            {{ form_errors(form.prix_c) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Date Debut</label>
+                                            <input class="form-control" type="time" id="date_debut" name="date_debut" ></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Date Fin</label>
+                                            <input class="form-control" type="time"  id="date_fin" name="date_fin">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Time</label>
+                                            <div class=""> <select name="dure_rdv" id="dure_rdv">
+                                                    <option value="15">15 min</option>
+                                                    <option value="20">20 min</option>
+                                                    <option value="30">30 min</option>
+                                                    <option value="40">40 min</option>
+                                                    <option value="50">50 min</option>
+                                                    <option value="60">60 min</option>
+                                                </select></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Diplomes</label>
+                                            {% if form.vars.value.diplomes is not empty %}
+                                                <img class="form-control" style="height:80px ;width: 80px" alt="user1" src="{{ asset('/profile/images/'~ form.vars.value.diplomes) }}" >
+                                            {% else %}
+                                                <img src="{{ asset('/profile/images/diplomes.jpg') }}" class="form-control" style="height:80px ;width: 80px" alt="user1">
+                                            {% endif %}
+
+                                            {{  form_widget(form.diplomes,  {'attr': {'class':'form-control'}}) }}
+                                            {{ form_errors(form.diplomes) }}
+
+                                        </div>
+
                                     </div>
                                 </div>
-                            </div>
+                            {%  endif %}
                         </div>
 
-                        <button class="btn btn-primary btn-sm ms-auto">Save</button>
+                        <button class="set btn-primary btn ms-auto">Save</button>
                     </div>
+                    {{ form_end(form) }}
                 </div>
             </div>
         </div>
     </main>
+
     <script src="{{ asset('/js/argon-dashboard.min.js') }}"></script>
     <script>
-        // var win = navigator.platform.indexOf('Win') > -1;
-        // if (win && document.querySelector('#sidenav-scrollbar')) {
-        //     var options = {
-        //         damping: '0.5'
-        //     }
-        //     Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-        // }
+        document.querySelector('.set').addEventListener('click', function() {
+            console.log("it's work")
+            document.querySelector('form').submit();
+        });
         function remove(event){
             event.preventDefault();
             console.log("here");
@@ -201,8 +269,5 @@
 
 
         document.getElementById('{{ user.id }}').addEventListener('click', remove) ;
-
     </script>
 {%  endblock %}
-
-

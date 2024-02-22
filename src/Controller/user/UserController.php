@@ -48,13 +48,24 @@ class UserController extends AbstractController
             $user->setDateCreateCompte(new \DateTimeImmutable());
             $user->setLastModifyData(new \DateTimeImmutable());
             $user->setLastModifyPassword(new \DateTimeImmutable());
-             $user->setMaladieChronique($request->get('maladie_chronique'));
-            $user->setDateNaissance(DateTime::createFromFormat('Y-m-d', $request->get('date_naissance')));
-            $role = $request->get('roleSelect');
-            if ($role == 'patient'){
+
+            $roleselect = $request->get('roleSelect');
+            if ($roleselect == 'patient'){
                 $user->setRoles(['ROLE_PATIENT']);
+                $user->setDureRdv(null);
+                $user->setRate(100);
+                $user->setValidation(1);
+                $user->setMaladieChronique($request->get('maladie_chronique'));
             }else{
-                $user->setRoles(['ROLE_MEDECIN']);
+                $duree_rdv = \DateTime::createFromFormat('i:s', $request->get('dure_rdv'));
+            if ($duree_rdv instanceof \DateTime) {
+                $user->setDureRdv($duree_rdv);
+            }else{
+                $user->setDureRdv(null);
+            }
+            $user->setRate(100);
+            $user->setValidation(0);
+            $user->setRoles(['ROLE_MEDECIN']);
             }
             $user->setGender($request->get('gender'));
             $user->setGroupeSanguin($request->get('groupe_sanguin'));
@@ -64,13 +75,17 @@ class UserController extends AbstractController
             }else{
                 $user->setDateDebut(null);
             }
+            $datenais = \DateTime::createFromFormat('Y-m-d', $request->get('date_naissance'));
+            if ($datenais instanceof \DateTime) {
+                $user->setDateNaissance($datenais);
+            }
             $dateFin = \DateTime::createFromFormat('H:i', $request->get('date_fin'));
             if ($dateFin instanceof \DateTime) {
                 $user->setDateFin($dateFin);
             }else{
                 $user->setDateFin(null);
             }
-//            $user->setDureRdv($request->get('dure_rdv'));
+//
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 if ($imageFile->getMimeType() === 'image/jpeg' || $imageFile->getMimeType() === 'image/png') {
@@ -81,7 +96,6 @@ class UserController extends AbstractController
                             $newFilename
                         );
                     } catch (FileException $e) {
-
                         $form->get('image')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
                         return $this->render('user/Register.html.twig', [
                             'form' => $form->createView(),
@@ -90,6 +104,30 @@ class UserController extends AbstractController
                     $user->setImage($newFilename);
                 } else {
                     $form->get('image')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                    return $this->render('user/Register.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+            $deplomeFile = $form->get('diplomes')->getData();
+            if ($deplomeFile) {
+
+                if ($deplomeFile->getMimeType() === 'image/jpeg' || $deplomeFile->getMimeType() === 'image/png') {
+                    $Filename = uniqid().'.'.$deplomeFile->guessExtension();
+                    try {
+                        $deplomeFile->move(
+                            $this->getParameter('brochures_directory'),
+                            $Filename
+                        );
+                    } catch (FileException $e) {
+                        $form->get('diplomes')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                        return $this->render('user/Register.html.twig', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $user->setDiplomes($Filename);
+                } else {
+                    $form->get('diplomes')->addError(new \Symfony\Component\Form\FormError('This image is invalid2.'));
                     return $this->render('user/Register.html.twig', [
                         'form' => $form->createView(),
                     ]);
@@ -111,17 +149,85 @@ class UserController extends AbstractController
     #[Route('/{id}/update', name: 'Update_data')]
     public function modifyData(Request $request, int $id  ,UserRepository $repository ,ManagerRegistry $managerRegistry ): Response
     {
-        $em= $managerRegistry->getManager();
         $user = $repository->find($id);
-        $form = $this->createForm(UserType::class, $user);
+        $em= $managerRegistry->getManager();
+        if (in_array('ROLE_MEDECIN', $user->getRoles())){
+            $form = $this->createForm(UserType::class, $user , [
+                'medecin'=>true
+            ]);
+            $role = "medecin";
+        }elseif (in_array('ROLE_EXPERT', $user->getRoles())){
+            $form = $this->createForm(UserType::class, $user , [
+                'expert_without_pass'=>true
+            ]);
+            $role = "expert";
+        }elseif (in_array('ROLE_PATIENT', $user->getRoles())) {
+            $form = $this->createForm(UserType::class, $user , [
+                'patient'=>true
+            ]);
+            $role = "patient";
+        }
+        else {
+            return new Response(" u can't modify data of admin");
+        }
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()  ) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                if ($imageFile->getMimeType() === 'image/jpeg' || $imageFile->getMimeType() === 'image/png') {
+                    $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                    try {
+                        $imageFile->move(
+                            $this->getParameter('brochures_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+
+                        $form->get('image')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                        return $this->render('user/Modify.html.twig', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $user->setImage($newFilename);
+                } else {
+                    $form->get('image')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                    return $this->render('user/Modify.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+         if ($role == "medecin" ){
+             $deplomeFile = $form->get('diplomes')->getData();
+             if ($deplomeFile) {
+                 if ($deplomeFile->getMimeType() === 'image/jpeg' || $deplomeFile->getMimeType() === 'image/png') {
+                     $Filename = uniqid().'.'.$deplomeFile->guessExtension();
+                     try {
+                         $deplomeFile->move(
+                             $this->getParameter('brochures_directory'),
+                             $Filename
+                         );
+                     } catch (FileException $e) {
+                         $form->get('diplomes')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                         return $this->render('admin/ModifyUser.html.twig', [
+                             'form' => $form->createView(),
+                         ]);
+                     }
+                     $user->setDiplomes($Filename);
+                 } else {
+                     $form->get('diplomes')->addError(new \Symfony\Component\Form\FormError('This image is invalid2.'));
+                     return $this->render('admin/ModifyUser.html.twig', [
+                         'form' => $form->createView(),
+                     ]);
+                 }
+             }
+         }
             $em->flush();
-            return  new Response("data update");
+            return  $this->redirectToRoute('Update_data' , ['id'=>$user->getId()]);
         }
 
         return $this->render('user/Modify.html.twig', [
             'form' => $form->createView(),
+            'role'=>$role,
             'user'=>$user
         ]);
     }
@@ -184,17 +290,16 @@ class UserController extends AbstractController
         return $this->render('admin/dashboard.html.twig');
     }
 
-    #[Route('/dashborad/alluser', name: 'all_user')]
+    #[Route('/dashboard/alluser', name: 'all_user')]
     public function allUser(UserRepository $repository,ManagerRegistry $managerRegistry): Response
     {
         $users = $repository ->findAll();
         return $this->render('admin/tableuser.html.twig', [
             'users' =>$users
         ]);
-//        return $this->redirectToRoute('app_home_page');
     }
 
-    #[Route('/dashborad/addexpert', name: 'Add_Expert')]
+    #[Route('/dashboard/addexpert', name: 'Add_Expert')]
     public function addExpert(Request $request ,UserPasswordHasherInterface $passwordHasher ,UserRepository $repository ,ManagerRegistry $managerRegistry): Response
     {
         $user = new User();
@@ -222,5 +327,88 @@ class UserController extends AbstractController
             return $this->redirectToRoute('all_user');
         }
         return $this->render('admin/addExpert.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/dashboard/update/{id}', name: 'Update_user')]
+    public function updateUser(Request $request, int $id  ,UserRepository $repository ,ManagerRegistry $managerRegistry ): Response
+    {
+        $user = $repository->find($id);
+        $em= $managerRegistry->getManager();
+       if (in_array('ROLE_MEDECIN', $user->getRoles())){
+           $form = $this->createForm(UserType::class, $user , [
+               'medecin'=>true
+           ]);
+           $role = "medecin";
+       }elseif (in_array('ROLE_EXPERT', $user->getRoles())){
+           $form = $this->createForm(UserType::class, $user , [
+               'expert_without_pass'=>true
+           ]);
+           $role = "expert";
+       }elseif (in_array('ROLE_PATIENT', $user->getRoles())) {
+           $form = $this->createForm(UserType::class, $user , [
+               'patient'=>true
+           ]);
+           $role = "patient";
+       }
+       else {
+            return new Response(" u can't modify data of admin");
+       }
+        $form->handleRequest($request);
+        if ($form->isSubmitted()  ) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                if ($imageFile->getMimeType() === 'image/jpeg' || $imageFile->getMimeType() === 'image/png') {
+                    $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                    try {
+                        $imageFile->move(
+                            $this->getParameter('brochures_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+
+                        $form->get('image')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                        return $this->render('admin/ModifyUser.html.twig', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $user->setImage($newFilename);
+                } else {
+                    $form->get('image')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                    return $this->render('admin/ModifyUser.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+            $deplomeFile = $form->get('diplomes')->getData();
+            if ($deplomeFile) {
+                if ($deplomeFile->getMimeType() === 'image/jpeg' || $deplomeFile->getMimeType() === 'image/png') {
+                    $Filename = uniqid().'.'.$deplomeFile->guessExtension();
+                    try {
+                        $deplomeFile->move(
+                            $this->getParameter('brochures_directory'),
+                            $Filename
+                        );
+                    } catch (FileException $e) {
+                        $form->get('diplomes')->addError(new \Symfony\Component\Form\FormError('This image is invalid.'));
+                        return $this->render('admin/ModifyUser.html.twig', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $user->setDiplomes($Filename);
+                } else {
+                    $form->get('diplomes')->addError(new \Symfony\Component\Form\FormError('This image is invalid2.'));
+                    return $this->render('admin/ModifyUser.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+            $em->flush();
+            return  $this->redirectToRoute('all_user');
+        }
+
+        return $this->render('admin/ModifyUser.html.twig', [
+            'form' => $form->createView(),
+            'role'=>$role
+        ]);
     }
 }

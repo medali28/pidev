@@ -77,7 +77,11 @@ class UserType extends AbstractType
 //            ->add('date_debut',  TimeType::class)
 //            ->add('date_fin',  TimeType::class)
             ->add('prix_c')
-            ->add('diplomes', FileType::class )
+            ->add('diplomes', FileType::class ,[
+                'multiple'=>false,
+                'mapped'=> false,
+                'required'=> false,
+            ] )
 //            ->add('dure_rdv')
             ->add('allergies' )
             ->add('antecedent_maladie' )
@@ -123,6 +127,21 @@ class UserType extends AbstractType
             $builder->remove('antecedent_medicaux');
 //            $builder->remove('Submit');
         }
+        if ($options['expert_without_pass']) {
+            $builder->remove('image');
+//            $builder->remove('address');
+//            $builder->remove('num_tel');
+            $builder->remove('password');
+            $builder->remove('confirm_password');
+            $builder->remove('diplomes');
+            $builder->remove('prix_c');
+            $builder->remove('specialite');
+            $builder->remove('num_tel2');
+            $builder->remove('allergies');
+            $builder->remove('antecedent_maladie');
+            $builder->remove('antecedent_medicaux');
+            $builder->remove('Submit');
+        }
         if ($options['medecin']) {
             $builder->remove('password');
             $builder->remove('confirm_password');
@@ -140,7 +159,8 @@ class UserType extends AbstractType
             'password' => false,
             'patient' => false,
             'medecin' => false,
-            'expert'=> false
+            'expert'=> false,
+            'expert_without_pass'=> false
         ]);
     }
 }

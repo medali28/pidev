@@ -109,7 +109,7 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     private ?float $prix_c = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-//    #[Assert\File( maxSize:"5M" , mimeTypes: ["image/jpeg", "image/png"] ,  mimeTypesMessage:"Veuillez télécharger une image au format JPG ou PNG" ) ]
+    #[Assert\File( maxSize:"5M" , mimeTypes: ["image/jpeg", "image/png"] ,  mimeTypesMessage:"Veuillez télécharger une image au format JPG ou PNG" ) ]
 //    #[Assert\NotBlank(message:"images must be non-empty")]
     private ?string $diplomes = null;
 

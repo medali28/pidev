@@ -388,16 +388,16 @@
                 </div>
                 <div class="field">
                     <div class="row">
-                      <div class="div1"> <select name="role" id="roleSelect">
+                      <div class="div1"> <select name="roleSelect" id="roleSelect">
                               <option value="patient">Patient</option>
                               <option value="doctor">Medecin</option>
-
                           </select></div>
 
                         <div class="div2">
 {#                          {{ form_widget(form.date_naissance,  { 'id':'date_naissance','attr': {'placeholder': 'Enter your Antecedent Medicaux'}}) }}#}
 {#                                {{ form_errors(form.date_naissance) }}#}
-                            <input type="date" id="date_naissance" name="date_naissance" placeholder="Date of Birth">
+                            <input type="date" id="date_naissance"  name="date_naissance" placeholder="Date of Birth">
+                            <div id="dateError1" style="color: red; display: none;">Date of birth must be not empty</div>
                             <div id="dateError" style="color: red; display: none;">Date of birth must be in the past</div>
                         </div>
                     </div>
@@ -485,12 +485,12 @@
                             <div class="div1">{{ form_widget(form.prix_c ,  {'id':'prix_c' ,'attr': {'placeholder': 'Enter your prix',}}) }}
                                 {{ form_errors(form.prix_c) }}</div>
                            <div class="div2"> <select name="dure_rdv" id="dure_rdv">
-                                   <option value="15">15 min</option>
-                                   <option value="20">20 min</option>
-                                   <option value="30">30 min</option>
-                                   <option value="40">40 min</option>
-                                   <option value="50">50 min</option>
-                                   <option value="50">60 min</option>
+                                   <option value="15:00">15 min</option>
+                                   <option value="20:00">20 min</option>
+                                   <option value="30:00">30 min</option>
+                                   <option value="40:00">40 min</option>
+                                   <option value="50:00">50 min</option>
+                                   <option value="60:00">60 min</option>
                                </select></div>
 
                         </div>
@@ -533,7 +533,7 @@
 
                 <div class="field btns ">
                     <button class="prev-3 SecondButton prev">Previous</button>
-                    <button  class="SecondButton submit" >Submit</button>
+                    <button  class="SecondButton submit" id="lastbutton">Submit</button>
                 </div>
             </div>
         {{ form_end(form) }}
@@ -553,32 +553,45 @@
             document.getElementById('nextButton').disabled = false;
         }
     });
+
     function toggleFields() {
-        const roleSelect = document.getElementById('roleSelect');
-        const patientFields = document.querySelector('.page .patient-fields');
-        const medecinFields = document.querySelector('.page .medecin-fields');
-        console.log(roleSelect.value);
-        if (roleSelect.value === 'patient') {
-            patientFields.style.display = 'block';
-            medecinFields.style.display = 'none';
-            document.getElementById('diplomes').value = '';
-            document.getElementById('specialite').value = '';
-            document.getElementById('num_tel2').value = '';
-            document.getElementById('date_debut').value = '';
-            document.getElementById('date_fin').value = '';
-            document.getElementById('prix_c').value = '';
-            document.getElementById('dure_rdv').value = '15';
-        } else if (roleSelect.value === 'doctor') {
-            patientFields.style.display = 'none';
-            medecinFields.style.display = 'block';
-            console.log(document.getElementById('antecedent_maladie').value);
-            document.getElementById('maladie_chronique').value = 'None';
-            document.getElementById('groupe_sanguin').value = 'None';
-            document.getElementById('antecedent_maladie').value = '';
-            document.getElementById('antecedent_medicaux').value = '';
-            document.getElementById('allergies').value = '';
-            console.log(document.getElementById('antecedent_maladie').value);
+        var dateNaissanceValue = document.getElementById('date_naissance').value;
+        console.log("test")
+        console.log(dateNaissanceValue)
+        if (!dateNaissanceValue.trim()) {
+            document.getElementById('dateError1').style.display = 'block';
+            document.getElementById('nextButton').disabled = true;
+            document.getElementById('lastbutton').disabled = true;
+        } else {
+            document.getElementById('lastbutton').disabled = false;
+            const roleSelect = document.getElementById('roleSelect');
+            const patientFields = document.querySelector('.page .patient-fields');
+            const medecinFields = document.querySelector('.page .medecin-fields');
+            console.log(roleSelect.value);
+            if (roleSelect.value === 'patient') {
+                patientFields.style.display = 'block';
+                medecinFields.style.display = 'none';
+                document.getElementById('diplomes').value = '';
+                document.getElementById('specialite').value = '';
+                document.getElementById('num_tel2').value = '';
+                document.getElementById('date_debut').value = '';
+                document.getElementById('date_fin').value = '';
+                document.getElementById('prix_c').value = '';
+                document.getElementById('dure_rdv').value = '15';
+            } else if (roleSelect.value === 'doctor') {
+                patientFields.style.display = 'none';
+                medecinFields.style.display = 'block';
+                console.log(document.getElementById('antecedent_maladie').value);
+                document.getElementById('maladie_chronique').value = 'None';
+                document.getElementById('groupe_sanguin').value = 'None';
+                document.getElementById('antecedent_maladie').value = '';
+                document.getElementById('antecedent_medicaux').value = '';
+                document.getElementById('allergies').value = '';
+                console.log(document.getElementById('antecedent_maladie').value);
+            }
         }
+
+
     }
     document.getElementById('nextButton').addEventListener('click', toggleFields);
     document.querySelector('.submit').addEventListener('click', function() {
