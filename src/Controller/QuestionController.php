@@ -34,7 +34,7 @@ class QuestionController extends AbstractController
         return $this->render('question/question_show.html.twig',['question'=>$question]);
     }
     #[Route('/question/question_add', name: 'app_question_add')]
-    public function add(Request $request,ManagerRegistry $managerRegistry,sluggerinterface $slugger/*,mailerinterface $mailer*/): Response
+    public function add(Request $request,ManagerRegistry $managerRegistry,sluggerinterface $slugger,mailerinterface $mailer): Response
     {
 
         $currentDateTime = new \DateTime();
@@ -81,8 +81,9 @@ class QuestionController extends AbstractController
                 $question->setImage($newFilename);
 
             }
-            $questionmailed = $form->getData();
-            //     $this->sendEmail($questionmailed, $mailer);
+            $title=$question->getTitle();
+            $photo=$question->getImage();
+              $this->sendEmail($photo,$title,$description,$mailer);
             $em = $managerRegistry->getManager();
             $em->persist($question);
             $em->flush();
@@ -173,20 +174,55 @@ class QuestionController extends AbstractController
         return $this->redirectToRoute('app_question_show');
     }
 
-    private function sendEmail($questionmailed,MailerInterface $mailer)
+    private function sendEmail($photo,  $title,$description, MailerInterface $mailer): void
     {
-
+        $emailText = "
+        <!DOCTYPE html>
+        <html lang='en'>
+        <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    padding: 20px;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    margin-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2 style='color: #007bff;'>New Question Created</h2>
+                <p><strong>Title:</strong> $title</p>
+                <p><strong>Description:</strong> $description</p>
+                <p><strong>Photo:</strong> <img src='$photo' alt='Question Photo'></p>
+            </div>
+        </body>
+        </html>
+    ";
 
         $email = (new Email())
-
             ->from(new Address('myedr@gmail.com', 'My eDr'))
             ->to('alaayari832@gmail.com')
-            ->subject('Un Nouveau Question a eté creé')
-            ->text($questionmailed);
+            ->subject('Un Nouveau Question a été créé')
+            ->html($emailText);
 
         $mailer->send($email);
-
-        return $this->redirectToRoute('app_question_show');
     }
 
     #[Route('/bad_words', name: 'question_bad_words')]
