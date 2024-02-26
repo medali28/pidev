@@ -115,7 +115,7 @@ class BackendController extends AbstractController
         return $this->render('back/reponse_edit.html.twig', ['f' => $form->createView()]);
     }
 
-    #[Route('/reponse/delete/{id}', name: 'app_reponseback_delete')]
+    #[Route('/reponseback/delete/{id}', name: 'app_reponseback_delete')]
     function deleter($id, ReponseRepository $repository, ManagerRegistry $managerRegistry) : \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $reponse = $repository->find($id);
@@ -145,5 +145,6 @@ class BackendController extends AbstractController
         }
         return $this->render('back/reponse_add.html.twig', ['f' => $form->createview()]);
     }
+
 
 }

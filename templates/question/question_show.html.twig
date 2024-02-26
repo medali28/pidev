@@ -35,7 +35,9 @@
                         <div class="card border-0 shadow-sm bg-light h-100 p-4">
                             <a href="{{ path('app_question_show_id', {'id': question.id}) }}" class="text-decoration-none text-dark">
                             <img src="/uploads/image/{{question.image}}" class="card-img-top rounded" alt="{{question.image}}">
+                            </a>
                             <div class="card-body">
+                                <a href="{{ path('app_question_show_id', {'id': question.id}) }}" class="text-decoration-none text-dark">
 
                                     <h5 class="card-title link-primary">{{ question.title }}</h5>
                                 </a>

@@ -9,6 +9,7 @@ use App\Repository\ReponseRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,11 +28,31 @@ class ReponseController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $description = $reponse->getDescriptionR();
+            $httpClient = HttpClient::create();
+            $response = $httpClient->request('GET', 'https://neutrinoapi.net/bad-word-filter', [
+                'query' => [
+                    'content' => $description
+                ],
+
+                'headers' => [
+                    'User-ID' => 'alaayari',
+                    'API-Key' => 'EYgRcIUx1tmxyjutrrP8uywr2NQXXNF3Fyc9XVq7BUGGyiis',
+                ]
+            ]);
+            if ($response->getStatusCode() === 200) {
+                $result = $response->toArray();
+                if ($result['is-bad']) {
+                    $this->addFlash('danger', '</i>Your comment contains inappropriate language and cannot be posted.');
+                    return $this->redirectToRoute('bad_words', ['id' => $id]);
+                }
+            }
+
 
             $em = $managerRegistry->getManager();
             $em->persist($reponse);
             $em->flush();
-            return $this->redirectToRoute('app_question_show_id',['id'=> $qestionid->getId()]);
+            return $this->redirectToRoute('app_question_show_id', ['id' => $qestionid->getId()]);
         }
         return $this->render('reponse/reponse_add.html.twig', ['f' => $form->createview()]);
     }
@@ -47,6 +68,25 @@ class ReponseController extends AbstractController
         $reponse->setDatetempR($currentDateTime);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $description = $reponse->getDescriptionR();
+            $httpClient = HttpClient::create();
+            $response = $httpClient->request('GET', 'https://neutrinoapi.net/bad-word-filter', [
+                'query' => [
+                    'content' => $description
+                ],
+
+                'headers' => [
+                    'User-ID' => 'alaayari',
+                    'API-Key' => 'EYgRcIUx1tmxyjutrrP8uywr2NQXXNF3Fyc9XVq7BUGGyiis',
+                ]
+            ]);
+            if ($response->getStatusCode() === 200) {
+                $result = $response->toArray();
+                if ($result['is-bad']) {
+                    $this->addFlash('danger', '</i>Your comment contains inappropriate language and cannot be posted.');
+                    return $this->redirectToRoute('bad_words', ['id' => $id]);
+                }
+            }
             $em = $managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute('app_question_show_id',['id'=>$question]);
@@ -54,16 +94,25 @@ class ReponseController extends AbstractController
         return $this->render('reponse/reponse_edit.html.twig', ['f' => $form->createView()]);
     }
 
+
     #[Route('/reponse/delete/{id}', name: 'app_reponse_delete')]
-    function delete($id, ReponseRepository $repository, ManagerRegistry $managerRegistry) : \Symfony\Component\HttpFoundation\RedirectResponse
+    function deleter($id, ReponseRepository $repository, ManagerRegistry $managerRegistry) : \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $reponse = $repository->find($id);
-        $question=$reponse->getQuestion()->getId();
+        $question = $reponse->getQuestion()->getId();
         $em = $managerRegistry->getManager();
         $em->remove($reponse);
         $em->flush();
-        return $this->redirectToRoute('app_question_show_id',['id'=>$question]);
+        return $this->redirectToRoute('app_question_show_id', ['id' => $question]);
     }
+    #[Route('/bad_words', name: 'bad_words')]
+
+    function Affiche_bad(ReponseRepository $repository)
+    {
+        $Commentaire = $repository->findAll();
+        return $this->render('reponse/bad_word.html.twig', ['description' => $Commentaire]);
+    }
+
 
 
 }
