@@ -44,7 +44,7 @@ class ReponseController extends AbstractController
                 $result = $response->toArray();
                 if ($result['is-bad']) {
                     $this->addFlash('danger', '</i>Your comment contains inappropriate language and cannot be posted.');
-                    return $this->redirectToRoute('bad_words', ['id' => $id]);
+                    return $this->redirectToRoute('reponse_bad_words', ['id' => $id]);
                 }
             }
 
@@ -84,7 +84,7 @@ class ReponseController extends AbstractController
                 $result = $response->toArray();
                 if ($result['is-bad']) {
                     $this->addFlash('danger', '</i>Your comment contains inappropriate language and cannot be posted.');
-                    return $this->redirectToRoute('bad_words', ['id' => $id]);
+                    return $this->redirectToRoute('reponse_bad_words', ['id' => $id]);
                 }
             }
             $em = $managerRegistry->getManager();
@@ -105,9 +105,9 @@ class ReponseController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('app_question_show_id', ['id' => $question]);
     }
-    #[Route('/bad_words', name: 'bad_words')]
+    #[Route('/reponse_bad_words', name: 'reponse_bad_words')]
 
-    function Affiche_bad(ReponseRepository $repository)
+    function Affiche_bad_rep(ReponseRepository $repository)
     {
         $Commentaire = $repository->findAll();
         return $this->render('reponse/bad_word.html.twig', ['description' => $Commentaire]);

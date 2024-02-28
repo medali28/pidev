@@ -61,7 +61,7 @@ class QuestionController extends AbstractController
 
             if ($result['is-bad'] ) {
                 $this->addFlash('danger', '</i>Your Question contains inappropriate language and cannot be posted.');
-                return $this->redirectToRoute('bad_words');
+                return $this->redirectToRoute('question_bad_words');
             }
         }
 
@@ -116,26 +116,7 @@ class QuestionController extends AbstractController
                     }
                     $question->setImage($newFilename);
                 }
-                $description = $question->getDescription();
-                $httpClient = HttpClient::create();
-                $response = $httpClient->request('GET', 'https://neutrinoapi.net/bad-word-filter', [
-                    'query' => [
-                        'content' => $description
-                    ],
 
-                    'headers' => [
-                        'User-ID' => 'alaayari',
-                        'API-Key' => 'EYgRcIUx1tmxyjutrrP8uywr2NQXXNF3Fyc9XVq7BUGGyiis',
-                    ]
-                ]);
-                if ($response->getStatusCode() === 200) {
-                    $result = $response->toArray();
-
-                    if ($result['is-bad'] ) {
-                        $this->addFlash('danger', '</i>Your Question contains inappropriate language and cannot be posted.');
-                        return $this->redirectToRoute('bad_words');
-                    }
-                }
                 $description = $question->getDescription();
                 $httpClient = HttpClient::create();
                 $response = $httpClient->request('GET', 'https://neutrinoapi.net/bad-word-filter', [
@@ -152,7 +133,7 @@ class QuestionController extends AbstractController
                     $result = $response->toArray();
                     if ($result['is-bad']) {
                         $this->addFlash('danger', '</i>Your Question contains inappropriate language and cannot be posted.');
-                        return $this->redirectToRoute('bad_words', ['id' => $id]);
+                        return $this->redirectToRoute('question_bad_words', ['id' => $id]);
                     }
                 }
                 $em = $managerRegistry->getManager();
@@ -180,6 +161,7 @@ class QuestionController extends AbstractController
         <!DOCTYPE html>
         <html lang='en'>
         <head>
+        <title>My eDr</title>
             <meta charset='UTF-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
             <style>
