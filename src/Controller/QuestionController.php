@@ -17,6 +17,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+
 class QuestionController extends AbstractController
 {
     #[Route('/question/afficher/{id}', name: 'app_question_show_id')]
@@ -199,8 +200,8 @@ class QuestionController extends AbstractController
     ";
 
         $email = (new Email())
-            ->from(new Address('myedr@gmail.com', 'My eDr'))
-            ->to('alaayari832@gmail.com')
+            ->from(new Address('myedr@email.com','My eDr'))
+            ->to('myedr83@gmail.com')
             ->subject('Un Nouveau Question a été créé')
             ->html($emailText);
 
