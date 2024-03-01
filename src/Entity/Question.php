@@ -37,6 +37,8 @@ class Question
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Reponse::class, orphanRemoval: true)]
     private Collection $reponses;
 
+
+
     public function __construct()
     {
         $this->reponses = new ArrayCollection();
@@ -136,4 +138,6 @@ class Question
 
         return $this;
     }
+
+
 }

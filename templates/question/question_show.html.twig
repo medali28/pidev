@@ -3,16 +3,15 @@
 {% block body %}
 
     <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
-        <div class="container">
+        <div class="container text-center">
             <div class="row">
                 <div class="col-lg-8 col-12 mx-auto">
-                    <h1 class="text-white text-center display-3 mb-4">Poser Vos Questions Aux Experts</h1>
+                    <h1 class="text-white display-2 mb-4">Poser Vos Questions Aux Experts</h1>
 
                     <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
                         <div class="input-group input-group-lg">
-                            <span class="input-group-text bi-search" id="basic-addon1"></span>
                             <input name="keyword" type="search" class="form-control" id="keyword" placeholder="Recherchez des sujets..." aria-label="Recherche">
-                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Rechercher</button>
                         </div>
                     </form>
                 </div>
@@ -20,10 +19,12 @@
         </div>
     </section>
 
+    <body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
+
     <div class="container mt-5">
-        <div class="card border-0 shadow-lg rounded bg-light p-4 text-center">
+        <div class="card border-start-0 shadow rounded-5 bg-light p-4 text-center">
             <a href="{{ path('app_question_add') }}" class="text-decoration-none text-dark">
-                <h1 class="display-2 text-primary bi bi-file-earmark-plus"></h1>
+                <h1 class="display-3 text-primary bi bi-file-earmark-plus"></h1>
                 <p class="lead">Posez votre question</p>
             </a>
         </div>
@@ -32,19 +33,18 @@
             <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
                 {% for question in question %}
                     <div class="col">
-                        <div class="card border-0 shadow-sm bg-light h-100 p-4">
+                        <div class="card border-0 shadow-lg rounded-5 h-100 p-4 card-img-top">
                             <a href="{{ path('app_question_show_id', {'id': question.id}) }}" class="text-decoration-none text-dark">
-                            <img src="/uploads/image/{{question.image}}" class="card-img-top rounded" alt="{{question.image}}">
+                                <img src="/uploads/image/{{question.image}}" class="img-fluid rounded image-popup" alt="{{question.image}}">
                             </a>
                             <div class="card-body">
                                 <a href="{{ path('app_question_show_id', {'id': question.id}) }}" class="text-decoration-none text-dark">
-
                                     <h5 class="card-title link-primary">{{ question.title }}</h5>
                                 </a>
                                 <p class="card-text">{{ question.description }}</p>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                                <small class="text-muted">Publié le {{ question.datetempQ()|date('d/m/Y à H:i:s' ) }}</small>
+                                <small class="text-muted">Publié le {{ question.datetempQ()|date('d/m/Y à H:i:s') }}</small>
                                 <div class="text-muted">
                                     <a href="{{ path('app_question_edit', {'id': question.id}) }}" class="text-dark"><i class="bi bi-pencil"></i> Modifier</a>
                                     <a href="{{ path('app_question_delete', {'id': question.id}) }}" class="text-dark"><i class="bi bi-trash"></i> Supprimer</a>
@@ -58,5 +58,16 @@
             <p class="lead text-muted text-center mt-4">Aucun article de blog disponible.</p>
         {% endif %}
     </div>
+
+    <!-- Pop-up modal code -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+
+
+
+    </body>
 
 {% endblock %}

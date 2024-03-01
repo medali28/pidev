@@ -25,8 +25,11 @@ class Reponse
     private ?Question $question = null;
 
     #[ORM\ManyToOne(inversedBy: 'reponses')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $medecin = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $pinned = null;
 
     public function getMedecin(): ?User
     {
@@ -75,6 +78,18 @@ class Reponse
     public function setQuestion(?Question $question): void
     {
         $this->question = $question;
+    }
+
+    public function isPinned(): ?bool
+    {
+        return $this->pinned;
+    }
+
+    public function setPinned(?bool $pinned): static
+    {
+        $this->pinned = $pinned;
+
+        return $this;
     }
 
 

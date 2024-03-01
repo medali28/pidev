@@ -112,7 +112,22 @@ class ReponseController extends AbstractController
         $Commentaire = $repository->findAll();
         return $this->render('reponse/bad_word.html.twig', ['description' => $Commentaire]);
     }
+    #[Route('/pin/{id}', name: 'app_pin')]
 
-
-
+    public function pinned(ReponseRepository $repository, $id, ManagerRegistry $managerRegistry)
+    {
+        $reponse = $repository->find($id);
+        $question = $reponse->getQuestion()->getId();
+        $maxPinnedCount = 5;
+        $pinnedComments = $repository->countPinnedCommentsForQuestion($question);
+        if ($reponse->isPinned() == false && $pinnedComments < $maxPinnedCount) {
+            $reponse->setPinned(true);
+        } else {
+            $reponse->setPinned(false);
+        }
+        $em = $managerRegistry->getManager();
+        $em->persist($reponse);
+        $em->flush();
+        return $this->redirectToRoute('app_question_show_id', ['id' => $question]);
+    }
 }

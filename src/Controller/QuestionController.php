@@ -24,7 +24,7 @@ class QuestionController extends AbstractController
     function showby(QuestionRepository $repository ,$id, ReponseRepository $reponseRepository)
     {
         $question=$repository->find($id);
-        $reponse=$reponseRepository->findByQuestion($question);
+        $reponse=$reponseRepository->findByPinned($question);
         return $this->render('question/afficher_question.html.twig',['question'=>$question,'reponse'=>$reponse]);
     }
 
@@ -193,7 +193,7 @@ class QuestionController extends AbstractController
                 <h2 style='color: #007bff;'>New Question Created</h2>
                 <p><strong>Title:</strong> $title</p>
                 <p><strong>Description:</strong> $description</p>
-                <p><strong>Photo:</strong> <img src='$photo' alt='Question Photo'></p>
+                <p><strong>image:</strong> <img src='/image/$photo' alt='Question Photo'></p>
             </div>
         </body>
         </html>
@@ -204,7 +204,6 @@ class QuestionController extends AbstractController
             ->to('myedr83@gmail.com')
             ->subject('Un Nouveau Question a été créé')
             ->html($emailText);
-
         $mailer->send($email);
     }
 
