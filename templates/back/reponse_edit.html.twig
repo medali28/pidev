@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
     <div class="container mt-5">
 <div><div class="text-success">Modify your Comment</div></div>
             {{ form_start(f) }}
@@ -18,4 +19,5 @@
             {{ form_end(f) }}
 
     </div>
+</body>
 {% endblock %}
