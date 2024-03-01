@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ForbiddenKeyword;
 use App\Entity\Medicament;
 use App\Form\AjoutmedType;
 use App\Form\ModifiermedType;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class MedicamentController extends AbstractController
 {
@@ -47,20 +50,24 @@ class MedicamentController extends AbstractController
             ;
     }
     #[Route('/ajout/donation', name: 'ajoutdonation')]
-    public function ajoutProduit(Request $request, ManagerRegistry $managerRegistry)
+
+    public function ajoutProduit(Request $request, ManagerRegistry $managerRegistry, SluggerInterface $slugger)
     {
 
-        $user = $this->getUser(); // Get the currently logged-in user
         $medicament = new Medicament();
-        $medicament->setUser($user);
+
         $form = $this->createForm(AjoutmedType::class, $medicament);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->get('image')->getData();
             if ($image) {
+                // Generate a unique filename for the image
                 $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $this->generateSafeFilename($originalFilename).'.'.$image->guessExtension();
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
+
+                // Move the uploaded file to the target directory
                 try {
                     $image->move(
                         $this->getParameter('images_directory'),
@@ -69,11 +76,32 @@ class MedicamentController extends AbstractController
                 } catch (FileException $e) {
                     // Handle the exception
                 }
+
+                // Use TesseractOCR to extract text from the image
+                $imagePath = $this->getParameter('images_directory') . '/' . $newFilename;
+                $text = (new TesseractOCR($imagePath))->run();
+
+                // Retrieve forbidden keywords from the database
+                $forbiddenKeywords = $managerRegistry->getRepository(ForbiddenKeyword::class)->findAll();
+
+                // Perform text analysis by checking against each forbidden keyword
+                foreach ($forbiddenKeywords as $keyword) {
+                    if (stripos($text, $keyword->getKeyword()) !== false) {
+                        // Handle the case when forbidden keyword is found
+                        // You can delete the uploaded image here if needed
+                        unlink($imagePath);
+                        $this->addFlash('error', 'Forbidden keyword detected in the image.');
+                        return $this->redirectToRoute('app_gestion_donation');
+                    }
+                }
+
+                // Set the image filename in the entity
                 $medicament->setImage($newFilename);
             }
-            $em=$managerRegistry->getManager();
-            $em->persist($medicament);
-            $em->flush();
+
+            $entityManager = $managerRegistry->getManager();
+            $entityManager->persist($medicament);
+            $entityManager->flush();
 
             $this->addFlash('success', 'Medicament ajouté avec succes!');
 

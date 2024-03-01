@@ -21,7 +21,6 @@ class AjoutmedType extends AbstractType
             ->add('Description')
             ->add('image' , FileType::class, [
                 'label' => 'l\'image de votre medicament',
-                'multiple' => false,
                 'required' => false,
                 'mapped' => false,
                 'constraints' => [

@@ -37,6 +37,7 @@
                                         <th>Catégorie</th>
 
                                         <th>Take (i'm poor)</th>
+                                        <th>add to cart</th>
 
                                     </tr>
                                     </thead>
@@ -56,8 +57,9 @@
                                             {% endif %}
                                             </td>
                                             <td>
-                                                <a href="{{ path('deleteProduit', {'id': medicament.id}) }}" onclick="return confirm('Are you sure you want to delete this product?')">Supprimer</a>
+                                                <a href="{{ path('deleteProduit', {'id': medicament.id}) }}" onclick="return confirm('Are you sure you want to delete this product?')">Prende</a>
                                             </td>
+                                            <td> <a>addto cart</a></td>
 
                                         </tr>
                                     {% endfor %}

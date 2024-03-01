@@ -1,0 +1,52 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress Bar</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Progress Bar</h1>
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button type="submit">Submit</button>
+{{ form_end(form) }}
+
+<div id="progress-bar"></div>
+
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('progress') }}',
+                data: formData,
+                success: function(response) {
+                    updateProgressBar(response.target);
+                }
+            });
+        });
+
+        function updateProgressBar(target) {
+            var current = 0;
+            var progressBar = $('#progress-bar');
+
+            var interval = setInterval(function() {
+                if (current <= target) {
+                    var progress = current / target * 100;
+                    progressBar.html('<div style="width: ' + progress + '%; background-color: green; height: 20px;"></div>');
+                    current++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+    });
+</script>
+</body>
+</html>

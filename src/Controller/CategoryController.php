@@ -39,6 +39,8 @@ class CategoryController extends AbstractController
             $em=$managerRegistry->getManager();
             $em->persist($categorie);
             $em->flush();
+            return $this->redirectToRoute('tableUser');
+
         }
         return $this->render('category/Ajoutcatg.html.twig',
             [

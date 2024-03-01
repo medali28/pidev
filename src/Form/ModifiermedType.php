@@ -19,6 +19,21 @@ class ModifiermedType extends AbstractType
         $builder
             ->add('name')
             ->add('Description')
+            ->add('image' , FileType::class, [
+                'label' => 'l\'image de votre medicament',
+                'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5120k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image file',
+                    ])
+                ],
+            ])
             ->add('date_fin')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
