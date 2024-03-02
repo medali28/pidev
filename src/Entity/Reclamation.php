@@ -13,9 +13,9 @@ class Reclamation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reclamations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $patient = null;
+//    #[ORM\ManyToOne(inversedBy: 'reclamations')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Userpast $patient = null;
 
     #[ORM\Column(length: 255)]
     private ?string $medecin = null;
@@ -36,15 +36,15 @@ class Reclamation
         return $this->id;
     }
 
-    public function getPatient(): ?User
-    {
-        return $this->patient;
-    }
-
-    public function setPatient(?User $patient): void
-    {
-        $this->patient = $patient;
-    }
+//    public function getPatient(): ?Userpast
+//    {
+//        return $this->patient;
+//    }
+//
+//    public function setPatient(?Userpast $patient): void
+//    {
+//        $this->patient = $patient;
+//    }
 
     public function getMedecin(): ?string
     {

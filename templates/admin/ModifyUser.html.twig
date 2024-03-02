@@ -65,6 +65,7 @@
                         <div class="card-body">
                             <p class="text-uppercase text-sm">User Information</p>
                             <div class="row" >
+                               {% if  role == "patient" or role == "medecin" %}
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Image</label>
@@ -78,6 +79,7 @@
 
                                     </div>
                                 </div>
+                                {% endif %}
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">First Name</label>
@@ -118,8 +120,9 @@
                             </div>
 
                             <hr class="horizontal dark">
-                            <p class="text-uppercase text-sm">Specific Information</p>
+
                             {% if role == "patient" %}
+                                <p class="text-uppercase text-sm">Specific Information</p>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -175,6 +178,7 @@
 
                             </div>
                             {% elseif role == "medecin" %}
+                                <p class="text-uppercase text-sm">Specific Information</p>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -238,6 +242,25 @@
                                 </div>
                             </div>
                             {%  endif %}
+                            <p class="text-uppercase text-sm">Modify Password</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">New Password</label>
+                                        {{ form_widget(form.password ,  {'attr': {'placeholder': 'Enter Password' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.password) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Confirm Password</label>
+                                        {{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Enter confirm password' , 'class':'form-control'}}) }}
+                                        {{ form_errors(form.confirm_password) }}
+                                    </div>
+                                </div>
+
+
+                            </div>
                         </div>
 
                         <button class="set btn-primary btn ms-auto">Save</button>

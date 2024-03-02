@@ -3,16 +3,17 @@
 namespace App\Form;
 
 use App\Entity\User;
-use Doctrine\DBAL\Types\FloatType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
@@ -47,16 +48,13 @@ class UserType extends AbstractType
 //            ->add('date_create_compte')
 //            ->add('last_modify_date')
 //            ->add('last_modify_data')
-//            ->add('date_naissance', DateType::class, [
-////                'format' => 'dd/MM/yyyy',
-//
-//                'attr' => [
-////                    'class' => 'datepicker',
-//                'input'=> 'string',
+//            ->add('date_naissance', null ,[
+//                'constraints' => [
+//                    new LessThanOrEqual(['value' => new \DateTimeImmutable(), 'message' => 'Date of birth cannot be in the future']),
 //                ],
 //            ])
             ->add('image', FileType::class , [
-                'multiple'=>false,
+//                'multiple'=>false,
                 'mapped'=> false,
                 'required'=> false,
 
@@ -78,7 +76,7 @@ class UserType extends AbstractType
 //            ->add('date_fin',  TimeType::class)
             ->add('prix_c')
             ->add('diplomes', FileType::class ,[
-                'multiple'=>false,
+//                'multiple'=>false,
                 'mapped'=> false,
                 'required'=> false,
             ] )
@@ -97,17 +95,45 @@ class UserType extends AbstractType
             $builder->remove('image');
             $builder->remove('address');
             $builder->remove('num_tel');
+            $builder->remove('diplomes');
             $builder->remove('prix_c');
             $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('allergies');
             $builder->remove('antecedent_maladie');
             $builder->remove('antecedent_medicaux');
+            $builder->remove('Submit');
+        }
+        if ($options['email_verify']) {
+            $builder->remove('password');
+            $builder->remove('first_name');
+            $builder->remove('last_name');
+            $builder->remove('image');
+            $builder->remove('address');
+            $builder->remove('num_tel');
+            $builder->remove('diplomes');
+            $builder->remove('prix_c');
+            $builder->remove('specialite');
+            $builder->remove('num_tel2');
+            $builder->remove('allergies');
+            $builder->remove('antecedent_maladie');
+            $builder->remove('antecedent_medicaux');
+            $builder->remove('Submit');
+            $builder->remove('confirm_password');
         }
 
         if ($options['patient']) {
             $builder->remove('password');
             $builder->remove('confirm_password');
+            $builder->remove('diplomes');
+            $builder->remove('prix_c');
+            $builder->remove('specialite');
+            $builder->remove('num_tel2');
+            $builder->remove('Submit');
+        }
+        if ($options['patient_admin']) {
+//            $builder->remove('password');
+//            $builder->remove('confirm_password');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
             $builder->remove('specialite');
@@ -127,12 +153,12 @@ class UserType extends AbstractType
             $builder->remove('antecedent_medicaux');
 //            $builder->remove('Submit');
         }
-        if ($options['expert_without_pass']) {
+        if ($options['expert_admin']) {
             $builder->remove('image');
 //            $builder->remove('address');
 //            $builder->remove('num_tel');
-            $builder->remove('password');
-            $builder->remove('confirm_password');
+//            $builder->remove('password');
+//            $builder->remove('confirm_password');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
             $builder->remove('specialite');
@@ -150,6 +176,14 @@ class UserType extends AbstractType
             $builder->remove('antecedent_medicaux');
             $builder->remove('Submit');
         }
+        if ($options['medecin_admin']) {
+            $builder->remove('password');
+            $builder->remove('confirm_password');
+            $builder->remove('allergies');
+            $builder->remove('antecedent_maladie');
+            $builder->remove('antecedent_medicaux');
+            $builder->remove('Submit');
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -159,8 +193,14 @@ class UserType extends AbstractType
             'password' => false,
             'patient' => false,
             'medecin' => false,
+            'patient_admin' => false,
+            'medecin_admin' => false,
             'expert'=> false,
-            'expert_without_pass'=> false
+            'expert_admin'=> false ,
+            'email_verify'=> false
         ]);
     }
+
+
+
 }

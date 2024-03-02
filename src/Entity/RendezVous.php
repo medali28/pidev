@@ -14,13 +14,13 @@ class RendezVous
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_patient')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $patient = null;
-
-    #[ORM\ManyToOne(inversedBy: 'id_medecin')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $medecin = null;
+//    #[ORM\ManyToOne(inversedBy: 'id_patient')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Userpast $patient = null;
+//
+//    #[ORM\ManyToOne(inversedBy: 'id_medecin')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Userpast $medecin = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_heure = null;
@@ -34,9 +34,9 @@ class RendezVous
     #[ORM\Column(length: 255)]
     private ?string $reponse_refuse = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_expert')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $expert = null;
+//    #[ORM\ManyToOne(inversedBy: 'id_expert')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Userpast $expert = null;
 
     #[ORM\Column]
     private ?bool $urgence = null;
@@ -61,29 +61,29 @@ class RendezVous
         return $this->id;
     }
 
-    public function getPatient(): ?User
-    {
-        return $this->patient;
-    }
-
-    public function setPatient(?User $patient): static
-    {
-        $this->patient = $patient;
-
-        return $this;
-    }
-
-    public function getMedecin(): ?User
-    {
-        return $this->medecin;
-    }
-
-    public function setMedecin(?User $medecin): static
-    {
-        $this->medecin = $medecin;
-
-        return $this;
-    }
+//    public function getPatient(): ?Userpast
+//    {
+//        return $this->patient;
+//    }
+//
+//    public function setPatient(?Userpast $patient): static
+//    {
+//        $this->patient = $patient;
+//
+//        return $this;
+//    }
+//
+//    public function getMedecin(): ?Userpast
+//    {
+//        return $this->medecin;
+//    }
+//
+//    public function setMedecin(?Userpast $medecin): static
+//    {
+//        $this->medecin = $medecin;
+//
+//        return $this;
+//    }
 
     public function getDateHeure(): ?\DateTimeInterface
     {
@@ -133,17 +133,17 @@ class RendezVous
         return $this;
     }
 
-    public function getExpert(): ?User
-    {
-        return $this->expert;
-    }
-
-    public function setExpert(?User $expert): static
-    {
-        $this->expert = $expert;
-
-        return $this;
-    }
+//    public function getExpert(): ?Userpast
+//    {
+//        return $this->expert;
+//    }
+//
+//    public function setExpert(?Userpast $expert): static
+//    {
+//        $this->expert = $expert;
+//
+//        return $this;
+//    }
 
     public function isUrgence(): ?bool
     {

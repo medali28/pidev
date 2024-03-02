@@ -38,7 +38,7 @@
                 height: 100%;
                 width: 100%;
                 place-items: center;
-                background: url('/images/i4.jpg');
+                background: url('{{ asset('/images/i4.jpg') }}');
                 background-size: cover;
                 background-repeat: no-repeat;
                 background-position: center;
@@ -88,13 +88,13 @@
                 border-color: #4158d0;
             }
             .wrapper form .field label{
-                position: absolute;
+                /*position: absolute;*/
                 top: 50%;
                 left: 20px;
-                color: #999999;
+                color: #0e0e0e;
                 font-weight: 400;
                 font-size: 17px;
-                pointer-events: none;
+                /*pointer-events: none;*/
                 transform: translateY(-50%);
                 transition: all 0.3s ease;
             }
@@ -167,32 +167,47 @@
         <div class="title">
             Login Form
         </div>
-        {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
+        <form method="post">
+            {% if error %}
+                {% if error.messageKey == 'Invalid credentials.' %}
+                    <div class="alert alert-danger">Mot de passe incorrect.</div>
+{#                    {% if error.messageData.username is defined %}#}
+{#                        <div class="alert alert-danger">{{ error.messageData.username }}</div>#}
+{#                    {% else %}#}
+{#                        <div class="alert alert-danger">{{ error.messageData. }}</div>#}
+{#                        <div class="alert alert-danger">Incorrect password.</div>#}
+{#                    {% endif %}#}
+                {% else %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
             <div class="field">
-
-                <label for="inputText" class="" >Email</label>
-                {{ form_widget(form.email) }}
-                {{ form_errors(form.email) }}
-
-{#                <input type="text" required>#}
-{#                <label>Email Address</label>#}
-            </div>
-            <div class="field">
-                <label for="inputText" class="" >Password</label>
-                {{ form_widget(form.password) }}
-                {{ form_errors(form.password) }}
-
-{#                <input type="password" required>#}
-{#                <label>Password</label>#}
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
             </div>
         <br>
+            <div class="field">
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            </div>
+        <br>
+        <br>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
             <div class="content">
                 <div class="checkbox">
                     <input type="checkbox" id="remember-me">
                     <label for="remember-me">Remember me</label>
                 </div>
                 <div class="pass-link">
-                    <a href="#">Forgot password?</a>
+                    <a href="{{ path('forgot') }}">Forgot password?</a>
                 </div>
             </div>
             <div class="field">
@@ -201,9 +216,16 @@
             <div class="signup-link">
                 Not Have an account? <a href="{{ path('Register') }}">Signup</a>
             </div>
-        {{ form_end(form) }}
+        </form>
     </div>
-
+<script>
+    document.querySelector('.submit').addEventListener('click', function() {
+        console.log("it's work")
+        // console.log(error.messageData);
+        // console.log(error.messageData.username);
+        document.querySelector('form').submit();
+    });
+</script>
     </body>
     </html>
 {% endblock %}

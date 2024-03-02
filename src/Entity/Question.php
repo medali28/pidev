@@ -34,9 +34,9 @@ class Question
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $datetempQ = null;
 
-    #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $patient = null;
+//    #[ORM\ManyToOne(inversedBy: 'questions')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Userpast $patient = null;
 
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Reponse::class, orphanRemoval: true)]
     private Collection $reponses;
@@ -123,15 +123,15 @@ class Question
         return $this;
     }
 
-    public function getPatient(): ?User
-    {
-        return $this->patient;
-    }
-
-    public function setPatient(?User $patient): void
-    {
-        $this->patient = $patient;
-    }
+//    public function getPatient(): ?Userpast
+//    {
+//        return $this->patient;
+//    }
+//
+//    public function setPatient(?Userpast $patient): void
+//    {
+//        $this->patient = $patient;
+//    }
 
 
 

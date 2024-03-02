@@ -19,6 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            /*height: 10%;*/
             /*min-height: 100vh;*/
             /*overflow: hidden;*/
             background: url('{{ asset('/images/i5.png') }}');
@@ -32,10 +33,12 @@
         }
         .container{
             width: 800px;
+            height: 600px;
             background: #fff;
             text-align: center;
             border-radius: 5px;
             padding: 30px 35px 10px 35px;
+            margin-top: 20px;
         }
         .container header{
             font-size: 35px;
@@ -62,16 +65,17 @@
         .form-outer form .page .field{
             width: 700px;
             height: 60px;
-            margin: 15px 0 5px 0;
+            margin: 15px 0 10px 0;
             display: flex;
             position: relative;
+
         }
-        form .page .field .label{
-            position: relative;
-            top: -10px;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
+        /*form .page .field .label{*/
+        /*    position: relative;*/
+        /*    top: -10px;*/
+        /*    margin-bottom: 10px;*/
+        /*    font-weight: 500;*/
+        /*}*/
         /*form .page .field .row .inputf{*/
         /*    height: 100%;*/
         /*    width: 100%;*/
@@ -262,16 +266,36 @@
             padding: revert;
             width: 100%;
             display: flex;
+            /*margin-bottom: 20px;*/
 
         }
         .field .row .div1{
-            height: 80%;
+            height: 70px;
             width:305px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        .field .row .div3 {
+            height: 70px;
+            width: 305px;
+            display: flex;
+        }
+        .field .row .div4 {
+            height: 70px;
+            margin-left: 45px;
+            width: 305px;
+            display: flex;
         }
         .field .row .div2{
-            height: 80%;
+            height: 70px;
             margin-left: 45px;
             width:305px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 30px;
             /*display: block;*/
         }
         .date{
@@ -298,8 +322,22 @@
             display: inline-block;
         }
 
+        /*.error-message {*/
+        /*    color: red;*/
+        /*    font-size: 14px;*/
+        /*    margin-top: 5px;*/
+        /*}*/
     </style>
 
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        /*
+            Function: loadCountries
+            Description: Query the API for a list of countries to populate the select list.
+                         NOTE: Function will execute once the document is fully loaded.
+        */
+
+    </script>
 </head>
 <body>
 <script src="{{ asset('https://kit.fontawesome.com/a076d05399.js') }}"></script>
@@ -339,7 +377,7 @@
     <div class="form-outer">
         {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
 
-            <div class="page slide-page">
+            <div class="page slide-page" style="margin-top:-10px ">
                 <div class="image-container">
                     <div class="image">
                         <div class="row">
@@ -352,12 +390,14 @@
                 <div class="field">
                     <div class="row">
                         <div class="div1">
-                            {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Enter your first name'}})  }}
-                            {{ form_errors(form.first_name , {'attr': {"class":"text-danger" }} ) }}
+                            <label >Nom</label>
+                            {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Entrer votre Nom'}})  }}
+                            {{ form_errors(form.first_name , {'attr': {'class': 'error-message'}} ) }}
                         </div>
                         <div class="div2">
-                            {{ form_widget(form.last_name ,  {'attr': {'placeholder': 'Enter your last name'}})  }}
-                            {{ form_errors(form.last_name, {'attr': {"class":"text-danger" }} ) }}
+                            <label>Prenom</label>
+                            {{ form_widget(form.last_name ,  {'attr': {'placeholder': 'Entrer votre prenom'}})  }}
+                            {{ form_errors(form.last_name, {'attr': {'class': 'error-message'}} ) }}
                         </div>
 
 
@@ -368,53 +408,69 @@
                 <div class="field">
                     <div class="row">
                        <div class="div1">
-                           {{ form_widget(form.email ,  {'attr': {'placeholder': 'Enter your Email'}})  }}
-                           {{ form_errors(form.email) }}</div>
+                           <label>Email</label>
+                           {{ form_widget(form.email ,  {'attr': {'placeholder': 'Entrer votre Email'}})  }}
+                           {{ form_errors(form.email) }}
+
+                       </div>
                      <div class="div2">
-                         {{ form_widget(form.num_tel ,  {'attr': {'placeholder': 'Enter your Telphone'}} ) }}
+                         <label>Telephone</label>
+                         {{ form_widget(form.num_tel ,  {'attr': {'placeholder': 'Entrer votre Telephone'}} ) }}
                          {{ form_errors(form.num_tel) }}</div>
 
                     </div>
                 </div>
                 <div class="field">
                     <div class="row">
-                       <div class="div1">  <select name="gender" id="gender">
+                       <div class="div1">
+                           <label>Gender</label>
+                           <select name="gender" id="gender"  >
                                <option value="male">Male</option>
                                <option value="female">Female</option>
                            </select></div>
-                       <div class="div2"> {{ form_widget(form.address ,  {'attr': {'placeholder': 'Enter your Address'}})  }}
+                       <div class="div2">
+                           <label>Addresse</label>
+                           {{ form_widget(form.address ,  {'attr': {'placeholder': 'Entrer votre Adress'}})  }}
                            {{ form_errors(form.address) }}</div>
                     </div>
                 </div>
                 <div class="field">
                     <div class="row">
-                      <div class="div1"> <select name="roleSelect" id="roleSelect">
+
+                      <div class="div1">
+                          <label>Es-tu ?</label>
+                          <select name="roleSelect" id="roleSelect">
                               <option value="patient">Patient</option>
                               <option value="doctor">Medecin</option>
                           </select></div>
 
                         <div class="div2">
-{#                          {{ form_widget(form.date_naissance,  { 'id':'date_naissance','attr': {'placeholder': 'Enter your Antecedent Medicaux'}}) }}#}
-{#                                {{ form_errors(form.date_naissance) }}#}
+                            <label>Date de naissance</label>
+
+{#                            {{ form_widget(form.date_naissance ,  {'attr': {'placeholder': 'Entrer votre Email'}})  }}#}
+{#                            {{ form_errors(form.date_naissance) }}#}
                             <input type="date" id="date_naissance"  name="date_naissance" placeholder="Date of Birth">
-                            <div id="dateError1" style="color: red; display: none;">Date of birth must be not empty</div>
-                            <div id="dateError" style="color: red; display: none;">Date of birth must be in the past</div>
+                            <div id="dateError1" style="color: red; display: none;font-size:12px">La date de naissance ne doit pas être vide</div>
+                            <div id="dateError3" style="color: red; display: none;font-size:12px">L'age > 18 </div>
+                            <div id="dateError" style="color: red; display: none; font-size:12px">La date de naissance doit être dans le passé</div>
                         </div>
                     </div>
                 </div>
-                <div class="field">
+                <div class="field" style="margin-top: 30px">
                     <div class="login-link" >
                         Have an account? <a href="{{ path('app_login') }}" type="button" id="login">Login</a>
                     </div>
                        <button class="firstNext next"  id="nextButton">Next</button></div>
             </div>
 
-            <div class="page">
+            <div class="page" style="margin-left: 90px">
                 <!-- Champs supplémentaires pour le rôle "patient" -->
                 <div class="patient-fields" style="display: none;">
                     <div class="field">
                         <div class="row">
-                           <div class="div1"> <select name="maladie_chronique" id="maladie_chronique">
+                           <div class="div1">
+                               <label>Maladie Chronique</label>
+                               <select name="maladie_chronique" id="maladie_chronique">
                                    <option value="None">None</option>
                                    <option value="Cardiaques">Cardiaques</option>
                                    <option value="Diabète">Diabète</option>
@@ -422,7 +478,9 @@
                                    <option value="respiratoires chroniques">Respiratoires Chroniques</option>
                                    <option value="rénales chroniques">Rénales Chroniques</option>
                                </select></div>
-                           <div class="div1"> <select name="groupe_sanguin" id="groupe_sanguin">
+                           <div class="div2">
+                               <label>Groupe Sanguin</label>
+                               <select name="groupe_sanguin" id="groupe_sanguin">
                                    <option value="None">None</option>
                                    <option value="A+">A+</option>
                                    <option value="A-">A-</option>
@@ -437,9 +495,13 @@
                     </div>
                     <div class="field">
                         <div class="row">
-                            <div class="div1" >{{ form_widget(form.antecedent_maladie,  { 'id':'antecedent_maladie', 'attr': {'placeholder': 'Enter your Antecedent Maladie'}}) }}
+                            <div class="div1" >
+                                <label>Antecedent Maladie</label>
+                                {{ form_widget(form.antecedent_maladie,  { 'id':'antecedent_maladie', 'attr': {'placeholder': 'Entrer votre Antecedent Maladie'}}) }}
                                 {{ form_errors(form.antecedent_maladie) }}</div>
-                            <div class="div2">{{ form_widget(form.antecedent_medicaux,  { 'id':'antecedent_medicaux','attr': {'placeholder': 'Enter your Antecedent Medicaux'}}) }}
+                            <div class="div2">
+                                <label>Antecedent Medicaux</label>
+                                {{ form_widget(form.antecedent_medicaux,  { 'id':'antecedent_medicaux','attr': {'placeholder': 'Entrer votre Antecedent Medicaux'}}) }}
                                 {{ form_errors(form.antecedent_medicaux) }} </div>
 
                         </div>
@@ -447,7 +509,8 @@
                     <div class="field">
                       <div class="row">
                           <div class="div1">
-                              {{ form_widget(form.allergies ,  {'id':'allergies','attr': {'placeholder': 'Enter your Allergies'}}) }}
+                              <label>Allergies</label>
+                              {{ form_widget(form.allergies ,  {'id':'allergies','attr': {'placeholder': 'Entrer votre Allergies'}}) }}
                               {{ form_errors(form.allergies) }}
                           </div>
                       </div>
@@ -459,32 +522,380 @@
                     <div >
                         <div class="row">
                             <label>Diplômes:</label>
-                           <div class="div1"> {{ form_widget(form.diplomes ,  {'id':'diplomes' ,'attr': {'placeholder': 'Enter your doplomes'}} ) }}
+                           <div class="div1"> {{ form_widget(form.diplomes ,  {'id':'diplomes' ,'attr': {'placeholder': 'Entrer votre doplomes'}} ) }}
                                {{ form_errors(form.diplomes) }}</div>
                         </div>
                     </div>
                     <div class="field">
                         <div class="row">
-                            <div class="div1">{{ form_widget(form.specialite ,  {'id':'specialite', 'attr': {'placeholder': 'Enter Specialite' }}) }}
-                                {{ form_errors(form.specialite) }}
+                            <div class="div1">
+                                <label>Specialite</label>
+{#                                {{ form_widget(form.specialite ,  {'id':'specialite', 'attr': {'placeholder': 'Entrer votre Specialite' }}) }}#}
+{#                                {{ form_errors(form.specialite) }}#}
+                                <select id="specialite" name="specialite">
+                                    <option value="None" >
+                                        None   </option>
+                                    <option value="111" >
+                                        Acupuncture   </option>                                                  </option>
+                                    <option value="120" >
+                                        Addictologue        </option>                                               </option>
+                                    <option value="121" >
+                                        Algologue  (Douleur)    </option>                                                  </option>
+                                    <option value="89" >
+                                        Allergologue           </option>                                            </option>
+                                    <option value="1" >
+                                        Anatomo-Cyto-Pathologiste    </option>                                                   </option>
+                                    <option value="122" >
+                                        Andrologue                  </option>                                     </option>
+                                    <option value="2" >
+                                        Anesthésiste-Réanimateur      </option>                                                 </option>
+                                    <option value="3" >
+                                        Angiologue                 </option>                                      </option>
+                                    <option value="160" >
+                                        Audiologiste       </option>                                                </option>
+                                    <option value="106" >
+                                        Audioprothésiste       </option>                                                </option>
+                                    <option value="172" >
+                                        Auriculothérapeute       </option>                                                </option>
+                                    <option value="6" >
+                                        Biochimiste         </option>                                              </option>
+                                    <option value="4" >
+                                        Biochimiste Clinique     </option>                                                  </option>
+                                    <option value="5" >
+                                        Biologiste Medicale  </option>                                                     </option>
+                                    <option value="10" >
+                                        Biophysique        </option>                                               </option>
+                                    <option value="12" >
+                                        Cancérologue             </option>                                          </option>
+                                    <option value="13" >
+                                        Cardiologue  (Cœur)       </option>                                               </option>
+                                    <option value="179" >
+                                        Cardiologue pédiatrique      </option>                                                 </option>
+                                    <option value="153" >
+                                        Centre d'imagerie médicale   </option>                                                    </option>
+                                    <option value="161" >
+                                        Chiropracteur                                                     </option>
+                                    <option value="182" >
+                                        Chirurgie Arthroscopique et du Sport    </option>                                                   </option>
+                                    <option value="158" >
+                                        Chirurgie plastique et réparatrice                                                     </option>
+                                    <option value="26" >
+                                        Chirurgien                                                     </option>
+                                    <option value="178" >
+                                        Chirurgien Buccal                                                     </option>
+                                    <option value="14" >
+                                        Chirurgien Cancérologue                                                     </option>
+                                    <option value="143" >
+                                        Chirurgien capillaire                                                     </option>
+                                    <option value="15" >
+                                        Chirurgien Cardio-Vasculaire                                                     </option>
+                                    <option value="16" >
+                                        Chirurgien Cardio-Vasculaire Thoracique                                                     </option>
+                                    <option value="177" >
+                                        Chirurgien cervico-facial                                                     </option>
+                                    <option value="133" >
+                                        Chirurgien de l'obésité                                                     </option>
+                                    <option value="24" >
+                                        Chirurgien Esthétique                                                     </option>
+                                    <option value="17" >
+                                        Chirurgien Généraliste                                                     </option>
+                                    <option value="151" >
+                                        Chirurgien Maxillo Facial et Esthétique                                                     </option>
+                                    <option value="91" >
+                                        Chirurgien Maxillo Facial Stomatologue                                                     </option>
+                                    <option value="174" >
+                                        Chirurgien Orthopédiste Pédiatrique                                                     </option>
+                                    <option value="20" >
+                                        Chirurgien Orthopédiste Traumatologue                                                     </option>
+                                    <option value="21" >
+                                        Chirurgien Pédiatrique                                                     </option>
+                                    <option value="22" >
+                                        Chirurgien Plasticien                                                     </option>
+                                    <option value="27" >
+                                        Chirurgien Thoracique                                                     </option>
+                                    <option value="25" >
+                                        Chirurgien Urologue                                                     </option>
+                                    <option value="144" >
+                                        Chirurgien vasculaire                                                     </option>
+                                    <option value="132" >
+                                        Chirurgien viscéral et digestif                                                     </option>
+                                    <option value="29" >
+                                        Dentiste  (Dents)                                                    </option>
+                                    <option value="30" selected>
+                                        Dermatologue  (Peau)                                                    </option>
+                                    <option value="31" >
+                                        Diabétologue                                                     </option>
+                                    <option value="101" >
+                                        Diététicien                                                     </option>
+                                    <option value="43" >
+                                        Embryologiste                                                     </option>
+                                    <option value="32" >
+                                        Endocrinologue                                                     </option>
+                                    <option value="33" >
+                                        Endocrinologue Diabétologue                                                     </option>
+                                    <option value="150" >
+                                        Endodontiste                                                     </option>
+                                    <option value="137" >
+                                        Epidemiologiste                                                     </option>
+                                    <option value="142" >
+                                        Ergothérapeute                                                     </option>
+                                    <option value="35" >
+                                        Gastro-entérologue                                                     </option>
+                                    <option value="36" >
+                                        Généraliste                                                     </option>
+                                    <option value="117" >
+                                        Généticien                                                     </option>
+                                    <option value="102" >
+                                        Gériatre                                                     </option>
+                                    <option value="37" >
+                                        Gynécologue                                                     </option>
+                                    <option value="39" >
+                                        Gynécologue Obstétricien                                                     </option>
+                                    <option value="41" >
+                                        Hématologue                                                     </option>
+                                    <option value="42" >
+                                        Hématologue Clinique                                                     </option>
+                                    <option value="7" >
+                                        Hématopathologiste                                                     </option>
+                                    <option value="110" >
+                                        Hépatologue  (Foie)                                                    </option>
+                                    <option value="116" >
+                                        Hypnothérapeute                                                     </option>
+                                    <option value="44" >
+                                        Imagerie Médicale                                                     </option>
+                                    <option value="45" >
+                                        Immunologiste                                                     </option>
+                                    <option value="8" >
+                                        Immunopathologiste                                                     </option>
+                                    <option value="152" >
+                                        Implantologue                                                     </option>
+                                    <option value="149" >
+                                        Infirmier                                                     </option>
+                                    <option value="49" >
+                                        Interniste                                                     </option>
+                                    <option value="176" >
+                                        Interniste Hypertensiologue                                                     </option>
+                                    <option value="50" >
+                                        Interniste Maladies Infectieuses                                                     </option>
+                                    <option value="51" >
+                                        Interniste Réanimation Médicale                                                     </option>
+                                    <option value="46" >
+                                        Kinésithérapeute                                                     </option>
+                                    <option value="154" >
+                                        Laboratoire d'analyses de biologie médicale                                                     </option>
+                                    <option value="155" >
+                                        Laboratoire d'anatomie et cytologie pathologiques                                                     </option>
+                                    <option value="156" >
+                                        Laboratoire de cytogénétique                                                     </option>
+                                    <option value="173" >
+                                        Maladies Cardiovasculaire                                                     </option>
+                                    <option value="47" >
+                                        Maladies Infectieuses                                                     </option>
+                                    <option value="59" >
+                                        Médecin Biologiste                                                     </option>
+                                    <option value="162" >
+                                        Médecin de famille                                                     </option>
+                                    <option value="168" >
+                                        Médecin du sommeil                                                     </option>
+                                    <option value="118" >
+                                        Médecin du sport                                                     </option>
+                                    <option value="48" >
+                                        Médecin du Travail                                                     </option>
+                                    <option value="96" >
+                                        Médecin Esthétique                                                     </option>
+                                    <option value="157" >
+                                        Médecin Hémodialyseur                                                     </option>
+                                    <option value="123" >
+                                        Médecin homéopathe                                                     </option>
+                                    <option value="52" >
+                                        Médecin Légiste                                                     </option>
+                                    <option value="53" >
+                                        Médecin Nucléaire                                                     </option>
+                                    <option value="55" >
+                                        Médecin Physique Réadaptateur                                                     </option>
+                                    <option value="124" >
+                                        Médecin urgentiste                                                     </option>
+                                    <option value="125" >
+                                        Médecine douce et alternative                                                     </option>
+                                    <option value="126" >
+                                        Médecine morphologique et anti-âge                                                     </option>
+                                    <option value="57" >
+                                        Médecine Préventive                                                     </option>
+                                    <option value="146" >
+                                        Médecine tropicale                                                     </option>
+                                    <option value="9" >
+                                        Microbiologiste                                                     </option>
+                                    <option value="61" >
+                                        Néonatologiste                                                     </option>
+                                    <option value="62" >
+                                        Néphrologue                                                     </option>
+                                    <option value="18" >
+                                        Neurochirurgien                                                     </option>
+                                    <option value="64" >
+                                        Neurologue  (Cerveau et Nerfs)                                                    </option>
+                                    <option value="171" >
+                                        Neuropédiatre                                                     </option>
+                                    <option value="169" >
+                                        Neurophysiologiste                                                     </option>
+                                    <option value="127" >
+                                        Neuropsychiatre                                                     </option>
+                                    <option value="167" >
+                                        Neuropsychologue                                                     </option>
+                                    <option value="159" >
+                                        Nutrithérapeute                                                     </option>
+                                    <option value="65" >
+                                        Nutritionniste                                                     </option>
+                                    <option value="164" >
+                                        Oncologue                                                     </option>
+                                    <option value="145" >
+                                        Oncologue-Chimiothérapeute                                                     </option>
+                                    <option value="85" >
+                                        Oncologue-Radiothérapeute                                                     </option>
+                                    <option value="66" >
+                                        Ophtalmologiste  (Yeux)                                                    </option>
+                                    <option value="128" >
+                                        Opticien                                                     </option>
+                                    <option value="67" >
+                                        Orthodontiste                                                     </option>
+                                    <option value="68" >
+                                        Orthopédiste  (Os)                                                    </option>
+                                    <option value="69" >
+                                        Orthopédiste Traumatologue                                                     </option>
+                                    <option value="100" >
+                                        Orthophoniste                                                     </option>
+                                    <option value="175" >
+                                        Orthoprothésiste                                                     </option>
+                                    <option value="104" >
+                                        Orthoptiste                                                     </option>
+                                    <option value="115" >
+                                        Ostéopathe                                                     </option>
+                                    <option value="70" >
+                                        Oto-Rhino-Laryngologiste (ORL)  (Oreille nez gorge)                                                    </option>
+                                    <option value="71" >
+                                        Parasitologiste                                                     </option>
+                                    <option value="119" >
+                                        Parodontiste implantologiste                                                     </option>
+                                    <option value="72" >
+                                        Pédiatre  (Enfant)                                                    </option>
+                                    <option value="74" >
+                                        Pédodontiste                                                     </option>
+                                    <option value="73" >
+                                        Pédopsychiatre                                                     </option>
+                                    <option value="166" >
+                                        Perineologue                                                     </option>
+                                    <option value="136" >
+                                        Pharmacien                                                     </option>
+                                    <option value="97" >
+                                        Pharmacien Biologiste                                                     </option>
+                                    <option value="129" >
+                                        Pharmacologue                                                     </option>
+                                    <option value="108" >
+                                        Phlébologue                                                     </option>
+                                    <option value="76" >
+                                        Physiologiste                                                     </option>
+                                    <option value="99" >
+                                        Physiothérapeute                                                     </option>
+                                    <option value="134" >
+                                        Phytothérapeute                                                     </option>
+                                    <option value="78" >
+                                        Pneumologue                                                     </option>
+                                    <option value="107" >
+                                        Podologue                                                     </option>
+                                    <option value="138" >
+                                        Posturologue                                                     </option>
+                                    <option value="109" >
+                                        Proctologue                                                     </option>
+                                    <option value="165" >
+                                        Prothésiste Capillaire                                                     </option>
+                                    <option value="103" >
+                                        Prothésiste dentaire                                                     </option>
+                                    <option value="113" >
+                                        Psychanalyste                                                     </option>
+                                    <option value="93" >
+                                        Psychiatre  (Troubles mentaux)                                                    </option>
+                                    <option value="79" >
+                                        Psychologue                                                     </option>
+                                    <option value="170" >
+                                        Psychologue clinicien                                                     </option>
+                                    <option value="112" >
+                                        Psychomotricien                                                     </option>
+                                    <option value="94" >
+                                        Psychothérapeute                                                     </option>
+                                    <option value="80" >
+                                        Radiologue                                                     </option>
+                                    <option value="84" >
+                                        Radiothérapeute                                                     </option>
+                                    <option value="86" >
+                                        Réanimateur Médical                                                     </option>
+                                    <option value="135" >
+                                        Réflexologue                                                     </option>
+                                    <option value="87" >
+                                        Rhumatologue                                                     </option>
+                                    <option value="180" >
+                                        Rythmologue interventionnel                                                     </option>
+                                    <option value="130" >
+                                        Sage femme                                                     </option>
+                                    <option value="131" >
+                                        Santé publique et médecine sociale                                                     </option>
+                                    <option value="147" >
+                                        Sénologue                                                     </option>
+                                    <option value="95" >
+                                        Sexologue                                                     </option>
+                                    <option value="90" >
+                                        Stomatologue                                                     </option>
+                                    <option value="181" >
+                                        Thérapeute manuel                                                     </option>
+                                    <option value="148" >
+                                        Urodynamique                                                     </option>
+                                    <option value="92" >
+                                        Urologue                                                     </option>
+                                    <option value="163" >
+                                        Vétérinaire                                                     </option>
+                                </select>
                                </div>
-                            <div class="div2"> {{ form_widget(form.num_tel2 ,  { 'id':'num_tel2' ,'attr': {'placeholder': 'Enter 2eme num Telephone'}}) }}
+                            <div class="div2">
+                                <label>Telephone 2</label>
+                                {{ form_widget(form.num_tel2 ,  { 'id':'num_tel2' ,'attr': {'placeholder': 'Entrer votre 2eme numero Telephone'}}) }}
                                 {{ form_errors(form.num_tel2) }}</div>
                         </div>
                     </div>
                     <div class="field">
+                       <div class="row">
+                                 <div class="div1">
+                                     Pays<br>
+                           <select class="country" onchange="loadStates()">
+                               <option selected>Select Country</option>
+                           </select>
+                           </div>
+                           <div class="div2">
+                               Ville<br>
+                           <select class="state">
+                               <option selected>Select City</option>
+                           </select>
+
+                           </div>
+                       </div>
+                    </div>
+                    <div class="field">
                         <div class="row " >
-                            <div class="div1" style="align-items: start"><label>Date debut</label>
+                            <div class="div1" style="align-items: start">
+                                <label>Date debut</label>
                                 <input type="time" id="date_debut" name="date_debut" ></div>
-                            <div class="div2"><label>Date fin</label><input type="time"  id="date_fin" name="date_fin"></div>
+                            <div class="div2">
+                                <label>Date fin</label>
+                                <input type="time"  id="date_fin" name="date_fin"></div>
                         </div>
                     </div>
                     <br>
                     <div class="field">
                         <div class="row">
-                            <div class="div1">{{ form_widget(form.prix_c ,  {'id':'prix_c' ,'attr': {'placeholder': 'Enter your prix',}}) }}
+                            <div class="div1" style="margin-top: -40px">
+                                <label>Prix de concultation</label>
+                                {{ form_widget(form.prix_c ,  {'id':'prix_c' ,'attr': {'placeholder': 'Entrer votre prix',}}) }}
                                 {{ form_errors(form.prix_c) }}</div>
-                           <div class="div2"> <select name="dure_rdv" id="dure_rdv">
+                           <div class="div2" style="margin-top: -40px">
+                               <label>Durée de rendez-vouz</label>
+                               <select name="dure_rdv" id="dure_rdv">
                                    <option value="15:00">15 min</option>
                                    <option value="20:00">20 min</option>
                                    <option value="30:00">30 min</option>
@@ -496,8 +907,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="field btns ">
-                    <button class="prev-1 SecondButton prev">Previous</button>
+                <div class="field btns " style="margin-top: -50px">
+                    <button class="prev-1 SecondButton prev" >Previous</button>
                     <button class="next-1 SecondButton next">Next </button>
                 </div>
             </div>
@@ -506,14 +917,14 @@
                     <div class="field" style="height: 30% ; ">
                      <div class="row" >
                              <div style="height: 40% ;width: 100%;">
-                                 {{ form_widget(form.password ,  {'attr': {'placeholder': 'Enter Password'}}) }}
+                                 {{ form_widget(form.password ,  {'attr': {'placeholder': 'Entrer votre Password'}}) }}
                                  {{ form_errors(form.password) }}
                              </div>
                      </div>
                     </div>
                 <div class="field" style="height: 30% ">
                     <div class="row">
-                        <div style="height: 40% ; width: 120%;">{{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Enter Confirm Password'}}) }}
+                        <div style="height: 40% ; width: 120%;">{{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Entrer votre Confirm Password'}}) }}
                             {{ form_errors(form.confirm_password) }}</div>
                     </div>
                 </div>
@@ -543,12 +954,24 @@
 <script>
     document.getElementById('date_naissance').addEventListener('change', function() {
         var selectedDate = new Date(this.value);
+
         var today = new Date();
+        console.log(today.getFullYear() - selectedDate.getFullYear());
         today.setHours(0, 0, 0, 0);
         if (selectedDate > today) {
+            document.getElementById('dateError1').style.display = 'none';
+
             document.getElementById('dateError').style.display = 'block';
             document.getElementById('nextButton').disabled = true;
-        } else {
+        } else if (today.getFullYear() - selectedDate.getFullYear()  < -1 ) {
+            document.getElementById('dateError1').style.display = 'none';
+
+            document.getElementById('dateError3').style.display = 'block';
+                document.getElementById('nextButton').disabled = true;
+        }else{
+            document.getElementById('dateError1').style.display = 'none';
+
+            document.getElementById('dateError3').style.display = 'none';
             document.getElementById('dateError').style.display = 'none';
             document.getElementById('nextButton').disabled = false;
         }
@@ -563,6 +986,7 @@
             document.getElementById('nextButton').disabled = true;
             document.getElementById('lastbutton').disabled = true;
         } else {
+            document.getElementById('dateError1').style.display = 'none';
             document.getElementById('lastbutton').disabled = false;
             const roleSelect = document.getElementById('roleSelect');
             const patientFields = document.querySelector('.page .patient-fields');
@@ -603,9 +1027,11 @@
     //     window.location.href = `https://127.0.0.1:8000/login` ;
     // }
     // document.getElementById('login').addEventListener('click', login);
+    // Function to fetch country data
+
 
 
 </script>
-
+<script src="{{ asset('/js/country.js') }}"></script>
 </body>
 </html>

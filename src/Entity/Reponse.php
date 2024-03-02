@@ -24,19 +24,19 @@ class Reponse
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $question = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reponses')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $medecin = null;
+//    #[ORM\ManyToOne(inversedBy: 'reponses')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Userpast $medecin = null;
 
-    public function getMedecin(): ?User
-    {
-        return $this->medecin;
-    }
-
-    public function setMedecin(?User $medecin): void
-    {
-        $this->medecin = $medecin;
-    }
+//    public function getMedecin(): ?Userpast
+//    {
+//        return $this->medecin;
+//    }
+//
+//    public function setMedecin(?Userpast $medecin): void
+//    {
+//        $this->medecin = $medecin;
+//    }
 
     public function getId(): ?int
     {

@@ -76,7 +76,6 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Create Account</th>
                                         <th class="text-secondary opacity-7"></th>
                                         <th class="text-secondary opacity-7"></th>
-                                        <th class="text-secondary opacity-7"></th>
 
                                     </tr>
                                     </thead>
@@ -119,20 +118,26 @@
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-bold">{{ user.dateCreateCompte|date('Y-m-d') }}</span>
                                         </td>
+{#                                        <td class="align-middle">#}
+{#                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">#}
+{#                                                More#}
+{#                                            </a>#}
+{#                                        </td>#}
+{#                                        <td class="align-middle">#}
+{#                                            <a href="{{ path('Update_user' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">#}
+{#                                                Edit#}
+{#                                            </a>#}
+{#                                        </td>#}
                                         <td class="align-middle">
-                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                More
+                                            {% if user.active  %}
+                                            <a href="{{ path('delete' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                Desactive
                                             </a>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="{{ path('Update_user' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                Edit
-                                            </a>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                Delete
-                                            </a>
+                                            {% else %}
+                                                <a href="{{ path('delete' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                    Active
+                                                </a>
+                                                {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}

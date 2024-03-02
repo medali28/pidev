@@ -28,8 +28,8 @@ class Medicament
     #[ORM\ManyToOne(inversedBy: 'medicaments')]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medicaments')]
-    private ?User $user = null;
+//    #[ORM\ManyToOne(inversedBy: 'medicaments')]
+//    private ?Userpast $user = null;
 
     public function getId(): ?int
     {
@@ -96,15 +96,15 @@ class Medicament
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
+//    public function getUser(): ?Userpast
+//    {
+//        return $this->user;
+//    }
+//
+//    public function setUser(?Userpast $user): static
+//    {
+//        $this->user = $user;
+//
+//        return $this;
+//    }
 }
