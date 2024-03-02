@@ -12,12 +12,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ReponseController extends AbstractController
 {
     #[Route('/reponse/add/{id}', name: 'app_reponse_add')]
-    public function add(Request $request, ManagerRegistry $managerRegistry,QuestionRepository $questionRepository,$id): Response
+    public function add(Request $request, ManagerRegistry $managerRegistry,QuestionRepository $questionRepository,$id,MailerInterface $mailer): Response
     {
         $qestionid=$questionRepository->find($id);
         $reponse = new Reponse();
@@ -48,6 +51,7 @@ class ReponseController extends AbstractController
                 }
             }
 
+            $this->sendEmail($description,$mailer);
 
             $em = $managerRegistry->getManager();
             $em->persist($reponse);
@@ -58,7 +62,7 @@ class ReponseController extends AbstractController
     }
 
     #[Route('/reponse/edit/{id}', name: 'app_reponse_edit')]
-    function edit(QuestionRepository $questionRepository,ReponseRepository $repository, $id, Request $request, ManagerRegistry $managerRegistry): Response
+    function edit(QuestionRepository $questionRepository,ReponseRepository $repository, $id, Request $request, ManagerRegistry $managerRegistry,MailerInterface $mailer): Response
     {
         $reponse = $repository->find($id);
         $question=$reponse->getQuestion()->getId();
@@ -87,6 +91,8 @@ class ReponseController extends AbstractController
                     return $this->redirectToRoute('reponse_bad_words', ['id' => $id]);
                 }
             }
+            $this->modifierEmail($description,$mailer);
+
             $em = $managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute('app_question_show_id',['id'=>$question]);
@@ -129,5 +135,108 @@ class ReponseController extends AbstractController
         $em->persist($reponse);
         $em->flush();
         return $this->redirectToRoute('app_question_show_id', ['id' => $question]);
+    }
+    private function sendEmail($description, MailerInterface $mailer): void
+    {
+        $emailText = "
+        <!DOCTYPE html>
+        <html lang='en'>
+        <head>
+        <title>My eDr</title>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    padding: 20px;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    margin-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2 style='color: #007bff;'>Nouveau Commentaire a eté Creé</h2>
+                <p><strong>Description:</strong> $description</p>
+            </div>
+        </body>
+        </html>
+    ";
+
+        $email = (new Email())
+            ->from(new Address('myedr@email.com','My eDr'))
+            ->to('myedr83@gmail.com')
+            ->subject('Un Nouveau Commentaire a été Deposer')
+            ->html($emailText);
+        $mailer->send($email);
+    }
+    private function modifierEmail($description, MailerInterface $mailer): void
+    {
+        $emailText = "
+        <!DOCTYPE html>
+        <html lang='en'>
+        <head>
+        <title>My eDr</title>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    padding: 20px;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    margin-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2 style='color: #007bff;'>un Nouveau Commentaire modifier</h2>
+                <p><strong>Description:</strong> $description</p>
+            </div>
+        </body>
+        </html>
+    ";
+
+        $email = (new Email())
+            ->from(new Address('myedr@email.com','My eDr'))
+            ->to('myedr83@gmail.com')
+            ->subject('Un Commentaire a été Modifier')
+            ->html($emailText);
+        $mailer->send($email);
+    }
+
+    #[Route('/bad_words', name: 'question_bad_words')]
+    function Affiche_bad(QuestionRepository $repository)
+    {
+        $Question = $repository->findAll();
+        return $this->render('question/bad_word.html.twig', ['description' => $Question]);
     }
 }

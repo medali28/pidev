@@ -31,8 +31,8 @@ class QuestionController extends AbstractController
     #[Route('/question/show', name: 'app_question_show')]
     function show(QuestionRepository $repository )
     {
-        $question=$repository->findAll();
-        return $this->render('question/question_show.html.twig',['question'=>$question]);
+        $questions = $repository->findBy([], ['datetempQ' => 'DESC']);
+        return $this->render('question/question_show.html.twig',['question'=>$questions]);
     }
     #[Route('/question/question_add', name: 'app_question_add')]
     public function add(Request $request,ManagerRegistry $managerRegistry,sluggerinterface $slugger,mailerinterface $mailer): Response
@@ -94,7 +94,7 @@ class QuestionController extends AbstractController
 
     }
     #[Route('/question/edit/{id}', name: 'app_question_edit')]
-    function edit(QuestionRepository $repository,$id,Request $request ,ManagerRegistry $managerRegistry,sluggerinterface $slugger)
+    function edit(QuestionRepository $repository,$id,Request $request ,ManagerRegistry $managerRegistry,sluggerinterface $slugger,MailerInterface $mailer)
     {
         $question = $repository->find($id);
         $currentDateTime = new \DateTime();
@@ -137,6 +137,9 @@ class QuestionController extends AbstractController
                         return $this->redirectToRoute('question_bad_words', ['id' => $id]);
                     }
                 }
+                $title=$question->getTitle();
+                $photo=$question->getImage();
+                $this->modifierEmail($photo,$title,$description,$mailer);
                 $em = $managerRegistry->getManager();
                 $em->flush();
                 return $this->redirectToRoute('app_question_show');
@@ -203,6 +206,56 @@ class QuestionController extends AbstractController
             ->from(new Address('myedr@email.com','My eDr'))
             ->to('myedr83@gmail.com')
             ->subject('Un Nouveau Question a été créé')
+            ->html($emailText);
+        $mailer->send($email);
+    }
+    private function modifierEmail($photo,  $title,$description, MailerInterface $mailer): void
+    {
+        $emailText = "
+        <!DOCTYPE html>
+        <html lang='en'>
+        <head>
+        <title>My eDr</title>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    padding: 20px;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    margin-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2 style='color: #007bff;'>New Question Created</h2>
+                <p><strong>Title:</strong> $title</p>
+                <p><strong>Description:</strong> $description</p>
+                <p><strong>image:</strong> <img src='/image/$photo' alt='Question Photo'></p>
+            </div>
+        </body>
+        </html>
+    ";
+
+        $email = (new Email())
+            ->from(new Address('myedr@email.com','My eDr'))
+            ->to('myedr83@gmail.com')
+            ->subject('Un Question a été Modifier')
             ->html($emailText);
         $mailer->send($email);
     }
