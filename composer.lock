@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "d57137455323cd4dca36aaa77167a239",
+=======
+    "content-hash": "3a7192d05b5e2fc6edb5a9a0b4ccb212",
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2430,6 +2434,7 @@
             "time": "2023-02-24T14:57:12+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "swiftmailer/swiftmailer",
             "version": "v6.3.0",
             "source": {
@@ -2506,6 +2511,8 @@
             "time": "2021-10-18T15:26:12+00:00"
         },
         {
+=======
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
             "name": "symfony/amqp-messenger",
             "version": "v5.4.35",
             "source": {

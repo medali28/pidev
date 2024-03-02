@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+<<<<<<< HEAD
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -18,6 +19,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use TCPDF;
 
 use App\Repository\RendezVousRepository;
+=======
+use Symfony\Component\Routing\Annotation\Route;
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
 
 
 #[Route('/consultation')]
@@ -32,17 +36,44 @@ class ConsultationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_consultation_new', methods: ['GET', 'POST'])]
+<<<<<<< HEAD
     public function new(Request $request, EntityManagerInterface $entityManager,RendezVousRepository $RendezVousRepository,mailerinterface  $mailer): Response
     {
         $RendezVous = $RendezVousRepository->findRendezVousById(7);
 
 
+=======
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $RendezVousRepository=$this->getDoctrine()->getRepository(RendezVous::class);
+        $RendezVous = $RendezVousRepository->findRendezVousById(15);
+
+        /*$consultation = new Consultation();
+        $form = $this->createForm(ConsultationType::class, $consultation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($consultation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('consultation/new.html.twig', [
+            'consultation' => $consultation,
+            'form' => $form,
+        ]);*/
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
         // Créer une nouvelle instance de Consultation
         $consultation = new Consultation();
 // Récupération des données du formulaire
         if ($request->isMethod('POST')) {
             $descriptionMaladie = $request->request->get('Description');
+<<<<<<< HEAD
              $dureeMaladie = $request->request->get('Duré_de_maladie');
+=======
+            // $dureeMaladie = $request->request->get('Duré_de_maladie');
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
             $poids = $request->request->get('Poids_de_patient');
             $taille = $request->request->get('taille');
             $temperature = $request->request->get('temperature');
@@ -77,17 +108,24 @@ class ConsultationController extends AbstractController
                 $consultation->setMedicament('null');}
 
             $consultation->setDateProchaine($dateConsultation);
+<<<<<<< HEAD
             $consultation->setDureeMaladie($dureeMaladie);
 
             $nomMedicament = $request->request->get('nomMedicament');
             $conseilsMaladie = $request->request->get('Conseils_de_maladie');
+=======
+            $consultation->setDureeMaladie(new \DateTime('2022-01-01'));
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
 
 
             // Persist et flush pour sauvegarder dans la base de données
             $entityManager->persist($consultation);
             $entityManager->flush();
+<<<<<<< HEAD
             $this->sendEmail($nomMedicament, $conseilsMaladie, $mailer);
 
+=======
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
 if($cnam === 'on'){
     return $this->redirectToRoute('app_cnam_new', ['id' => $consultation->getId()]);
 }
@@ -116,6 +154,7 @@ if($cnam === 'on'){
         ]);
     }
 
+<<<<<<< HEAD
     /*public function show(Consultation $consultation): Response
     {
         $qrCode = new QrCode($consultation->getId());
@@ -132,6 +171,8 @@ if($cnam === 'on'){
             'qrCodeUrl' => $qrCodeUrl,
         ]);
     }*/
+=======
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
     #[Route('/{id}/edit', name: 'app_consultation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
     {
@@ -160,6 +201,7 @@ if($cnam === 'on'){
 
         return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
     }
+<<<<<<< HEAD
 
 
 
@@ -218,4 +260,6 @@ if($cnam === 'on'){
         $mailer->send($email);
     }*/
 
+=======
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
 }

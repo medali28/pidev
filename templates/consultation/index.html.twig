@@ -86,6 +86,7 @@
                 <h1>Partagez pour un Monde en Meilleure Santé</h1>
                 <p>Ensemble, construisons une base de données médicale collaborative</p>
             </div>
+<<<<<<< HEAD
             <form action="{{ path('filter_consultations') }}" method="GET" class="mb-4"> <!-- Ajout de la classe "mb-4" pour une marge inférieure de 4 unités -->
                 <input type="text" name="duree_maladie" placeholder="Rechercher par durée de maladie">
                 <button type="submit">Rechercher</button>
@@ -99,6 +100,16 @@
 
             <table class="table table-striped">
                 <thead
+=======
+            <section class="section-padding section-bg text-center">
+                <h1>Consultation index</h1>
+
+            </section>
+
+
+            <table class="table table-striped">
+                <thead>
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
                 <tr>
                     <th scope="col">Nom du Patient</th>
                     <th scope="col">Description</th>
@@ -119,7 +130,11 @@
                     <tr>
                         <td>{{ consultation.getRdv().getPatient().getLastName() }}</td>
                         <td>{{ consultation.description }}</td>
+<<<<<<< HEAD
                         <td>{{ consultation.dureeMaladie }}</td>
+=======
+                        <td>{{ consultation.dureeMaladie ? consultation.dureeMaladie|date('Y-m-d H:i:s') : '' }}</td>
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
                         <td>{{ consultation.poids }}</td>
                         <td>{{ consultation.taille }}</td>
                         <td>{{ consultation.temperature }}</td>
@@ -129,7 +144,10 @@
                         <td>{{ consultation.medicament }}</td>
                         <td>{{ consultation.dateProchaine ? consultation.dateProchaine|date('Y-m-d H:i:s') : '' }}</td>
                         <td>
+<<<<<<< HEAD
                             <a href="{{ path('imprimer', {'id': consultation.id}) }}" class="btn btn-success btn-sm">Imprimer</a> <!-- Nouveau bouton pour imprimer -->
+=======
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
                             <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
                             <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                         </td>
@@ -141,8 +159,65 @@
                 {% endfor %}
                 </tbody>
             </table>
+<<<<<<< HEAD
             <a href="{{ path('app_consultation_new') }}">Create new</a>
             <a href="{{ path('generate_pdf') }}" class="btn btn-primary">Générer PDF</a>
+=======
+<!--<div class="container-lg">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Durée Maladie</th>
+                            <th scope="col">Poids</th>
+                            <th scope="col">Taille</th>
+                            <th scope="col">Température</th>
+                            <th scope="col">Fréquence Cardiaque</th>
+                            <th scope="col">Respiration</th>
+                            <th scope="col">Conseils</th>
+                            <th scope="col">Médicament</th>
+                            <th scope="col">Date Prochaine</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consultation in consultations %}
+                            <tr>
+                                <td>{{ consultation.id }}</td>
+                                <td>{{ consultation.description }}</td>
+                                <td>{{ consultation.dureeMaladie ? consultation.dureeMaladie|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>{{ consultation.poids }}</td>
+                                <td>{{ consultation.taille }}</td>
+                                <td>{{ consultation.temperature }}</td>
+                                <td>{{ consultation.frequenceCardique }}</td>
+                                <td>{{ consultation.respiration }}</td>
+                                <td>{{ consultation.conseils }}</td>
+                                <td>{{ consultation.medicament }}</td>
+                                <td>{{ consultation.dateProchaine ? consultation.dateProchaine|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>
+                                    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
+                                    <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="12">Aucun enregistrement trouvé</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+
+            <a href="{{ path('app_consultation_new') }}">Create new</a>
+>>>>>>> cd29f56e5a6689dcd195b77a9fb1c8d03bff8e4b
         </div>
     </section>
 </main>
