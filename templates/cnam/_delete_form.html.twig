@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('app_cnam_delete', {'id': cnam.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cnam.id) }}">
+    <button class="btn">Delete</button>
+    <!--button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_cnam_index') }}'">Back to List</button!-->
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_cnam_edit', {'id': cnam.id}) }}'">Edit</button>
+
+</form>

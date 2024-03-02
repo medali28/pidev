@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ConsultationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Float_;
 
 #[ORM\Entity(repositoryClass: ConsultationRepository::class)]
 class Consultation
@@ -19,23 +20,23 @@ class Consultation
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $duree_maladie = null;
+    #[ORM\Column]
+    private ?float $duree_maladie = null;
 
     #[ORM\Column]
-    private ?int $poids = null;
+    private ?float $poids = null;
 
     #[ORM\Column]
-    private ?int $taille = null;
+    private ?float $taille = null;
 
     #[ORM\Column]
-    private ?int $temperature = null;
+    private ?float $temperature = null;
 
     #[ORM\Column]
-    private ?int $frequence_cardique = null;
+    private ?float $frequence_cardique = null;
 
     #[ORM\Column]
-    private ?int $respiration = null;
+    private ?float $respiration = null;
 
     #[ORM\Column(length: 255)]
     private ?string $conseils = null;
@@ -47,7 +48,7 @@ class Consultation
     private ?\DateTimeInterface $date_prochaine = null;
 
     #[ORM\OneToOne(inversedBy: 'consultation', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?RendezVous $rdv = null;
 
     public function getId(): ?int
@@ -69,72 +70,72 @@ class Consultation
         return $this;
     }
 
-    public function getDureeMaladie(): ?\DateTimeInterface
+    public function getDureeMaladie(): ?float
     {
         return $this->duree_maladie;
     }
 
-    public function setDureeMaladie(\DateTimeInterface $duree_maladie): static
+    public function setDureeMaladie(float $duree_maladie): static
     {
         $this->duree_maladie = $duree_maladie;
 
         return $this;
     }
 
-    public function getPoids(): ?int
+    public function getPoids(): ?float
     {
         return $this->poids;
     }
 
-    public function setPoids(int $poids): static
+    public function setPoids(float $poids): static
     {
         $this->poids = $poids;
 
         return $this;
     }
 
-    public function getTaille(): ?int
+    public function getTaille(): ?float
     {
         return $this->taille;
     }
 
-    public function setTaille(int $taille): static
+    public function setTaille(float $taille): static
     {
         $this->taille = $taille;
 
         return $this;
     }
 
-    public function getTemperature(): ?int
+    public function getTemperature(): ?float
     {
         return $this->temperature;
     }
 
-    public function setTemperature(int $temperature): static
+    public function setTemperature(float $temperature): static
     {
         $this->temperature = $temperature;
 
         return $this;
     }
 
-    public function getFrequenceCardique(): ?int
+    public function getFrequenceCardique(): ?float
     {
         return $this->frequence_cardique;
     }
 
-    public function setFrequenceCardique(int $frequence_cardique): static
+    public function setFrequenceCardique(float $frequence_cardique): static
     {
         $this->frequence_cardique = $frequence_cardique;
 
         return $this;
     }
 
-    public function getRespiration(): ?int
+    public function getRespiration(): ?float
     {
         return $this->respiration;
     }
 
-    public function setRespiration(int $respiration): static
+    public function setRespiration(float $respiration): static
     {
         $this->respiration = $respiration;
 
@@ -186,6 +187,13 @@ class Consultation
     {
         $this->rdv = $rdv;
     }
-
+    public function __toString(): string
+    {
+        // Définir la représentation de la consultation sous forme de chaîne de caractères
+        return $this->description . ' - ' . $this->medicament;
+    }
 
 }
+
+
+

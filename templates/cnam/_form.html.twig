@@ -1,0 +1,26 @@
+{{ form_start(form) }}
+<div class="form-group">
+    {{ form_label(form.Numero_carnet) }}
+    {{ form_errors(form.Numero_carnet) }}
+    {{ form_widget(form.Numero_carnet, {'attr': {'class': 'form-control', 'placeholder': 'Votre numéro de carnet (8 chiffres)', 'pattern': '^[0-9]{8}$', 'title': 'Veuillez entrer exactement 8 chiffres.'}}) }}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.Prix_consultation) }}
+    {{ form_errors(form.Prix_consultation) }}
+    {{ form_widget(form.Prix_consultation, {'attr': {'class': 'form-control', 'placeholder': 'Le prix de consultation', 'min': 45, 'max': 180}}) }}
+</div>
+
+
+<div class="form-group">
+    {{ form_label(form.consultation) }}
+    {{ form_errors(form.consultation) }}
+    {{ form_widget(form.consultation, {'attr': {'class': 'form-control', 'placeholder': 'consultation'}}) }}
+</div>
+{# Ajoutez d'autres champs du formulaire ici le cas échéant #}
+
+<button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+<button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_cnam_index') }}'">Back to List</button>
+
+
+{{ form_end(form) }}
