@@ -572,4 +572,16 @@ class UserController extends AbstractController
     }
 
 
+    #[Route('/medecin/map', name: 'map')]
+//    #[Route('/profile/{id}/medecin/map/{lat}/{lng}', name: 'map')]
+    public function map( Request $request , UserRepository $repository, ManagerRegistry $managerRegistry, AuthenticationUtils $authenticationUtils): Response
+    {
+        $lat= 36.830580332026834;
+        $lng =  10.146119297556947;
+        return $this->render('user/map.html.twig', [
+            'latd'=>$lat,
+            'lngd'=>$lng
+        ]);
+    }
+
 }
