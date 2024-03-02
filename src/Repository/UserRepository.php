@@ -105,15 +105,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function findMedecinsByCriteria($specialite, $prix )
+    public function findMedecinsByCriteria($specialite, $prix ,$pays , $ville)
     {
         $queryBuilder = $this->createQueryBuilder('m')
             ->andWhere('m.roles LIKE :role')
             ->setParameter('role', '%"ROLE_MEDECIN"%');
-        if ($specialite  !== null){
+        if ($specialite  !== 'None'){
             $queryBuilder
             ->andWhere('m.specialite = :specialite')
                 ->setParameter('specialite', $specialite);
+        }
+        if ($pays  !== 'none'){
+            $queryBuilder
+                ->andWhere('m.pays = :pays')
+                ->setParameter('pays', $pays);
+        }
+        if ($ville  !== 'none'){
+            $queryBuilder
+                ->andWhere('m.ville = :ville')
+                ->setParameter('ville', $ville);
         }
         if ($prix !== null) {
             $range = 10 ;

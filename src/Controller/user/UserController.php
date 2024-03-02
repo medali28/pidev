@@ -60,7 +60,7 @@ class UserController extends AbstractController
                 $user->setRoles(['ROLE_PATIENT']);
                 $user->setDureRdv(null);
                 $user->setRate(100);
-                $user->setValidation(1);
+                $user->setActive(true);
                 $user->setMaladieChronique($request->get('maladie_chronique'));
             } else {
                 $duree_rdv = \DateTime::createFromFormat('i:s', $request->get('dure_rdv'));
@@ -70,10 +70,15 @@ class UserController extends AbstractController
                     $user->setDureRdv(null);
                 }
                 $user->setRate(100);
-                $user->setValidation(0);
+                $user->setActive(true);
                 $user->setRoles(['ROLE_MEDECIN']);
             }
             $user->setGender($request->get('gender'));
+            $user->setPays($request->get('countryInput'));
+            $user->setVille($request->get('stateDisplay'));
+            $user->setLat($request->get('latitudeDisplay'));
+            $user->setLog($request->get('longitudeDisplay'));
+            $user->setSpecialite($request->get('specialite'));
             $user->setGroupeSanguin($request->get('groupe_sanguin'));
             $dateDebut = \DateTime::createFromFormat('H:i', $request->get('date_debut'));
             if ($dateDebut instanceof \DateTime) {
@@ -168,8 +173,6 @@ class UserController extends AbstractController
         <p>Votre code à 6 chiffres est: <strong>{{ code }}</strong></p>
     </body>
     </html>";
-
-
 
             if ($request->isMethod('POST') ){
                 $code_tep = $request->request->get('code');
@@ -535,9 +538,7 @@ class UserController extends AbstractController
 
         if ($this->getUser()) {
             $form = $this->createFormBuilder()
-                ->add('specialite', TextType::class, [
-                    'required' => false,
-                ])
+
                 ->add('prix', IntegerType::class, [
                     'required' => false,
                 ])
@@ -547,18 +548,19 @@ class UserController extends AbstractController
 //                ->add('ville', TextType::class, [
 //                    'required' => false,
 //                ])
-                ->add('search', SubmitType::class)
+//                ->add('search', SubmitType::class)
                 ->getForm();
 
             $form->handleRequest($request);
             $meds = $repository->findMedecins();
             if ($form->isSubmitted()){
                 $data = $form->getData();
-                 $specialite = $data['specialite'];
+                 $specialite = $request->request->get('specialite');
                  $prix = $data['prix'];
-                // $pays = $data['pays'];
-                // $ville = $data['ville'];
-                $meds= $repository->findMedecinsByCriteria($specialite,$prix);
+                 $pays =  $request->request->get('countryh');
+                 $ville =  $request->request->get('stateh');
+//                 return new Response($ville.$pays);
+                $meds= $repository->findMedecinsByCriteria($specialite,$prix,$pays,$ville);
             }
             return $this->render('user/medecin.html.twig' , [
                 'meds'=>$meds ,

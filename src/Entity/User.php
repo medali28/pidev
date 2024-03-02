@@ -71,9 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(  length: 255 , nullable: true)]
     private ?string $image;
 
-    #[ORM\Column(length: 255 , nullable: true)]
-    #[Assert\NotBlank(message:"Address must be non-empty")]
-    private ?string $address = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $maladie_chronique = null;
@@ -382,15 +380,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->image = $image;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
 
-    public function setAddress(?string $address): void
-    {
-        $this->address = $address;
-    }
+
+
 
     public function getMaladieChronique(): ?string
     {

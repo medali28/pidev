@@ -64,7 +64,7 @@
                                 {{ user.lastName ~ ' ' ~ user.firstName }}
                             </h5>
                             <p class="mb-0 font-weight-bold text-sm">
-                                {{ user.address }}
+                                {{ user.pays ~','~user.ville }}
                             </p>
                         </div>
                     </div>
@@ -148,8 +148,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Address</label>
-                                        {{  form_widget(form.address ,  {'attr': {'placeholder': 'Enter your Adress' , 'class':'form-control'}}) }}
-                                        {{ form_errors(form.address) }}
+{#                                        {{  form_widget(form.pays ,  {'attr': {'placeholder': 'Enter your Adress' , 'class':'form-control'}}) }}#}
+{#                                        {{ form_errors(form.address) }}#}
                                     </div>
                                 </div>
 

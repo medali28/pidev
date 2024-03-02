@@ -59,16 +59,16 @@ class UserType extends AbstractType
                 'required'=> false,
 
             ])
-            ->add('address')
+
 //            ->add('maladie_chronique')
             ->add('num_tel2',IntegerType::class , [
                 'invalid_message' => ' Le numéro de téléphone  n\'est pas valide.'
             ])
-            ->add('specialite', TextType::class , [
-                'constraints' => [
-                    new Regex('/^[a-zA-Z\-\' ]+$/' , message: ' Le prenom  n\'est pas valide.')
-                ],
-            ])
+//            ->add('specialite', TextType::class , [
+//                'constraints' => [
+//                    new Regex('/^[a-zA-Z\-\' ]+$/' , message: ' Le prenom  n\'est pas valide.')
+//                ],
+//            ])
 //            ->add('validation')
 //            ->add('rate')
 //            ->add('disponibilite')
@@ -93,11 +93,11 @@ class UserType extends AbstractType
             $builder->remove('first_name');
             $builder->remove('last_name');
             $builder->remove('image');
-            $builder->remove('address');
+
             $builder->remove('num_tel');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
-            $builder->remove('specialite');
+//            $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('allergies');
             $builder->remove('antecedent_maladie');
@@ -109,11 +109,11 @@ class UserType extends AbstractType
             $builder->remove('first_name');
             $builder->remove('last_name');
             $builder->remove('image');
-            $builder->remove('address');
+
             $builder->remove('num_tel');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
-            $builder->remove('specialite');
+//            $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('allergies');
             $builder->remove('antecedent_maladie');
@@ -127,7 +127,7 @@ class UserType extends AbstractType
             $builder->remove('confirm_password');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
-            $builder->remove('specialite');
+//            $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('Submit');
         }
@@ -136,17 +136,16 @@ class UserType extends AbstractType
 //            $builder->remove('confirm_password');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
-            $builder->remove('specialite');
+//            $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('Submit');
         }
         if ($options['expert']) {
             $builder->remove('image');
-//            $builder->remove('address');
 //            $builder->remove('num_tel');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
-            $builder->remove('specialite');
+//            $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('allergies');
             $builder->remove('antecedent_maladie');
@@ -161,7 +160,7 @@ class UserType extends AbstractType
 //            $builder->remove('confirm_password');
             $builder->remove('diplomes');
             $builder->remove('prix_c');
-            $builder->remove('specialite');
+//            $builder->remove('specialite');
             $builder->remove('num_tel2');
             $builder->remove('allergies');
             $builder->remove('antecedent_maladie');
