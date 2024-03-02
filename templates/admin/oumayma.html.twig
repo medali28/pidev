@@ -1,0 +1,146 @@
+{% extends 'baseback.html.twig' %}
+{% block body %}
+
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                <svg class="icon icon-lg">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
+                </svg>
+            </button><a class="header-brand d-md-none" href="#">
+                <svg width="118" height="46" alt="CoreUI Logo">
+                    <use xlink:href="assets/brand/coreui.svg#full"></use>
+                </svg></a>
+
+
+
+        </div>
+
+
+    </header>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Description</th>
+        <th scope="col">Durée Maladie</th>
+        <th scope="col">Poids</th>
+        <th scope="col">Taille</th>
+        <th scope="col">Température</th>
+        <th scope="col">Fréquence Cardiaque</th>
+        <th scope="col">Respiration</th>
+        <th scope="col">Conseils</th>
+        <th scope="col">Médicament</th>
+        <th scope="col">Date Prochaine</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for consultation in consultations %}
+        <tr>
+            <td>{{ consultation.id }}</td>
+            <td>{{ consultation.description }}</td>
+            <td>{{ consultation.dureeMaladie ? consultation.dureeMaladie|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ consultation.poids }}</td>
+            <td>{{ consultation.taille }}</td>
+            <td>{{ consultation.temperature }}</td>
+            <td>{{ consultation.frequenceCardique }}</td>
+            <td>{{ consultation.respiration }}</td>
+            <td>{{ consultation.conseils }}</td>
+            <td>{{ consultation.medicament }}</td>
+            <td>{{ consultation.dateProchaine ? consultation.dateProchaine|date('Y-m-d H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
+
+                <form method="post" action="{{ path('app_consultation_delete', {'id': consultation.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation.id) }}">
+                    <button class="btn">Delete</button>
+                    {% if showButtons is defined and showButtons %}
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_consultation_index') }}'">Back to List</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_consultation_edit', {'id': consultation.id}) }}'">Edit</button>
+                    {% endif %}
+                </form>
+
+
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="12">Aucun enregistrement trouvé</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="my-4 text-center">
+    <hr class="my-4"> <!-- Barre horizontale décorative -->
+    <h3>Statistiques</h3> <!-- Titre pour séparer visuellement -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="consultationsChart" width="200" height="50"></canvas>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('consultationsChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
+                datasets: [{
+                    label: 'Consultations par jour',
+                    data: [12, 19, 3, 5, 2, 3, 7], // Remplacez ces données par les vraies données de votre base de données
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+<!-- Graphique -->
+
+
+<table class="table table-striped border mb-0">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Numero Carnet</th>
+        <th scope="col">Prix Consultation</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for cnam in cnams %}
+        <tr class="align-middle">
+            <td class="text-center">{{ cnam.id }}</td>
+            <td>{{ cnam.NumeroCarnet }}</td>
+            <td>{{ cnam.PrixConsultation }}</td>
+            <td>
+                <a href="{{ path('app_cnam_show', {'id': cnam.id}) }}" class="btn btn-primary btn-sm">Afficher</a>
+                <form method="post" action="{{ path('app_cnam_delete', {'id': cnam.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cnam.id) }}">
+                    <button class="btn">Delete</button>
+                    {% if showButtons is defined and showButtons %}
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_cnam_index') }}'">Back to List</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('app_cnam_edit', {'id': cnam.id}) }}'">Edit</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">Aucun enregistrement trouvé</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

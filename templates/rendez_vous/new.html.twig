@@ -22,18 +22,18 @@
                                             <h3>Prendre un rendez-vous</h3>
                                             <div class="container">
                                                 <form action="{{ path('app_rendez_vous_new') }}" method="post" onsubmit="return validateForm()">
-                                                    <input name="date" id="selectedDate" type="date" required="" class="date" onchange="updateTimeOptions()">
+                                                    <input name="date" id="selectedDate" type="date" class="date" onchange="updateTimeOptions()">
                                                     <p style="color: black;">Entrer l'horaire souhaité</p>
                                                     <select id="horaire" name="time" class="horaire"> </select>
                                                     <div class="form-floating">
-                                                        <textarea class="form-control" id="message" name="description" placeholder="Tell me about the project"></textarea>
+                                                        <textarea class="form-control" id="message" name="description" placeholder="Parlez-moi des symptômes que vous avez" required></textarea>
                                                         <label for="floatingTextarea">Parlez-moi des symptômes que vous avez</label>
                                                     </div>
 
                                                     <label for="urgence">Rendez-vous en urgence</label>
-                                                    <input type="checkbox" id="urgence" name="urgence">
+                                                    <input type="checkbox" id="urgence" name="urgence" >
                                                     <label for="besoinAmbulance">Vous avez besoin d'une ambulance ?</label>
-                                                    <input type="checkbox" id="besoinAmbulance" name="besoinAmbulance">
+                                                    <input type="checkbox" id="besoinAmbulance" name="besoinAmbulance" >
                                                     <button  type="submit" class="btn custom-btn mt-3 mt-lg-4 submit-btn">Soumettre</button>
                                                 </form>
 
@@ -100,7 +100,14 @@
                 return false;
             }
 
-            var selectedDay = new Date(selectedDate).getDay();
+            var selectedDateTime = new Date(selectedDate);
+            var currentDate = new Date();
+
+            if (selectedDateTime < currentDate) {
+                alert("Veuillez sélectionner une date ultérieure à la date actuelle.");
+                return false;
+            }
+            var selectedDay = selectedDateTime.getDay();
             if (selectedDay === 0 || selectedDay === 6) {
                 alert("La date sélectionnée est un week-end. Veuillez choisir une autre date.");
                 return false;

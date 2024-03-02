@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-4">Ajouter</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+<body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
+    <div class="container mt-5">
+        <h1 class="alert-light">Ajouter une réponse</h1>
+
+        <form method="post" action="" class="mt-4">
+            {{ form_start(f) }}
+
+            <div class="mb-3">
+                {{ form_label(f.description_r, 'Votre Commentaire', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(f.description_r, {'attr': {'class': 'form-control', 'placeholder': 'Votre description', 'maxlength': 400}}) }}
+                {{ form_errors(f.description_r, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check"></i> Ajouter une réponse
+            </button>
+
+            {{ form_end(f) }}
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('{{ f.description_r.vars.id }}').addEventListener('input', function () {
+                if (this.value.length > 400) {
+                    this.setCustomValidity('La description ne doit pas dépasser 400 caractères.');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        });
+    </script>
+</body>
+{% endblock %}

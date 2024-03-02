@@ -43,6 +43,9 @@ class RendezVous
 
     #[ORM\Column]
     private ?bool $urgence = null;
+    #[ORM\Column]
+    private ?bool $ReminderEmail = null;
+
 
     #[ORM\OneToOne(mappedBy: 'rdv', cascade: ['persist', 'remove'])]
     private ?Consultation $consultation = null;
@@ -169,6 +172,16 @@ class RendezVous
 
         return $this;
     }
+    public function getReminderEmail(): ?bool
+    {
+        return $this->ReminderEmail;
+    }
+
+    public function setReminderEmail(?bool $ReminderEmail): void
+    {
+        $this->ReminderEmail = $ReminderEmail;
+    }
+
     public function __toString(): string
     {
         $patientName = $this->getPatient() ? $this->getPatient()->getFirstName() : 'Unknown Patient';

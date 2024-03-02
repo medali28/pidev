@@ -1,0 +1,171 @@
+{% extends 'baseback.html.twig' %}
+
+{% block body %}
+    <body class="bg-light">
+
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+
+
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg">
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <strong>Tables</strong><span class="small ms-1">Table Blog</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-coreui-toggle="tab" href="#preview-1018" role="tab">
+                                        Preview Table Blog</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
+                                    <table class="table table-striped">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Question ID</th>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Date & Time</th>
+                                            <th scope="col">Supprimer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for question in question %}
+                                            <tr>
+                                                <td>{{ question.id }}</td>
+                                                <td>{{ question.title }}</td>
+                                                <td>
+                                                    <div class="position-relative text-center">
+                                                        <img src="/uploads/image/{{ question.image }}" class="img-fluid rounded image-popup" alt="{{ question.image }}" style="max-width: 80px;" onclick="openModal('/uploads/image/{{ question.image }}')">
+                                                    </div>
+                                                </td>
+                                                <td>{{ question.description }}</td>
+                                                <td>{{ question.datetempQ|date('d/m/Y g:i:s a') }}</td>
+
+                                                <td>
+                                                    <a href="{{ path('app_questionback_delete', {'id': question.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to Delete?')">
+                                                        <svg class="icon icon-sm me-1">
+                                                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                                                        </svg>
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <strong>Tables</strong><span class="small ms-1">Table Commentaire</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
+                                        Preview Table Commentaire</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1019">
+                                    <table class="table table-striped">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Reponse ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Date & Time</th>
+                                            <th scope="col">Question</th>
+                                            <th scope="col">Supprimer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for reponse in reponse %}
+                                            <tr>
+                                                <td>{{ reponse.id }}</td>
+                                                <td>{{ reponse.descriptionR }}</td>
+                                                <td>
+                                                    <div class="position-relative text-center">
+                                                        <img src="/uploads/image/{{ reponse.question.image }}" class="img-fluid rounded image-popup" alt="{{ reponse.question.image }}" style="max-width: 80px;" onclick="openModal('/uploads/image/{{ reponse.question.image }}')">
+                                                    </div>
+                                                </td>
+                                                <td>{{ reponse.datetempR|date('d/m/Y g:i:s a') }}</td>
+                                                <td>{{ reponse.question.title }}</td>
+
+                                                <td>
+                                                    <a href="{{ path('app_reponseback_delete', {'id': reponse.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to Delete?')">
+                                                        <svg class="icon icon-sm me-1">
+                                                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-trash"></use>
+                                                        </svg>
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pop-up modal code -->
+        <div id="imageModal" class="modal" onclick="closeModal()">
+            <img class="modal-content rounded-5" id="modalImage" style="max-width: 80%; max-height: 80vh; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        </div>
+
+        <style>
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 100000;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+
+            .modal-content {
+                margin: auto;
+                display: block;
+            }
+        </style>
+
+        <script>
+            function openModal(imageSrc) {
+                var modal = document.getElementById('imageModal');
+                var modalImage = document.getElementById('modalImage');
+                modalImage.src = imageSrc;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                var modal = document.getElementById('imageModal');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        </script>
+
+        <script src="{{ asset('backadmin/vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
+        <script src="{{ asset('backadmin/vendors/simplebar/js/simplebar.min.js') }}"></script>
+    </div>
+    </body>
+
+{% endblock %}

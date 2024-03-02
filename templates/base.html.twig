@@ -6,6 +6,7 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
+
             <link rel="preconnect" href="{{ asset('https://fonts.googleapis.com') }}">
 
             <link rel="preconnect" href="{{ asset('https://fonts.gstatic.com') }}" crossorigin>
@@ -14,14 +15,22 @@
 
             <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
-            <link href="{{ asset('css/bootstrap-icons.css') }}" rel="stylesheet">
+            <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css') }}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            {{ encore_entry_link_tags('app') }}
 
+            <link href="{{ asset('css/bootstrap-icons.css') }}" rel="stylesheet">
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
             <link href="{{ asset('css/templatemo-topic-listing.css') }}" rel="stylesheet">
             <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css') }}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
             {{ encore_entry_link_tags('app') }}
+
         {% endblock %}
 
+
+
         {% block javascripts %}
+
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
             <script src="{{ asset('js/jquery.min.js') }}"></script>
             <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
             <script src="{{ asset('js/jquery.sticky.js') }}"></script>
@@ -32,5 +41,147 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+        {% block nav %}
+            <nav class="navbar navbar-expand-lg">
+                <div class="container">
+                    <a class="navbar-brand" href="{{ path('app_test') }}">
+                        <img src="{{ asset('images/logo_my_eDR-removebg-preview.png') }}" width="25%" height="auto" alt="My eDR Logo">
+                        <span>My eDR</span>
+                    </a>
+
+                    <div class="d-lg-none ms-auto me-4">
+                        <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                    </div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="{{ path('app_test') }}">accueil</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_2">Nos Experts Médicaux</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">financer une bonne cause</a>
+
+                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+
+
+                                    <li><a class="dropdown-item" href="{{ path('progress_create')}}">Ajouter</a></li>
+                                    <li><a class="dropdown-item"  href="{{ path ('progress_view')}}">Lister</a></li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_4">FAQs</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_5">Contact</a>
+                            </li>
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                    <li><a class="dropdown-item active" href="{{ path('app_rendez_vous_index')}}">Rendez Vous</a></li>
+
+                                    <li><a class="dropdown-item" href="{{ path('app_ambulance_index')}}">Ambulance</a></li>
+                                    <li><a class="dropdown-item"  href="{{ path ('app_gestion_donation')}}">Liste des dons</a></li>
+
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <div class="d-none d-lg-block">
+                            <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+        {% endblock %}
+        {% block footer %}
+            <footer class="site-footer section-padding">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-12 mb-4 pb-2">
+                            <a class="navbar-brand mb-2" href="index.html">
+                                <i class="bi-back"></i>
+                                <span>Topic</span>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <h6 class="site-footer-title mb-3">Resources</h6>
+
+                            <ul class="site-footer-links">
+                                <li class="site-footer-link-item">
+                                    <a href="#" class="site-footer-link">Home</a>
+                                </li>
+
+                                <li class="site-footer-link-item">
+                                    <a href="#" class="site-footer-link">How it works</a>
+                                </li>
+
+                                <li class="site-footer-link-item">
+                                    <a href="#" class="site-footer-link">FAQs</a>
+                                </li>
+
+                                <li class="site-footer-link-item">
+                                    <a href="#" class="site-footer-link">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                            <h6 class="site-footer-title mb-3">Information</h6>
+
+                            <p class="text-white d-flex mb-1">
+                                <a href="tel: 305-240-9671" class="site-footer-link">
+                                    305-240-9671
+                                </a>
+                            </p>
+
+                            <p class="text-white d-flex">
+                                <a href="mailto:info@company.com" class="site-footer-link">
+                                    info@company.com
+                                </a>
+                            </p>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-12 mt-4 mt-lg-0 ms-auto">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    English</button>
+
+                                <ul class="dropdown-menu">
+                                    <li><button class="dropdown-item" type="button">Thai</button></li>
+
+                                    <li><button class="dropdown-item" type="button">Myanmar</button></li>
+
+                                    <li><button class="dropdown-item" type="button">Arabic</button></li>
+                                </ul>
+                            </div>
+
+                            <p class="copyright-text mt-lg-5 mt-4">Copyright © 2048 Topic Listing Center. All rights reserved.
+                                <br><br>Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        {% endblock %}
+
     </body>
 </html>

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-4">Explorez et Partagez vos Question Avec Des Experts</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <p class="text-danger">You will be redirected in 5 seconds. If not, click <a href="{{ path('app_question_add') }}">here</a>.</p>
+
+    <script>
+    alert("Votre Question ne sera pas publié ! Pas de gros mots!!")
+    setTimeout(function() {
+        window.location.href = '{{ path('app_question_add') }}';
+    }, 5000);
+</script>
+
+{% endblock %}

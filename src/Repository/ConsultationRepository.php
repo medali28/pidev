@@ -19,8 +19,16 @@ class ConsultationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Consultation::class);
-    }
 
+    }
+    public function findByDureemaladie($dureeMaladie)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.duree_maladie = :duree')
+            ->setParameter('duree', $dureeMaladie)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Consultation[] Returns an array of Consultation objects
 //     */

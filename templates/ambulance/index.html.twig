@@ -6,8 +6,15 @@
 
     {{ include('navigation.html.twig') }}
     {{ include('header.html.twig') }}
-<section class="section-padding">
-    <div class="container">
+    <section class="section-padding">
+        <div >
+            <div >
+                <div class="col-lg-8 col-12 mt-3 mx-auto">
+                    <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+                        <div class="d-flex">
+
+                            <div class="custom-block-topics-listing-info d-flex">
+                                <div>
     <table class="table">
         <thead>
         <tr>
@@ -28,8 +35,6 @@
                 <td>{{ ambulance.localActuelPatient }}</td>
                 <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
                 <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
-
-
                 <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
                 <td>{{ ambulance.getRdv().time|date('H:i:s') }}</td>
                 <td>
@@ -44,8 +49,15 @@
         {% endfor %}
         </tbody>
     </table>
-    </div>
-</section>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     {{ include('footer.html.twig') }}
 

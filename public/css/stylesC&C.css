@@ -1,0 +1,226 @@
+#specificSection 
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f8f8;
+    width: 70%;
+}
+
+#specificSection .container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#specificSection .header {
+    background-color: #80d0c7;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+#specificSection form {
+    display: flex;
+    margin: 10%;
+    flex-direction: column;
+    padding: 2%;
+    background-color: white;
+}
+
+#specificSection label {
+    margin-bottom: 8px;
+}
+
+#specificSection input, select, textarea {
+    margin-bottom: 16px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#specificSection .file-upload {
+    position: relative;
+}
+
+#specificSection .file-label {
+    background-color: #80d0c7;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#specificSection .location-section {
+    margin-top: 20px;
+}
+
+#specificSection button {
+    background-color: #80d0c7;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    margin: 8px;
+}
+
+
+#specificSection button:hover {
+    background-color: #80d0c7;
+}
+/* Style pour la fenêtre modale */
+.modal {
+    display: none; /* Cachée par défaut */
+    position: fixed; /* Position fixe par rapport à la fenêtre visible */
+    top: 50%; /* Centrée verticalement à 50% du haut de la fenêtre */
+    left: 50%; /* Centrée horizontalement à 50% de la largeur de la fenêtre */
+    transform: translate(-50%, -50%); /* Centrer parfaitement */
+    background-color: #fefefe; /* Couleur de fond */
+    padding: 20px; /* Espacement interne */
+    border: 1px solid #888; /* Bordure grise */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    z-index: 1; /* Mettez la fenêtre modale au-dessus du reste du contenu */
+    max-width: 50%; /* Largeur maximale de la fenêtre modale */
+    max-height: 50%; /* Hauteur maximale de la fenêtre modale */
+    overflow: auto; /* Activation du défilement si le contenu est trop grand */
+}
+
+/* Style pour le bouton de fermeture de la fenêtre modale */
+.close {
+    color: #aaa; /* Couleur du texte de fermeture */
+    float: right; /* Alignement à droite */
+    font-size: 28px; /* Taille de police */
+    font-weight: bold; /* Gras */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Changement de couleur au survol/focus */
+    text-decoration: none; /* Pas de soulignement au survol/focus */
+    cursor: pointer; /* Curseur pointeur au survol/focus */
+}
+
+/* Ajouter un fond assombri en arrière-plan lorsque la fenêtre modale est ouverte */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 80%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent noir */
+    z-index: 0; /* Mettez l'overlay en-dessous de la fenêtre modale */
+}
+/* Styles pour le formulaire d'appel d'ambulance */
+#urgenceForm {
+    max-width: 80%; /* Utilisez la largeur maximale du conteneur parent */
+}
+
+/* Styles pour les champs de saisie */
+#urgenceForm input,
+#urgenceForm textarea {
+    width: 50%; /* Utilisez la largeur totale disponible */
+    margin: 15px; /* Espacement entre les champs */
+    padding: 10px; /* Espacement interne */
+    box-sizing: border-box; /* Inclure les bordures et le rembourrage dans la largeur totale */
+}
+
+/* Style pour le bouton de soumission du formulaire */
+#urgenceForm button {
+    background-color: #4CAF50; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    padding: 15px 20px; /* Espacement interne */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur pointeur au survol */
+
+}
+
+#urgenceForm button:hover {
+    background-color: #45a049; /* Changement de couleur au survol */
+}
+
+
+/* Styles pour le titre h1 */
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Styles pour la table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Styles pour les liens */
+a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Styles pour le bouton "back to list" */
+.back-to-list-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-to-list-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Styles pour le bouton "edit" */
+.edit-btn {
+    background-color: #28a745;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background-color: #218838;
+}
+
+/* Styles pour le formulaire de suppression inclus */
+.delete-form {
+    margin-top: 20px;
+}
+
+/* Styles pour les cellules de la table */
+.table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Styles pour les valeurs de consultation */
+.consultation-value {
+    font-weight: normal;
+    color: #333;
+}

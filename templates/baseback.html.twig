@@ -6,7 +6,7 @@
     <base href="./">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=deviace-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
@@ -31,11 +31,12 @@
     <!-- Vendors styles-->
     <link rel="stylesheet" href="{{ asset('backadmin/vendors/simplebar/css/simplebar.css') }}">
     <link rel="stylesheet" href="{{ asset('backadmin/css/vendors/simplebar.css') }}">
-    <!-- admin styles for this application-->
+    <!-- Main styles for this application-->
     <link href="{{ asset('backadmin/css/style.css') }}" rel="stylesheet">
     <!-- We use those styles to show code examples, you should remove them in your application.-->
     <link href="{{ asset('backadmin/css/examples.css') }}" rel="stylesheet">
     <link href="{{ asset('backadmin/vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
+    <link rel="canonical" href="https://coreui.io/docs/content/tables/">
     {% endblock %}
 
     {% block javascripts %}
@@ -47,7 +48,7 @@
         <script src="{{ asset('backadmin/vendors/chart.js/js/chart.min.js') }}"></script>
         <script src="{{ asset('backadmin/vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
         <script src="{{ asset('backadmin/vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
-        <script src="{{ asset('backadmin/js/admin.js') }}"></script>
+        <script src="{{ asset('backadmin/js/main.js') }}"></script>
         <script>
         </script>
     {% endblock %}
@@ -85,20 +86,17 @@
                         <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-puzzle"></use>
                     </svg> Base</a>
                 <ul class="nav-group-items">
-                    <li class="nav-item"><a class="nav-link" href="base/accordion.html"><span class="nav-icon"></span> Accordion</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/breadcrumb.html"><span class="nav-icon"></span> Breadcrumb</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/cards.html"><span class="nav-icon"></span> Cards</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/carousel.html"><span class="nav-icon"></span> Carousel</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/collapse.html"><span class="nav-icon"></span> Collapse</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/list-group.html"><span class="nav-icon"></span> List group</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_admin1') }}"><span class="nav-icon"></span> Rendez-vous & Ambulance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_backend') }}"><span class="nav-icon"></span> Question & Reponse</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('tableUser') }}"><span class="nav-icon"></span> Category & Medicament</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('oumeymatable') }}"><span class="nav-icon"></span> Consultation & Cnam</a> </li>
+                    <li class="nav-item"><a class="nav-link" href="base/list-group.html"><span class="nav-icon"></span> Progreees bar </a></li>
                     <li class="nav-item"><a class="nav-link" href="base/navs-tabs.html"><span class="nav-icon"></span> Navs &amp; Tabs</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/pagination.html"><span class="nav-icon"></span> Pagination</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/placeholders.html"><span class="nav-icon"></span> Placeholders</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/popovers.html"><span class="nav-icon"></span> Popovers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/progress.html"><span class="nav-icon"></span> Progress</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/scrollspy.html"><span class="nav-icon"></span> Scrollspy</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/spinners.html"><span class="nav-icon"></span> Spinners</a></li>
-                    <li class="nav-item"><a class="nav-link" href="base/tables.html"><span class="nav-icon"></span> Tables</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('tableUser')}}"><span class="nav-icon"></span> Tables</a></li>
                     <li class="nav-item"><a class="nav-link" href="base/tooltips.html"><span class="nav-icon"></span> Tooltips</a></li>
                 </ul>
             </li>
@@ -194,8 +192,10 @@
         </ul>
         <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
     </div>
+{% endblock %}
 
-    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+{% block ven %}
+    <div class="wrapper d-flex flex-column min-vh-10 bg-light">
         <header class="header header-sticky mb-4">
             <div class="container-fluid">
                 <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
@@ -283,20 +283,13 @@
                 </nav>
             </div>
         </header>
-
     </div>
 {% endblock %}
+
 {% block body %}
-
 {% endblock %}
 
-{% block footer %}
-    <footer class="footer">
-        <div><a href="https://coreui.io">CoreUI </a><a href="https://coreui.io">Bootstrap Admin Template</a> © 2023 creativeLabs.</div>
-        <div class="ms-auto">Powered by&nbsp;<a href="https://coreui.io/docs/">CoreUI UI Components</a></div>
-    </footer>
 
-{% endblock %}
 
 </body>
 </html>

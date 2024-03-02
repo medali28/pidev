@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main/main.html.twig">
-            <i class="bi-back"></i>
-            <span>Topic</span>
+        <a class="navbar-brand" href="{{ path('app_test') }}">
+            <img src="{{ asset('images/logo_my_eDR-removebg-preview.png') }}" width="25%" height="auto" alt="My eDR Logo">
+            <span>My eDR</span>
         </a>
 
         <div class="d-lg-none ms-auto me-4">
@@ -16,32 +16,33 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-5 me-lg-auto">
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="index.html#section_1">Home</a>
+                    <a class="nav-link click-scroll" href="{{ path('app_test') }}">accueil</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="index.html#section_2">Browse Topics</a>
+                    <a class="nav-link click-scroll" href="#section_2">Nos Experts Médicaux</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="index.html#section_3">How it works</a>
+                    <a class="nav-link click-scroll" href="#section_3">Comment ça fonctionne</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="index.html#section_4">FAQs</a>
+                    <a class="nav-link click-scroll" href="#section_4">FAQs</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="index.html#section_5">Contact</a>
+                    <a class="nav-link click-scroll" href="#section_5">Contact</a>
                 </li>
+
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
 
                     <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                        <li><a class="dropdown-item active" href="topics-listing.html">Topics Listing</a></li>
+                        <li><a class="dropdown-item active" href="{{ path('app_rendez_vous_index')}}">Rendez Vous</a></li>
 
-                        <li><a class="dropdown-item" href="contact.html">Contact Form</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_ambulance_index')}}">Ambulance</a></li>
                     </ul>
                 </li>
             </ul>

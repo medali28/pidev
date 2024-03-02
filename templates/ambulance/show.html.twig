@@ -3,22 +3,41 @@
 {% block title %}Ambulance{% endblock %}
 
 {% block body %}
-    <h1>Ambulance</h1>
-    {{ include('navigateur.html.twig') }}
+    {{ include('navigation.html.twig') }}
     {{ include('header.html.twig') }}
-<section class="section-padding">
-    <div class="container">
+    <section class="section-padding">
+        <div >
+            <div >
+                <div class="col-lg-8 col-12 mt-3 mx-auto">
+                    <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+                        <div class="d-flex">
+
+                            <div class="custom-block-topics-listing-info d-flex">
+                                <div>
     <table class="table">
         <tbody>
 
             <tr>
-                <th>Local_actuel_patient</th>
+                <th>La localisation actuelle du patient</th>
                 <td>{{ ambulance.localActuelPatient }}</td>
             </tr>
             <tr>
-                <th>Besoin_infirmier</th>
+                <th>Adresse destination</th>
+                <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ambulance.getRdv().date|date('Y-m-d') }}</td>
+            </tr>
+            <tr>
+                <th>Heure</th>
+                <td>{{ambulance.getRdv().time|date('H:i') }}</td>
+            </tr>
+            <tr>
+                <th>Besoin d'infirmier</th>
                 <td>{{ ambulance.besoinInfirmier ? 'Yes' : 'No' }}</td>
             </tr>
+
         </tbody>
     </table>
 
@@ -27,7 +46,14 @@
     <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">Modifier</a>
 
     {{ include('ambulance/_delete_form.html.twig') }}
-    </div>
-</section>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     {{ include('footer.html.twig') }}
 {% endblock %}

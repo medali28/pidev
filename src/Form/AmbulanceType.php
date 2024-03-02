@@ -12,9 +12,7 @@ class AmbulanceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('local_actuel_patient')
             ->add('besoin_infirmier')
-
         ;
     }
 

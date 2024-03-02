@@ -1,0 +1,116 @@
+
+{% extends 'base.html.twig' %}
+{% block title %}RendezVous{% endblock %}
+
+{% block body %}
+    <main>
+
+        {{ include('navigation.html.twig') }}
+        {{ include('header.html.twig') }}
+
+
+    <div class="tabs">
+        <button id="futureTab" class="tablinks active btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'futureAppointments')">A venir</button>
+        <button id="pastTab" class="tablinks btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'pastAppointments')">Passés</button>
+        <button id="pendingTab" class="tablinks btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'pendingAppointments')">En attente</button>
+    </div>
+
+        <div id="pendingAppointments" class="tabcontent " style="display:none">
+            {% include 'rendez_vous/appointmentsTable.html.twig' with {'appointments': pendingAppointments , tableTitle: 'Rendez-vous en attente', 'showButtons': true} %}
+        </div>
+
+        <div id="pastAppointments" class="tabcontent " style="display:none">
+            {% include 'rendez_vous/appointmentsTable.html.twig' with {'appointments': pastAppointments , tableTitle: 'Rendez-vous passés', 'showButtons': false} %}
+        </div>
+
+    <div id="futureAppointments" class="tabcontent " style="display:block">
+        {% include 'rendez_vous/appointmentsTable.html.twig' with {'appointments': futureAppointments , tableTitle: 'Rendez-vous approuvés', 'showButtons': false} %}
+    </div>
+
+
+
+        <div id='calendar' style="margin: 10%"></div>
+
+    </main>
+
+{% endblock %}
+
+{% block javascripts %}
+
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+
+    <script>
+
+        const eventsData = [];
+        {% for key, rendez_vou in pastAppointments %}
+        eventsData.push({
+            title: '{{ rendez_vou.patient.getLastName() }}', // Assuming you want to display patient's last name as the event title
+            start: '{{ rendez_vou.date|date('Y-m-d') }}T{{ rendez_vou.time|date('H:i') }}',
+            idRDV: '{{ rendez_vou.getId() }}',
+            url: '{{ path('app_consultation_new', {'id_rdv': rendez_vou.getId()}) }}'
+            // Optionally, you can add more properties like end time if available
+        });
+        {% endfor %}
+
+        {% for key, rendez_vou in futureAppointments %}
+        eventsData.push({
+            title: '{{ rendez_vou.patient.getLastName() }}', // Assuming you want to display patient's last name as the event title
+            start: '{{ rendez_vou.date|date('Y-m-d') }}T{{ rendez_vou.time|date('H:i') }}',
+            idRDV: '{{ rendez_vou.getId() }}',
+            url: '{{ path('app_consultation_new', {'id_rdv': rendez_vou.getId()}) }}'
+
+            // Optionally, you can add more properties like end time if available
+        });
+        {% endfor %}
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'dayGridWeek,timeGridDay'
+                },
+                businessHours: {
+                    daysOfWeek: [1, 2, 3, 4], // Monday - Thursday
+                    startTime: '09:00',
+                    endTime: '18:00',
+                },
+                events: eventsData
+                ,
+                eventDidMount: function(info) {
+                    // Modify the background color of events here
+                    info.el.style.backgroundColor = '#80d0c7';
+                    info.el.style.borderColor = '#80d0c7';
+                }
+
+            });
+            calendar.render();
+        });
+    </script>
+
+
+    <script>
+
+
+
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+    </script>
+
+{% endblock %}

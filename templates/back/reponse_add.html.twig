@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="alert-light">Add Response</h1>
+
+        <form method="post" action="" class="mt-4">
+            {{ form_start(f) }}
+
+            <div class="mb-3">
+                {{ form_label(f.description_r, 'Your Description Label', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(f.description_r, {'attr': {'class': 'form-control', 'placeholder': 'Your Description'}}) }}
+                {{ form_errors(f.description_r, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check"></i> Add Response
+            </button>
+
+            {{ form_end(f) }}
+        </form>
+    </div>
+{% endblock %}

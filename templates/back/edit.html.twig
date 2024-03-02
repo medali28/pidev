@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section id="contact" class="contact-form card-body   " style="background-color: #f8f9fa; padding: 50px 0;">
+        <div class="container center" data-aos="fade-up">
+
+            <header class="section-header mb-5">
+                <h2 class="text-primary display-4">Modify Your Question</h2>
+                <p class="lead">Make your updates and hit 'Modifier'</p>
+            </header>
+
+            <div class="row gy-4">
+
+                <div class="col-lg-12">
+                    {{ form_start(f, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    <div class="row gy-4">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(f.title, null, {'label_attr': {'class': 'form-label h5'}}) }}
+                                {{ form_widget(f.title, {'attr': {'class': 'form-control', 'placeholder': 'Your Question Title'}}) }}
+                                {{ form_errors(f.title, {'attr': {'class': 'text-danger'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form_label(f.description, null, {'label_attr': {'class': 'form-label h5'}}) }}
+                                {{ form_widget(f.description, {'attr': {'class': 'form-control', 'placeholder': 'Your Question Description'}}) }}
+                                {{ form_errors(f.description, {'attr': {'class': 'text-danger'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form_label(f.image, null, {'label_attr': {'class': 'form-label h5'}}) }}
+                                {{ form_widget(f.image, {'attr': {'class': 'form-control', 'placeholder': 'Your Question Description'}}) }}
+                                {{ form_errors(f.image, {'attr': {'class': 'text-danger'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-pencil-square"></i> Modify
+                            </button>
+                        </div>
+
+                    </div>
+
+                    {{ form_end(f) }}
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

@@ -6,6 +6,8 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -16,10 +18,18 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Name cannot be longer than {{ limit }} charcters")]
+    #[Assert\Regex(pattern: '/^[A-Za-z]+$/', message: "invalid it must contains only charcters")]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Medicament::class)]
     private Collection $medicaments;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: "description cannot be longer than {{ limit }} characters")]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -69,6 +79,18 @@ class Category
                 $medicament->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

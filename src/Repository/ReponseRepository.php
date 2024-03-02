@@ -45,4 +45,32 @@ class ReponseRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findByQuestion($questionId)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->join('c.question', 'q')
+            ->andWhere('q.id = :questionId')
+            ->setParameter('questionId', $questionId);
+
+        return $qb->getQuery()->getResult();
+    }
+    public function findByPinned($question)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.question = :question')
+            ->setParameter('question', $question)
+            ->orderBy('r.pinned', 'DESC') // Pinned comments first
+            ->getQuery()
+            ->getResult();
+    }
+    public function countPinnedCommentsForQuestion($questionId)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->andWhere('r.question = :question')
+            ->andWhere('r.pinned = true')
+            ->setParameter('question', $questionId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

@@ -19,8 +19,16 @@ class Ambulance
     #[ORM\Column]
     private ?bool $besoin_infirmier = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column]
+    private $latitude;
+
+    #[ORM\Column]
+    private $longitude;
+
+
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?RendezVous $rdv = null;
 
     public function getId(): ?int
@@ -62,5 +70,26 @@ class Ambulance
         $this->rdv = $rdv;
 
         return $this;
+    }
+
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude($latitude): void
+    {
+        $this->latitude = $latitude;
+    }
+
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+
+    public function setLongitude($longitude): void
+    {
+        $this->longitude = $longitude;
     }
 }

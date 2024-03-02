@@ -3,16 +3,86 @@
 {% block title %}New Ambulance{% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" href="{{ asset('/leaflet/dist/leaflet.css') }}">
     {{ include('navigation.html.twig') }}
     {{ include('header.html.twig') }}
-<section class="section-padding">
-    <div class="container">
+    <section class="section-padding">
+        <div class="container">
+<div class="table table-striped">
 
-    {{ include('ambulance/_form.html.twig') }}
+    <form action="{{ path('app_ambulance_new', {'id': id}) }}" method="post" onsubmit="return true">
+        <label for="besoin_infirmier">Vous avez besoin d'infirmier ?</label>
+        <input type="checkbox" id="besoin_infirmier" name="besoin_infirmier" >
+        <div id="map" style="height: 400px;"></div>
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+        <button  type="submit" class="btn custom-btn mt-3 mt-lg-4 submit-btn">Soumettre</button>
+    </form>
 
     <a href="{{ path('app_ambulance_index') }}">Retour à la liste</a>
-    </div>
+                </div>
+        </div>
 </section>
+
     {{ include('footer.html.twig') }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var map;
+
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+
+            function showPosition(position) {
+               var geolocationData = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                document.getElementById('latitude').value = geolocationData.latitude;
+                document.getElementById('longitude').value = geolocationData.longitude;
+                showMap(geolocationData);
+            }
+
+            function showMap(geolocationData) {
+                map = L.map('map').setView([geolocationData.latitude, geolocationData.longitude], 13);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                L.marker([geolocationData.latitude, geolocationData.longitude])
+                    .addTo(map);
+
+                // Add a map click event listener
+                map.on('click', function (e) {
+                    var newLatitude = e.latlng.lat;
+                    var newLongitude = e.latlng.lng;
+
+                    // Update the map with the new location
+                    updateMap(newLatitude, newLongitude);
+                });
+            }
+
+            function updateMap(newLatitude, newLongitude) {
+                // Remove the existing marker
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                // Add a new marker with the updated location
+                L.marker([newLatitude, newLongitude])
+                    .addTo(map);
+
+                // Update hidden fields with the new coordinates
+                document.getElementById('latitude').value = newLatitude;
+                document.getElementById('longitude').value = newLongitude;
+            }
+        });
+    </script>
+
 
 {% endblock %}
+

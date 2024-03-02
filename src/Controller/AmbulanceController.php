@@ -12,10 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+// framework/index.php
+
+
 
 #[Route('/ambulance')]
 class AmbulanceController extends AbstractController
 {
+
+
     #[Route('/', name: 'app_ambulance_index', methods: ['GET'])]
     public function index(AmbulanceRepository $ambulanceRepository): Response
     {
@@ -25,25 +30,30 @@ class AmbulanceController extends AbstractController
     }
 
     #[Route('/new/{id}', name: 'app_ambulance_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, RendezVous $rendezVous,RendezVousRepository $rendezVousRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, RendezVous $rendezVous): Response
     {
         $ambulance = new Ambulance();
-
-       // $rendezVous= $rendezVousRepository->findRendezVousById($id);
         $ambulance->setRdv($rendezVous);
-        $form = $this->createForm(AmbulanceType::class, $ambulance);
-        $form->handleRequest($request);
+        $ambulance->setLocalActuelPatient(" ");
+        $latitude = $request->request->get('latitude');
+        $longitude = $request->request->get('longitude');
+        $besoin_infirmier = $request->request->get('besoin_infirmier');
+        $besoin_infirmier = $besoin_infirmier === 'on';
+        $ambulance->setLatitude($latitude);
+        $ambulance->setLongitude($longitude);
+        $ambulance->setBesoinInfirmier($besoin_infirmier);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($request->isMethod('POST')){
             $entityManager->persist($ambulance);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_ambulance_index', [], Response::HTTP_SEE_OTHER);
+
         }
 
         return $this->renderForm('ambulance/new.html.twig', [
             'ambulance' => $ambulance,
-            'form' => $form,
+            'id' => $rendezVous->getId(),
         ]);
     }
 

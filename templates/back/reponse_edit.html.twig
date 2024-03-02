@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
+    <div class="container mt-5">
+<div><div class="text-success">Modify your Comment</div></div>
+            {{ form_start(f) }}
+
+            <div class="mb-4">
+                {{ form_label(f.description_r, 'Your Description Label', {'label_attr': {'class': 'form-label h4 text-light'}}) }}
+                {{ form_widget(f.description_r, {'attr': {'class': 'form-control', 'placeholder': 'Your Description', 'rows': 4}}) }}
+                {{ form_errors(f.description_r, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check"></i> Modifier Response
+            </button>
+
+            {{ form_end(f) }}
+
+    </div>
+</body>
+{% endblock %}

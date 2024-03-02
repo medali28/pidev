@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-4">🌟 Ajouter</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+<body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
+    <section id="contact" class="contact">
+        <div class="container center" data-aos="fade-up">
+            <header class="section-header mb-5">
+                <h2 class="text-primary display-4">✨ Ajouter une nouvelle question</h2>
+                <p class="lead">Remplissez les détails et appuyez sur 'Ajouter'</p>
+            </header>
+
+            <div class="row gy-4">
+                <div class="col-lg-12">
+                    {{ form_start(f, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    <div class="row gy-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(f.title, null, {'label_attr': {'class': 'form-label h5 text-primary'}}) }}
+                                {{ form_widget(f.title, {'attr': {'class': 'form-control', 'placeholder': 'Le titre de votre question', 'maxlength': 50}}) }}
+                                {{ form_errors(f.title, {'attr': {'class': 'text-danger'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form_label(f.description, null, {'label_attr': {'class': 'form-label h5 text-primary'}}) }}
+                                {{ form_widget(f.description, {'attr': {'class': 'form-control', 'placeholder': 'La description de votre question', 'maxlength': 400}}) }}
+                                {{ form_errors(f.description, {'attr': {'class': 'text-danger'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form_label(f.image, null, {'label_attr': {'class': 'form-label h5 text-primary'}}) }}
+                                {{ form_widget(f.image, {'attr': {'class': 'form-control', 'placeholder': 'L\'image de votre question'}}) }}
+                                {{ form_errors(f.image, {'attr': {'class': 'text-danger'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-plus"></i> Ajouter
+                            </button>
+                        </div>
+                    </div>
+
+                    {{ form_end(f) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('{{ f.title.vars.id }}').addEventListener('input', function () {
+                if (this.value.length > 50) {
+                    this.setCustomValidity('Le titre ne doit pas dépasser 50 caractères.');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+
+            document.getElementById('{{ f.description.vars.id }}').addEventListener('input', function () {
+                if (this.value.length > 400) {
+                    this.setCustomValidity('La description ne doit pas dépasser 400 caractères.');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        });
+    </script>
+</body>
+{% endblock %}

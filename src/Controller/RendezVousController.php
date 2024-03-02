@@ -3,18 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\RendezVous;
-use App\Entity\User;
-use App\Form\RendezVousType;
+
 use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
-use DateTime;
+use App\Command\SendAppointmentRemindersCommand;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 #[Route('/rendez/vous')]
 class RendezVousController extends AbstractController
 {
@@ -27,8 +26,6 @@ class RendezVousController extends AbstractController
     }
 
 
-
-
         /*
                        $userRepository = $this->getDoctrine()->getRepository(User::class);
                        $user = $userRepository->findUserById(1);
@@ -39,23 +36,18 @@ class RendezVousController extends AbstractController
 
                        */
     #[Route('/new', name: 'app_rendez_vous_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,UserRepository $userRepository,SendAppointmentRemindersCommand $SendAppointmentRemindersCommand): Response
         {
 
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-        $user = $userRepository->findUserById(1);
+        $patient = $userRepository->findUserById(1);
+        $medecin = $userRepository->findUserById(3);
 
-        if (!$user) {
-            throw $this->createNotFoundException('User not found.');
-        }
         $rendezvous = new RendezVous();
-
-        $rendezvous->setStatusRdv('En attent'); // Replace with your actual value
-        $rendezvous->setReponseRefuse(''); // Replace with your actual value
-        $rendezvous->setPatient($user);
-        $rendezvous->setMedecin($user);
-        $rendezvous->setExpert($user);
-
+        $rendezvous->setStatusRdv('En attent');
+        $rendezvous->setReponseRefuse('');
+        $rendezvous->setPatient($patient);
+        $rendezvous->setMedecin($medecin);
+        $rendezvous->setExpert(null);
         if ($request->isMethod('POST')) {
 
             $date = $request->request->get('date');
@@ -66,9 +58,11 @@ class RendezVousController extends AbstractController
             $rendezvous->setDate(new \DateTime($date));
             $rendezvous->setTime(new \DateTime($time));
             $rendezvous->setDescription($message);
+            $rendezvous->setReminderEmail(false);
             $rendezvous->setUrgence($urgence === 'on');
                 $entityManager->persist($rendezvous);
                 $entityManager->flush();
+            $SendAppointmentRemindersCommand->sendReminderEmail( "", $rendezvous);
             if($besoinAmbulance === 'on'){
                  return $this->redirectToRoute('app_ambulance_new' , ['id' => $rendezvous->getId()]);
                 }
@@ -76,45 +70,6 @@ class RendezVousController extends AbstractController
         }
             return $this->render('rendez_vous/new.html.twig');
         }
-
-            // Always pass the $rendezvous variable to the template
-          //  $rendezvousId = $rendezvous->getId();
-
-            // Redirect to the ambulance form with rendezvous ID as a parameter
-           // return $this->redirectToRoute('app_rendez_vous_new', [
-           //     'rendezVous' => $rendezvous,
-           // ]);
-      //  }
-
-            // Persist et flush pour sauvegarder dans la base de données
-           /* $entityManager->persist($rendezvous);
-            $entityManager->flush();
-
-               /* if ($rendezvous->getUrgence()) {
-                    // Call the new method from AmbulanceController
-                    $response = $ambulanceController->new($request, $entityManager);
-
-                    // Redirect to the ambulance index after creating an ambulance
-                    if ($response instanceof RedirectResponse) {
-                        return $this->redirectToRoute('app_ambulance_index', [], Response::HTTP_SEE_OTHER);
-                    }
-                }*/
-            // Redirection vers une page de confirmation ou autre
-            /*return $this->render('index.html.twig', [
-                'rendezVous' => $rendezvous,
-            ]);
-            /*return $this->redirectToRoute('app_rendez_vous_index', [
-        'rendezVous' => $rendezvous,
-    ]);
-*/
-
-
-
-
-    // Si le formulaire n'a pas été soumis, rendu du formulaire
-//return $this->render('rendez_vous/new.html.twig');
-//}
-
 
     #[Route('/{id}', name: 'app_rendez_vous_show', methods: ['GET'])]
     public function show(RendezVous $rendezVou): Response
@@ -127,18 +82,27 @@ class RendezVousController extends AbstractController
     #[Route('/{id}/edit', name: 'app_rendez_vous_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, RendezVous $rendezVou, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(RendezVousType::class, $rendezVou);
-        $form->handleRequest($request);
+        if ($request->isMethod('POST')) {
+            $date = $request->request->get('date');
+            $time = $request->request->get('time');
+            $message = $request->request->get('description');
+            $urgence = $request->request->get('urgence');
 
-        if ($form->isSubmitted() && $form->isValid()) {
+            $rendezVou->setDate(new \DateTime($date));
+            $rendezVou->setTime(new \DateTime($time));
+            $rendezVou->setDescription($message);
+            $rendezVou->setUrgence($urgence === 'on');
+
+
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('rendez_vous/edit.html.twig', [
-            'rendez_vou' => $rendezVou,
-            'form' => $form,
+            'rendez_vou' => $rendezVou
+
         ]);}
 
     #[Route('/{id}', name: 'app_rendez_vous_delete', methods: ['POST'])]
@@ -150,5 +114,141 @@ class RendezVousController extends AbstractController
         }
 
         return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    ////////////////////////////////////
+    #[Route('/patient/{id_patient}', name: 'app_rendez_vous_patient_list')]
+    public function yourAction(int $id_patient,RendezVousRepository $rendezVousRepository): Response
+    {
+        $appointments = $rendezVousRepository->getAppointmentsForPatient($id_patient);
+
+        $acceptedAppointments = array_filter($appointments, function (RendezVous $appointment) {
+            return $appointment->getStatusRdv() === 'Approuve_Expert_Medecin';
+        });
+
+        $refusedAppointments = array_filter($appointments, function (RendezVous $appointment) {
+            return str_starts_with($appointment->getStatusRdv(), 'Refuse');
+        });
+
+        $pendingAppointments = array_filter($appointments, function (RendezVous $appointment) {
+            return $appointment->getStatusRdv() === null || str_starts_with($appointment->getStatusRdv(), 'En_attente');
+        });
+
+        return $this->render('rendez_vous/indexPatient.html.twig', [
+            'acceptedAppointments' => $acceptedAppointments,
+            'refusedAppointments' => $refusedAppointments,
+            'pendingAppointments' => $pendingAppointments,
+        ]);
+    }
+
+    #[Route('/medecin/{medecinId}', name: 'medecin_appointments')]
+    public function getMedecinAppointments(int $medecinId,RendezVousRepository $rendezVousRepository): Response
+    {
+        $appointments = $rendezVousRepository->getAppointmentsForMedecin($medecinId);
+
+        $currentDate = new \DateTime();
+
+        $futureAppointments = array_filter($appointments, function (RendezVous $appointment) use ($currentDate) {
+            return $appointment->getDate() > $currentDate && $appointment->getStatusRdv() === 'Approuve_Expert_Medecin';
+        });
+
+        $pastAppointments = array_filter($appointments, function (RendezVous $appointment) use ($currentDate) {
+            return $appointment->getDate() <= $currentDate && $appointment->getStatusRdv() === 'Approuve_Expert_Medecin';
+        });
+
+        $pendingAppointments = array_filter($appointments, function (RendezVous $appointment) {
+            return $appointment->getStatusRdv() === 'Approuve_Expert';
+        });
+
+
+        return $this->render('rendez_vous/indexMedecin.html.twig', [
+            'futureAppointments' => $futureAppointments,
+            'pastAppointments' => $pastAppointments,
+            'pendingAppointments' => $pendingAppointments,// pour les traiter
+        ]);
+    }
+    #[Route('/expert/{expertId}', name: 'expert_list')]
+    public function getExpertAppointments(int $expertId,RendezVousRepository $rendezVousRepository): Response
+    {
+        $appointments = $rendezVousRepository->getAppointmentsForExpert($expertId);
+
+        $pendingAppointments = array_filter($appointments, function (RendezVous $appointment) {
+            return $appointment->getExpert() === null;
+        });
+
+        $processedAppointments = array_filter($appointments, function (RendezVous $appointment) {
+            $status = $appointment->getStatusRdv();
+            return $status === 'Approuve_Expert' || $status === 'Refuse_Expert';
+        });
+
+        return $this->render('rendez_vous/indexExpert.html.twig', [
+            'pendingAppointments' => $pendingAppointments,
+            'processedAppointments' => $processedAppointments,
+        ]);
+    }
+
+    // Expert approves the appointment
+    #[Route('/expert_approve/{rendezvousId}', name: 'approveByExpert')]
+    public function approveByExpert(int $rendezvousId, RendezVousRepository $rendezVousRepository,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    { /*$userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->findUserById(1);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found.');
+        }*/
+        $rendezvous = $rendezVousRepository->find($rendezvousId);
+        $Expert = $userRepository->findUserById(1);
+        if ($rendezvousId) {
+            $expert = $userRepository->find($Expert->getId());
+            $rendezvous->setStatusRdv('Approuve_Expert');
+            $rendezvous->setExpert($expert);
+            $entityManager->flush();
+        }
+
+         return  new Response('OK');
+    }
+
+    #[Route('/expert_refuse/{rendezvousId}', name: 'refuseByExpert')]
+    public function refuseByExpert(int $rendezvousId, RendezVousRepository $rendezVousRepository,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    { /*$userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->findUserById(1);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found.');
+        }*/
+        $rendezvous = $rendezVousRepository->find($rendezvousId);
+        $Expert = $userRepository->findUserById(1);
+        if ($rendezvousId) {
+            $expert = $userRepository->find($Expert->getId());
+            $rendezvous->setStatusRdv('Refuse_Expert');
+            $rendezvous->setExpert($expert);
+            $entityManager->flush();
+        }
+
+        return  new Response('OK');
+    }
+    #[Route('/medecin_approve/{rendezvousId}', name: 'approveBymedecin')]
+    public function approveByDoctor(int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
+    {
+        $rendezvous = $rendezVousRepository->find($rendezvousId);
+
+        if ($rendezvousId) {
+            $rendezvous->setStatusRdv('Approuve_Expert_Medecin');
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('medecin_appointments', ['medecinId' => $rendezvous->getMedecin()->getId()]);
+    }
+
+    #[Route('/medecin_refuse/{rendezvousId}', name: 'refuseBymedecin')]
+    public function refuseByDoctor(int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
+    {
+        $rendezvous = $rendezVousRepository->find($rendezvousId);
+
+        if ($rendezvousId) {
+            $rendezvous->setStatusRdv('Refuse_Expert_Medecin');
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('medecin_appointments', ['medecinId' => $rendezvous->getMedecin()->getId()]);
     }
 }

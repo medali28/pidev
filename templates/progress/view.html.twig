@@ -1,0 +1,20 @@
+{# templates/progress/view.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}View Progress Bar{% endblock %}
+
+{% block body %}
+
+    <h1>Progress Bar</h1>
+    {% for progressBar in progressBar  %}
+        <p>Target Value: {{ progressBar.target }}</p>
+        <p>Current Value: {{ progressBar.current }}</p>
+
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
+        </div>
+
+        <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Edit</a>
+    {% endfor %}
+
+{% endblock %}

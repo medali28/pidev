@@ -29,8 +29,78 @@ class RendezVousRepository extends ServiceEntityRepository
                 ->setParameter('Id', $Id)
                 ->getQuery()
                 ->getOneOrNullResult();
-        } catch (NonUniqueResultException $e) {
-        }
+        } catch (NonUniqueResultException $e) {}
+    }
+    public function findOneBySomeField($value): ?RendezVous
+   {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * Get appointments for a specific patient.
+     *
+     * @param int $patientId
+     * @return RendezVous[]
+     */
+    public function getAppointmentsForPatient(int $patientId): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.patient = :patientId')
+            ->setParameter('patientId', $patientId)
+            ->orderBy('r.date', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    /**
+     * Get appointments for a specific patient.
+     *
+     * @param int $medecinId
+     * @return RendezVous[]
+     */
+    public function getAppointmentsForMedecin(int $medecinId): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.medecin= :medecinId')
+            ->setParameter('medecinId', $medecinId)
+            ->orderBy('r.date', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * Get appointments for a specific patient.
+     *
+     * @param int $expertId
+     * @return RendezVous[]
+     */
+    public function getAppointmentsForExpert(int $expertId): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.expert= :expertId')
+            ->setParameter('expertId', $expertId)
+            ->orderBy('r.date', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function findAppointmentsToRemind()
+    {
+        $twoDaysLater = new \DateTime('now +2 days');
+
+        return $this->createQueryBuilder('r')
+            ->where('r.date = :date')
+            ->andWhere('r.time <= :time')
+            ->setParameter('date', $twoDaysLater->format('Y-m-d'))
+            ->setParameter('time', $twoDaysLater->format('H:i:s'))
+            ->getQuery()
+            ->getResult();
     }
 //    /**
 //     * @return RendezVous[] Returns an array of RendezVous objects

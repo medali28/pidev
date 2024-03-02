@@ -1,0 +1,201 @@
+{% extends 'baseback.html.twig' %}
+{% block body %}
+
+
+
+    <body>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <header class="header header-sticky mb-4">
+            <div class="container-fluid">
+                <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                    <svg class="icon icon-lg">
+                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
+                    </svg>
+                </button><a class="header-brand d-md-none" href="#">
+                    <svg width="118" height="46" alt="CoreUI Logo">
+                        <use xlink:href="assets/brand/coreui.svg#full"></use>
+                    </svg></a>
+
+                <ul class="header-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">
+                            <svg class="icon icon-lg">
+                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
+                            </svg></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">
+                            <svg class="icon icon-lg">
+                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list-rich"></use>
+                            </svg></a></li>
+
+
+
+        </header>
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg">
+                <div class="car"></div>
+
+
+
+                <div class="card mb-4">
+                    <div class="card-header"><strong>Tables</strong><span class="small ms-1">Table Categorie et Medicament</span></div>
+                    <div class="card-body">
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1018" role="tab">
+                                        Preview Table Categorie</a></li>
+
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
+                                    <a href="{{ path('add_category') }}" class="btn btn mb-2" style="width: 100%; background-color: white ;color: black; border: 2px solid #4CAF50;">Ajouter Catégorie</a>
+                                    <table class="table">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Categorie id</th>
+                                            <th scope="col">Nom de categorie</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Modifier</th>
+                                            <th scope="col">Suprimer</th>
+                                        </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                        {% for categorie in categories  %}
+                                            <tr>
+                                                <td>{{ categorie.id }}</td>
+                                                <td>{{ categorie.name }}</td>
+                                                <td>{{ categorie.description }}</td>
+
+
+                                                <td>
+                                                    <a href="{{ path('updateCategorie', {'id': categorie.id}) }}" onclick="return confirm('Are you sure you want to Update?')">Update</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('deleteCategorie', {'id': categorie.id}) }}" onclick="return confirm('Are you sure you want to Delete?')">delete</a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+
+
+
+                                    </table>
+                                    <div class ="d-flex justify-content-center">
+                                        {{ knp_pagination_render(categories,'pagination.html.twig') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
+                                        Preview Table Medicament</a></li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1019">
+                                    <table class="table" id="medicamentTable">
+                                        <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">Nom de medicament</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Categorie</th>
+                                            <th scope="col">Update</th>
+                                            <th scope="col">Delete</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for medicament in medicaments  %}
+                                            <tr>
+                                                <td>{{ medicament.name }}</td>
+                                                <td>{{ medicament.description }}</td>
+
+                                                <td><img src="/uploads/image/{{medicament.image}}" alt="{{ medicament.name }}"
+                                                         style="height:100px; width:200px; margin-left:70px; box-shadow: 2px 2px 6px #888888; border-radius: 5px;"></td>
+
+                                                {% if medicament.category is not null %}
+                                                    <td>{{ medicament.category.name }}</td>
+                                                {% else %}
+                                                    <td>No category assigned</td>
+                                                {% endif %}
+                                                <td>
+                                                    <a href="{{ path('updateProduit', {'id': medicament.id}) }}" onclick="return confirm('Are you sure you want to update this medicament?')" >Edit</a>
+
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('deleteProduit', {'id': medicament.id}) }}" onclick="return confirm('Are you sure you want to delete this medicament?')">Supprimer</a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class ="d-flex justify-content-center">
+                                        {{ knp_pagination_render(medicaments,'pagination.html.twig') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
+                                        Preview Progrees bars</a></li>
+                            </ul>
+
+                            {% for progressBar in progress  %}
+                                <p>Target Value: {{ progressBar.target }}</p>
+                                <p>Current Value: {{ progressBar.current }}</p>
+
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
+                                </div>
+
+                                <a href="{{ path('progress_delete', {'id': progressBar.id}) }}" class="btn btn-primary">Delete</a>
+                            {% endfor %}
+                                    <div class ="d-flex justify-content-center">
+                                        {{ knp_pagination_render(progress,'pagination.html.twig') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- JavaScript to handle inline editing -->
+                        <script>
+                            // Get the table element
+                            const table = document.getElementById('medicamentTable');
+
+                            // Add event listener for delete buttons
+                            table.addEventListener('click', function (event) {
+                                if (event.target.classList.contains('editBtn')) {
+                                    const confirmDelete = confirm('Are you sure you want to update this product?');
+                                    if (confirmDelete) {
+                                        const row = event.target.closest('tr');
+                                        const id = event.target.dataset.id;
+                                        // Perform delete operation here, e.g., via AJAX
+                                        // After successful deletion, remove the row from the table
+                                        row.remove();
+                                    }
+                                }
+                            });
+                        </script>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="vendors/simplebar/js/simplebar.min.js"></script>
+
+    </script>
+
+    </body>
+    </html>
+{% endblock %}

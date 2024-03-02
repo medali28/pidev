@@ -5,7 +5,6 @@
 {% block body %}
     {{ include('navigation.html.twig') }}
     {{ include('header.html.twig') }}
-    <h1>Edit RendezVous</h1>
 
     <section class="section-padding">
         <div class="container">
@@ -19,10 +18,27 @@
                                     <section id="appointment">
                                         <h3>Modifier le rendez-vous</h3>
                                         <div class="container">
-                                            {{ include('rendez_vous/_form.html.twig', {'button_label': 'Update'}) }}
-                                            <a href="{{ path('app_rendez_vous_index') }}">Retour à la liste</a>
-                                            {{ include('rendez_vous/_delete_form.html.twig') }}
+                                            <form action="" method="post" onsubmit="return validateForm()">
+                                                <label for="rendezvous_date">Date:</label>
+                                                <input type="date" id="rendezvous_date" name="date" value="{{ rendez_vou.date|date('Y-m-d') }}" required onchange="validateDate()">
+
+                                                <label for="rendezvous_time">Time:</label>
+                                                <input type="time" id="rendezvous_time" name="time" value="{{ rendez_vou.time|date('H:i') }}" required>
+
+                                                <label for="rendezvous_description">Description:</label>
+                                                <textarea id="rendezvous_description" name="description" placeholder="Tell me about the project" required>{{ rendez_vou.description }}</textarea>
+
+                                                <label for="rendezvous_urgence">Rendez-vous en urgence:</label>
+                                                <input type="checkbox" id="rendezvous_urgence" name="urgence" {% if rendez_vou.urgence %}checked{% endif %}>
+                                                <!--input type="checkbox" id="rendezvous_ambulance" name="ambulance" {% if rendez_vou.urgence %}checked{% endif %}-->
+                                                <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+                                            </form>
+
+
                                         </div>
+                                        <a href="{{ path('app_rendez_vous_index') }}">Retour à la liste</a>
+
+                                        {{ include('rendez_vous/_delete_form.html.twig') }}
                                     </section>
                                 </div>
                             </div>
@@ -33,5 +49,59 @@
         </div>
     </section>
     {{ include('footer.html.twig') }}
+    <script>
+        function updateTimeOptions() {
+            var horaireSelect = document.getElementById("rendezvous_time");
+            horaireSelect.innerHTML = "";
+            addOption("9:00");
+            addOption("9:30");
+            addOption("11:00");
+            addOption("14:00");
+        }
 
+        function addOption(time) {
+            var horaireSelect = document.getElementById("rendezvous_time");
+            var option = document.createElement("option");
+            option.text = time;
+            option.value = time;
+            horaireSelect.add(option);
+        }
+        var dateInitiale = document.getElementById("rendezvous_date").value;
+        function validateForm() {
+            var selectedDate = document.getElementById("rendezvous_date").value;
+            var selectedTime = document.getElementById("rendezvous_time").value;
+
+            if (!selectedDate) {
+                alert("Veuillez sélectionner une date.");
+                return false;
+            }
+
+            if (!selectedTime) {
+                alert("Veuillez sélectionner un horaire.");
+                return false;
+            }
+
+            var selectedDateTime = new Date(selectedDate);
+            var currentDate = new Date();
+            var differenceEnMilliseconds = selectedDateTime - dateInitiale;
+            var differenceEnJours = differenceEnMilliseconds / (1000 * 60 * 60 * 24);
+
+
+            if (differenceEnJours < 2) {
+                alert("Vous ne pouvez pas modifier la date du rendez-vous à moins de 2 jours avant la date actuelle.");
+                return false;
+            }
+            if (selectedDateTime < currentDate) {
+                alert("Veuillez sélectionner une date ultérieure à la date actuelle.");
+                return false;
+            }
+            var selectedDay = selectedDateTime.getDay();
+            if (selectedDay === 0 || selectedDay === 6) {
+                alert("La date sélectionnée est un week-end. Veuillez choisir une autre date.");
+                return false;
+            }
+            return true;
+        }
+
+    </script>
 {% endblock %}

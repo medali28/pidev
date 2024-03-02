@@ -10,20 +10,27 @@
 
 
 
-        <section class="section-padding" style=" text-align: -webkit-center;">
-            <div class="container">
-                <div style="width: 40%;">
+        <section class="section-padding">
+            <div >
+                <div >
+                    <div class="col-lg-8 col-12 mt-3 mx-auto">
+                        <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+                            <div class="d-flex">
+
+                                <div class="custom-block-topics-listing-info d-flex">
+                                    <div>
+                <div style="">
                 <h1>RendezVous</h1>
 
                 <table class="table">
                     <tbody>
                     <tr>
-                        <th>medecin</th>
+                        <th>Medecin</th>
                         <td>{{ rendez_vou.medecin.getFirstName() }} {{ rendez_vou.medecin.getLastName() }}</td>
                     </tr>
 
                     <tr>
-                        <th>patient</th>
+                        <th>Patient</th>
                         <td>{{ rendez_vou.patient.getFirstName() }} {{ rendez_vou.patient.getLastName() }}</td>
                     </tr>
 
@@ -32,7 +39,7 @@
                         <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
                     </tr>
                     <tr>
-                        <th>heure</th>
+                        <th>Heure</th>
                         <td>{{ rendez_vou.time ? rendez_vou.time|date('H:i') : ''  }}</td>
 
                     </tr>
@@ -41,7 +48,7 @@
                         <td>{{ rendez_vou.description }}</td>
                     </tr>
                     <tr>
-                        <th>Status_rdv</th>
+                        <th>Statut rdv</th>
                         <td>{{ rendez_vou.statusRdv }}</td>
                     </tr>
                     <tr>
@@ -56,7 +63,7 @@
                     </tr>
                     {% if rendez_vou.reponseRefuse is not null and rendez_vou.reponseRefuse != '' %}
                         <tr>
-                            <th>Reponse_refuse</th>
+                            <th>Reponse de refuse</th>
                             <td>{{ rendez_vou.reponseRefuse }}</td>
                         </tr>
                     {% endif %}
@@ -67,11 +74,20 @@
                     </tbody>
                 </table>
 
-                <a href="{{ path('app_rendez_vous_index') }}">back to list</a>
 
-                <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">edit</a>
+                </div>
+                <a href="{{ path('app_rendez_vous_index') }}">Retour à la liste</a>
+
+                <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">Modifier</a>
 
                 {{ include('rendez_vous/_delete_form.html.twig') }}
+                                        <a href="{{ path('app_rendez_vous_new') }}">Demander un rendez-vous</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
