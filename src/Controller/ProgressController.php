@@ -129,6 +129,25 @@ class ProgressController extends AbstractController
         $this->addFlash('error', 'Payment was cancelled.');
         return $this->redirectToRoute('progress_view');
     }
+    #[Route('/progress/{id}/delete', name: 'progress_delete')]
+    public function delete($id, ProgressBarRepository $progressBarRepository, ManagerRegistry $managerRegistry): Response
+    {
+        $progressBar = $progressBarRepository->find($id);
+
+        if (!$progressBar) {
+            throw $this->createNotFoundException('Progress bar not found');
+        }
+
+        $entityManager = $managerRegistry->getManager();
+        $entityManager->remove($progressBar);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Progress bar deleted successfully.');
+
+        return $this->redirectToRoute('progress_view');
+    }
+
+
 
 
 }

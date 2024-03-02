@@ -138,6 +138,30 @@
                             </div>
                         </div>
 
+
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
+                                        Preview Progrees bars</a></li>
+                            </ul>
+
+                            {% for progressBar in progress  %}
+                                <p>Target Value: {{ progressBar.target }}</p>
+                                <p>Current Value: {{ progressBar.current }}</p>
+
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
+                                </div>
+
+                                <a href="{{ path('progress_delete', {'id': progressBar.id}) }}" class="btn btn-primary">Delete</a>
+                            {% endfor %}
+                                    <div class ="d-flex justify-content-center">
+                                        {{ knp_pagination_render(categories,'pagination.html.twig') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- JavaScript to handle inline editing -->
                         <script>
                             // Get the table element
