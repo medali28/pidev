@@ -1,140 +1,250 @@
 {% extends 'baseback.html.twig' %}
 {% block body %}
-<section class="section-padding">
-    <div >
-        <div >
-            <div class="col-lg-8 col-12 mt-3 mx-auto">
-                <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
-                    <div class="d-flex">
+    <link rel="stylesheet" href="{{ asset('/leaflet/dist/leaflet.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-                        <div class="custom-block-topics-listing-info d-flex">
-                            <div>
-                                <h1>liste de rendez-vous</h1>
-                                <table class="table table-striped">
-                                    <thead class="table-dark">
-                                    <tr>
-                                        <th></th>
-                                        <th>Date</th>
-                                        <th>Heure</th>
-                                        <th>Status_rdv</th>
-                                        <th>Description</th>
+    <body>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <header class="header header-sticky mb-4">
+            <div class="container-fluid">
+                <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                    <svg class="icon icon-lg">
+                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
+                    </svg>
+                </button><a class="header-brand d-md-none" href="#">
+                    <svg width="118" height="46" alt="CoreUI Logo">
+                        <use xlink:href="assets/brand/coreui.svg#full"></use>
+                    </svg></a>
 
-                                        <th>Urgence</th>
-                                        <th>Nom du Patient</th>
-                                        <th>Nom du Médecin</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for key,rendez_vou in rendez_vouses %}
-                                        <tr>
-                                            <td>{{ key + 1 }}</td>
-                                            <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
-                                            <td>{{ rendez_vou.time ? rendez_vou.time|date('H:i') : '' }}</td>
-                                            <td>{{ rendez_vou.statusRdv }}</td>
-                                            <td>{{ rendez_vou.description }}</td>
+                <ul class="header-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">
+                            <svg class="icon icon-lg">
+                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
+                            </svg></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">
+                            <svg class="icon icon-lg">
+                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list-rich"></use>
+                            </svg></a></li>
 
-                                            <td>{{ rendez_vou.urgence ? 'oui' : 'non' }}</td>
-                                            <td>{{ rendez_vou.patient.getFirstName() }} {{ rendez_vou.patient.getLastName() }}</td>
-                                            <td>{{ rendez_vou.medecin.getFirstName() }} {{ rendez_vou.medecin.getLastName() }}</td>
-                                            <td>
-                                                <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">show</a>
 
-                                            </td>
+
+        </header>
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg">
+                <div class="car"></div>
+
+
+
+                <div class="card mb-4">
+                    <div class="card-header"><strong>Tables</strong><span class="small ms-1">Table Categorie et Medicament</span></div>
+                    <div class="card-body">
+
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
+                                        liste de rendez-vous</a></li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1019">
+                                    <table class="table" id="rdvTable">
+                                        <thead class="table-dark">
+                                        <tr><th scope="col"></th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Heure</th>
+                                            <th scope="col">Status_rdv</th>
+                                            <th scope="col">Description</th>
+
+                                            <th scope="col">Urgence</th>
+                                            <th scope="col">Nom du Patient</th>
+                                            <th scope="col">Nom du Médecin</th>
+                                            <th scope="col">Actions</th>
+
                                         </tr>
-                                    {% else %}
-                                        <tr>
-                                            <td colspan="7">no records found</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
 
-
-                                <div class="my-4 text-center">
-                                    <hr class="my-4"> <!-- Barre horizontale décorative -->
-                                    <h3>Autres données</h3> <!-- Titre pour séparer visuellement -->
-                                </div>
-                                <div class="my-4">
-                                    <h3 class="text-center">Statistiques de santé</h3>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Nombre total de consultations</h5>
-                                                    <p class="card-text">100</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Nombre de patients</h5>
-                                                    <p class="card-text">50</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Nombre de médicaments prescrits</h5>
-                                                    <p class="card-text">80</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="custom-block-topics-listing-info d-flex">
-                                    <div>
-                                        <h1>liste de ambulance</h1>
-                                        <table class="table table-striped">
-                                            <thead class="table-dark">
+                                        {% for key,rendez_vou in rendez_vouses %}
                                             <tr>
-                                                <th></th>
-                                                <th>Position du patient</th>
-                                                <th>Adresse du médecin</th>
-                                                <th>Besoin d'infirmier</th>
+                                                <td>{{ key + 1 }}</td>
+                                                <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
+                                                <td>{{ rendez_vou.time ? rendez_vou.time|date('H:i') : '' }}</td>
+                                                <td>{{ rendez_vou.statusRdv }}</td>
+                                                <td>{{ rendez_vou.description }}</td>
 
-                                                <th>Date du rendez-vous </th>
-                                                <th>Heure du rendez-vous</th>
-                                                <th>Actions</th>
+                                                <td>{{ rendez_vou.urgence ? 'oui' : 'non' }}</td>
+                                                <td>{{ rendez_vou.patient.getFirstName() }} {{ rendez_vou.patient.getLastName() }}</td>
+                                                <td>{{ rendez_vou.medecin.getFirstName() }} {{ rendez_vou.medecin.getLastName() }}</td>
+                                                <td>
+                                                    <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">show</a>
+
+                                                </td>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for key ,ambulance in ambulances %}
-                                                <tr>
-                                                    <td>{{ key + 1 }}</td>
-                                                    <td>{{ ambulance.localActuelPatient }}</td>
-                                                    <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
-                                                    <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
-                                                    <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
-                                                    <td>{{ ambulance.getRdv().time|date('H:i:s') }}</td>
-                                                    <td>
-                                                        <a href="{{ path('app_ambulance_show', {'id': ambulance.id}) }}">Afficher</a>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="7">Aucun enregistrement trouvé</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class ="d-flex justify-content-center">
 
-                                                    </td>
-                                                </tr>
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="8">Aucun enregistrement trouvé</td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
-
-
                             </div>
-
                         </div>
+
+                        <div class="example">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1019" role="tab">
+                                        liste de ambulance</a></li>
+                            </ul>
+                            <div class="tab-content rounded-bottom">
+                                <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1019">
+                                    <table class="table" id="rdvTable">
+                                        <thead class="table-dark">
+                                        <tr><th scope="col"></th>
+
+                                            <th scope="col">Position du patient</th>
+                                            <th scope="col">Adresse du médecin</th>
+                                            <th scope="col">Besoin d'infirmier</th>
+
+                                            <th scope="col">Date du rendez-vous </th>
+                                            <th scope="col">Heure du rendez-vous</th>
+                                            <th scope="col">Actions</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for key ,ambulance in ambulances %}
+                                            <tr>
+                                                <td>{{ key + 1 }}</td>
+                                                <td>
+                                                    <div id="map_{{ key }}" style="height: 200px; width: 200px;"></div>
+                                                </td>
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', function () {
+                                                        function showMap(mapId, latitude, longitude) {
+                                                            var map = L.map(mapId).setView([latitude, longitude], 13);
+
+                                                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+
+                                                            L.marker([latitude, longitude]).addTo(map);
+                                                        }
+
+                                                        {% for key, ambulance in ambulances %}
+                                                        showMap('map_{{ key }}', {{ ambulance.latitude }}, {{ ambulance.longitude }});
+                                                        {% endfor %}
+                                                    });
+                                                </script>
+                                                <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
+                                                <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
+                                                <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
+                                                <td>{{ ambulance.getRdv().time|date('H:i') }}</td>
+                                                <td>
+                                                    <a href="{{ path('app_ambulance_show', {'id': ambulance.id}) }}">Afficher</a>
+
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="8">Aucun enregistrement trouvé</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class ="d-flex justify-content-center">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="container" style="width: 100%; height: 600px;"></div>
+                        <div id="container1" style="width: 100%; height: 600px;"></div>
+
                     </div>
                 </div>
+
+                <!-- JavaScript to handle inline editing -->
+                <script>
+                    // Get the table element
+                    const table = document.getElementById('rdvTable');
+
+                    // Add event listener for delete buttons
+                    table.addEventListener('click', function (event) {
+                        if (event.target.classList.contains('editBtn')) {
+                            const confirmDelete = confirm('Are you sure ?');
+                            if (confirmDelete) {
+                                const row = event.target.closest('tr');
+                                const id = event.target.dataset.id;
+                                // Perform delete operation here, e.g., via AJAX
+                                // After successful deletion, remove the row from the table
+                                row.remove();
+                            }
+                        }
+                    });
+                </script>
+
             </div>
         </div>
+
+
     </div>
-</section>
+    </div>
+
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="vendors/simplebar/js/simplebar.min.js"></script>
+
+    </script>
+    <script src="https://cdn.anychart.com/releases/8.12.0/js/anychart-base.min.js"></script>
+    <script>
+        var data = [
+            {x: "A", value: 637166},
+            {x: "B", value: 721630},
+            {x: "C", value: 148662},
+            {x: "D", value: 78662},
+            {x: "E", value: 90000}
+        ];
+
+        // create a pie chart and set the data
+        chart = anychart.pie(data);
+
+        /* set the inner radius
+        (to turn the pie chart into a doughnut chart)*/
+        chart.innerRadius("30%");
+
+        // set the container id
+        chart.container("container");
+
+        // initiate drawing the chart
+        chart.draw();
+
+        var data1 = [
+            ["John", 10000],
+            ["Jake", 12000],
+            ["Peter", 13000],
+            ["James", 10000],
+            ["Mary", 9000]
+        ];
+
+        // create a chart
+        chart1 = anychart.bar();
+
+        // create a bar series and set the data
+        var series = chart1.bar(data);
+
+        // set the container id
+        chart1.container("container1");
+
+        // initiate drawing the chart
+        chart1.draw();
+    </script>
+    </body>
+    </html>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 {% endblock %}

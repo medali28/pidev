@@ -68,18 +68,26 @@ class AmbulanceController extends AbstractController
     #[Route('/{id}/edit', name: 'app_ambulance_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ambulance $ambulance, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AmbulanceType::class, $ambulance);
-        $form->handleRequest($request);
+        // Handle form submission
+        if ($request->isMethod('POST')) {
+            $ambulance->setLocalActuelPatient(" ");
+            $latitude = $request->request->get('latitude');
+            $longitude = $request->request->get('longitude');
+            $besoin_infirmier = $request->request->get('besoin_infirmier');
+            $besoin_infirmier = $besoin_infirmier === 'on';
+            $ambulance->setLatitude($latitude);
+            $ambulance->setLongitude($longitude);
+            $ambulance->setBesoinInfirmier($besoin_infirmier);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($ambulance);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_ambulance_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ambulance/edit.html.twig', [
+        // Render the form
+        return $this->render('ambulance/edit.html.twig', [
             'ambulance' => $ambulance,
-            'form' => $form,
         ]);
     }
 

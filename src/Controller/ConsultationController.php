@@ -172,11 +172,10 @@ class ConsultationController extends AbstractController
         $email = (new Email())
             ->from(new Address('myedr@gmail.com', 'My eDr'))
             ->to('myedr83@gmail.com')
-            ->subject('Un Nouveau Question a été créé')
+            ->subject('informations personeelles')
             ->text($emailText);
 
         $mailer->send($email);
-
 
     }
     /*private function sendEmail($nomMedicament, $conseilsMaladie, MailerInterface $mailer): void
