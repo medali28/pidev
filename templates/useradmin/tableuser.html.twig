@@ -1,0 +1,176 @@
+{#{%  extends 'admin/baseAdmin.html.twig' %}#}
+{%  extends 'baseback.html.twig' %}
+{% block body %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+        <meta name="author" content="Łukasz Holeczek">
+        <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+        <title>CoreUI Free Bootstrap Admin Template</title>
+        <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+        <link rel="manifest" href="assets/favicon/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" href="{{ asset('/user/vendors/simplebar/css/simplebar.css') }}">
+        <link rel="stylesheet" href="{{ asset('/user/css/vendors/simplebar.css') }}">
+        <!-- Main styles for this application-->
+        <link href="{{ asset('/user/css/style.css') }}" rel="stylesheet">
+        <!-- We use those styles to show code examples, you should remove them in your application.-->
+        <link href="{{ asset('/user/css/examples.css') }}" rel="stylesheet">
+        <link href="{{ asset('/user/vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
+        {{ encore_entry_link_tags('app') }}
+        <style>
+            .bodyusers{
+                height: 100%;
+                width: 100%;
+                background: url('{{ asset('/images/i10.jpg') }}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        </style>
+        <script src="{{ asset('/vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
+        <script src="{{ asset('/vendors/simplebar/js/simplebar.min.js') }}"></script>
+        <!-- Plugins and scripts required by this view-->
+        <script src="{{ asset('/vendors/chart.js/js/chart.min.js') }}"></script>
+        <script src="{{ asset('/vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
+        <script src="{{ asset('/vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
+        <script src="{{ asset('/js/main.js') }}"></script>
+        <script>
+        </script>
+    </head>
+    <body>
+    {% block content %}
+        <div class="bodyusers">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <main class="main-content position-relative border-radius-lg bodyuser" style="margin-left: 20% ; height: 100%">
+        <div class="min-height-300 bg-primary position-absolute w-100 "></div>
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false" style="color: black">
+            <div class="container-fluid py-1 px-3">
+                <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                        <div class="input-group">
+                            <span class="input-group-text text-body"><i class="fa fa-search" aria-hidden="true" style='font-size:20px;color:white'></i></span>
+                            <input type="text" class="form-control" placeholder="Searsh here...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid py-4" style="background-color: transparent" >
+            <div class="row"  style="background-color: transparent" >
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-header pb-0">
+                            <h6>User table</h6>
+                        </div>
+                        <div class="card-body px-0 pt-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Role</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rate</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Create Account</th>
+                                        <th class="text-secondary opacity-7"></th>
+                                        <th class="text-secondary opacity-7"></th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div>
+                                                    {% if user.image is not null %}
+                                                        <img src="{{ asset('profile/images/' ~ user.image) }}" class="avatar avatar-sm me-3" style="height:80px ;width: 80px" alt="user1">
+                                                    {% else %}
+                                                        <img src="{{ asset('profile/images/profilebase.png') }}" class="avatar avatar-sm me-3" style="height:80px ;width: 80px" alt="user1">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">{{ user.lastName ~ ' ' ~ user.firstName }}</h6>
+                                                    <p class="text-xs text-secondary mb-0">{{ user.email }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="align-middle text-center text-sm">
+                                            {% if 'ROLE_PATIENT' in user.roles %}
+                                                <span class="mb-0 text-sm">Patient</span>
+                                            {% elseif 'ROLE_MEDECIN' in user.roles %}
+                                                <span class="mb-0 text-sm">Medecin</span>
+                                            {% elseif 'ROLE_EXPERT' in user.roles %}
+                                                <span class="mb-0 text-sm">Expert</span>
+                                            {% else %}
+                                                <span class="mb-0 text-smr">Admin</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="mb-0 text-smr">{{ user.rate }}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="mb-0 text-smr">{{ user.validation }}</span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span class="text-secondary text-xs font-weight-bold">{{ user.dateCreateCompte|date('Y-m-d') }}</span>
+                                        </td>
+{#                                        <td class="align-middle">#}
+{#                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">#}
+{#                                                More#}
+{#                                            </a>#}
+{#                                        </td>#}
+{#                                        <td class="align-middle">#}
+{#                                            <a href="{{ path('Update_user' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">#}
+{#                                                Edit#}
+{#                                            </a>#}
+{#                                        </td>#}
+                                        <td class="align-middle">
+                                            {% if user.active  %}
+                                            <a href="{{ path('deactive_user' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                Desactive
+                                            </a>
+                                            {% else %}
+                                                <a href="{{ path('deactive_user' , {'id': user.id}) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                    Active
+                                                </a>
+                                                {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+        </div>
+    {% endblock %}
+
+    </body>
+    </html>
+{%  endblock %}

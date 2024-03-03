@@ -1,0 +1,91 @@
+{% extends 'admin_reclamation/baseAdmin.html.twig' %}
+
+{% block body %}
+
+        <div class="bodyusers">
+            <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') }}">
+            <main class="main-content position-relative border-radius-lg bodyuser d-flex justify-content-center align-items-center" >
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card mb-4">
+                                <div class="card-header pb-0 text-center">
+                                    <h6>Détails de la Réclamation</h6>
+                                </div>
+                                <div class="card-body px-0 pt-0 pb-2">
+                                    <div class="table-responsive p-0">
+                                        <table class="table align-items-center mb-0">
+                                            <tbody>
+                                            <tr>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ReclamationID</th>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.id }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">PatientId</th>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.idPatient }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Médecin</th>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.idMedecin }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sujet</th>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.sujet }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                                                <td class="align-middle text-center text-sm">
+                                                    <textarea class="accordion" readonly>{{ rec.descriptionRec }}</textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date de la reclamation</th>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.dateRec | date('Y-m-d H:i:s') }}</span>
+                                                </td>
+                                            </tr>
+                                            {% if rec.reponse is not empty %}
+                                                <tr>
+                                                    <td colspan="2" class="text-center text-danger warning-message">
+                                                        Attention : Cette réclamation a déjà une réponse.
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if rec.reponse is empty %}
+                                                <tr>
+                                                    <td class="align-middle text-center" colspan="2">
+                                                        <div class="d-flex justify-content-center">
+                                                            <a href="{{ path('reponse', {'id': rec.id}) }}" class="btn" style="background-color: #00BFA6;">Répondre</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td class="align-middle text-center" colspan="2">
+                                                        <div class="d-flex justify-content-center">
+                                                            <a href="{{ path('reponse', {'id': rec.id}) }}" class="btn" style="background-color: #00BFA6;">Retour</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            {% endif %}
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-2 mx-auto">
+                    <h1 class="text-white text-center display-4">Mes Réclamations</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="" style="margin-top: 100px">
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <form action="{{ path('search_reclamation',{'id': id}) }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="term" placeholder="Rechercher une réclamation...">
+                            <button class="btn btn-primary" style="background-color:#0cb8b6;" type="submit">Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>ID Réclamation</th>
+                                <th>Médecin</th>
+                                <th>Sujet</th>
+                                <th>Etat de la reclamation</th>
+                                <th>Date</th>
+                                <th>Reponse</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for reclamation in reclamations %}
+                                <tr class="alert" role="alert">
+                                    <th scope="row">{{ reclamation.id }}</th>
+                                    <td>{{ reclamation.medecin.firstName ~' '~ reclamation.medecin.lastName }}</td>
+                                    <td>{{ reclamation.sujet }}</td>
+                                    <td>{{ reclamation.etat }}</td>
+                                    <td>{{ reclamation.dateRec | date('Y-m-d ') }}</td>
+                                    {%  if reclamation.reponse %}
+                                        <td>{{ reclamation.reponse }}</td>
+                                    {%  else %}
+                                        <td>no trouver</td>
+                                        {% endif %}
+                                    <td>
+                                        <a href="{{ path('edit_reclamation', {'id': reclamation.id}) }}" class="btn btn-link"  style="color: #9a6e3a"
+                                        >Modifier</a>
+                                        <a  href="{{ path('delete_reclamation', {'id': id, 'reclamationId': reclamation.id}) }}"
+                                           class="btn-link"
+                                           style="color: red"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');">Supprimer</a>
+
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">Aucune réclamation trouvée.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                            <div  class="d-flex justify-content-center mt-4">
+                                <a href="{{ path('app_reclamation', {'id': id}) }}"
+                                   class="btn btn-primary" style="background-color: #0cb8b6">Ajouter une nouvelle
+                                    réclamation</a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+{% endblock %}
+{% block footer %}{% endblock %}

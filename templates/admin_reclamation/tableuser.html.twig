@@ -1,0 +1,89 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+        <div class="bodyusers" style="margin-left: 20% ; width: 80%">
+            <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') }}">
+            <main class="main-content position-relative border-radius-lg bodyuser" >
+                <div class="min-height-300 bg-primary position-absolute w-100 "></div>
+                <div class="container-fluid py-4" style="background-color: transparent">
+                    {# Add this form above the table #}
+                    <div class="row" style="background-color: transparent">
+                        <div class="col-12">
+                            <div class="card mb-4">
+                                <div class="card-header pb-0 text-center">
+                                    <h6>Reclamation Table</h6>
+                                </div>
+                                <div class="card-body px-0 pt-0 pb-2 d-flex justify-content-center">
+                                    <form action="{{ path('admin_search_reclamation') }}" method="GET" class="mx-auto">
+                                        <div class="input-group">
+                                            <input type="text" name="term" class="form-control" placeholder="Search by sujet...">
+                                            <button type="submit" class="btn btn-primary" style="background-color: #0cb8b6">Search</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="table-responsive p-0">
+                                    <table class="table align-items-center mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Patient</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Médecin</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sujet</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">etat</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reponse</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for rec in recs %}
+                                            <tr>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.type }}</span>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.patient.firstName ~' '~rec.patient.lastName }}</span>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{rec.medecin.firstName ~' '~rec.medecin.lastName }}</span>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.sujet }}</span>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.descriptionRec }}</span>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.dateRec | date('Y-m-d ') }}</span>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="mb-0 text-sm">{{ rec.etat }}</span>
+                                                </td>
+                                                {%  if rec.reponse %}
+                                                    <td class="align-middle text-center text-sm">
+                                                        <span class="mb-0 text-sm">{{ rec.reponse }}</span>
+                                                    </td>
+                                                {%  else %}
+                                                    <td>no trouver</td>
+                                                {% endif %}
+
+                                                <td>
+                                                    {%  if rec.reponse %}
+                                                        <span  class="btn" style="background-color: green">Repondu</span>
+                                                    {%  else %}
+                                                        <a href="{{ path('reponse', {'id': rec.id}) }}" class="btn" style="background-color: grey">Repondre</a>
+                                                    {% endif %}
+                                                    <a href="{{ path('admin/delete_reclamation',{'reclamationId':rec.id})}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');">Supprimer</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+{% endblock %}

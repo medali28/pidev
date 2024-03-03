@@ -1,0 +1,576 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <style>
+        /*body {*/
+        /*    font-family: Arial, sans-serif;*/
+        /*    margin: 0;*/
+        /*    padding: 0;*/
+        /*}*/
+
+        /*header {*/
+        /*    background-color: #ffffff;*/
+        /*    !*padding: 0px;*!*/
+        /*    !*text-align: ;*!*/
+        /*}*/
+
+        aside {
+            background-color: #ffffff;
+            border: black solid 1px;
+            padding: 20px;
+            width: 350px;
+            height: 420px;
+        }
+
+        aside h2 {
+            margin-top: 0;
+        }
+
+        aside input[type="text"],
+        aside input[type="number"] {
+            display: block;
+            color: #529CA7;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        aside button {
+            display: block;
+            color: #ffffff;
+            background-color:  #529CA7;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        section {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .doctor-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            /*margin: 10px;*/
+            margin-left: 40px;
+            margin-top: -40px;
+            margin-bottom: 60px;
+            padding: 20px;
+            width: 600px;
+            /*height: 400px;*/
+            height: 200px;
+            box-sizing: border-box;
+        }
+
+        .doctor-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .doctor-card h3 {
+            margin-top: 0;
+        }
+
+        .doctor-card p {
+            margin: 5px 0;
+        }
+
+        .doctor-card button {
+            background-color: #529CA7;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .doctor-card .rdv {
+            background-color: #529CA7;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .doctor-card button:hover {
+            background-color: #529CA7;
+        }
+        .section-padding{
+            padding: 60px 0px;
+
+        }
+        .row_med{
+            display: flex;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        .data{
+            margin-top: 10px;
+            margin-left: 20px;
+            width: 200px;
+        }
+
+        .field{
+            width: 360px;
+            /*height: 45px;*/
+            /*margin: 45px 0;*/
+            /*display: flex;*/
+            position: relative
+        }
+        .field select{
+            width: 305px;
+            height: 100%;
+            margin-right: 40px;
+            padding-left: 15px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .field  .div1{
+            align-items: center;
+            /*padding: revert;*/
+            height: 30px;
+            width:305px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="https://cdnjs.c/loudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"  />
+
+{#<header>#}
+{#    <img style="height: 500px ; width: 100%" src="https://imageio.forbes.com/specials-images/imageserve/651bbeb1c78cc403f92a6abd/The-10-Biggest-Trends-Revolutionizing-Healthcare-In-2024/0x0.jpg?format=jpg&crop=2500,1405,x0,y0,safe&width=1440" alt="Healthcare Logo">#}
+
+{#</header>#}
+<body>
+<body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
+
+<section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12 mx-auto">
+                <h1 class="text-white text-center display-4">Explorez et Partagez vos Questions Avec Des Experts</h1>
+                <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bi-search" id="basic-addon1"></span>
+                        <input name="keyword" type="search" class="form-control" id="keyword" placeholder="Recherchez des sujets..." aria-label="Recherche">
+                        <button type="submit" class="form-control btn btn-primary">Rechercher</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <h2 class="ser-title">Notre Doctors</h2>
+    <hr class="botm-line">
+<div class="row_med">
+    <aside>
+        <h2>Filter par</h2>
+        <hr style="width: 300px">
+        {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
+        <div class="field">
+
+        <label>Specialite</label>
+        <select class="div1" id="specialite" name="specialite">
+            <option value="None">None</option>
+            <option value="Acupuncture">Acupuncture</option>
+            <option value="Addictologue">Addictologue</option>
+            <option value="Algologue (Douleur)">Algologue (Douleur)</option>
+            <option value="Allergologue">Allergologue</option>
+            <option value="Anatomo-Cyto-Pathologiste">Anatomo-Cyto-Pathologiste</option>
+            <option value="Andrologue">Andrologue</option>
+            <option value="Anesthésiste-Réanimateur">Anesthésiste-Réanimateur</option>
+            <option value="Angiologue">Angiologue</option>
+            <option value="Audiologiste">Audiologiste</option>
+            <option value="Audioprothésiste">Audioprothésiste</option>
+            <option value="Auriculothérapeute">Auriculothérapeute</option>
+            <option value="Biochimiste">Biochimiste</option>
+            <option value="Biochimiste Clinique">Biochimiste Clinique</option>
+            <option value="Biologiste Medicale">Biologiste Medicale</option>
+            <option value="Biophysique">Biophysique</option>
+            <option value="Cancérologue">Cancérologue</option>
+            <option value="Cardiologue (Cœur)">Cardiologue (Cœur)</option>
+            <option value="Cardiologue pédiatrique">Cardiologue pédiatrique</option>
+            <option value="Centre d'imagerie médicale">Centre d'imagerie médicale</option>
+            <option value="Chiropracteur">Chiropracteur</option>
+            <option value="Chirurgie Arthroscopique et du Sport">Chirurgie Arthroscopique et du Sport</option>
+            <option value="Chirurgie plastique et réparatrice">Chirurgie plastique et réparatrice</option>
+            <option value="Chirurgien">Chirurgien</option>
+            <option value="Chirurgien Buccal">Chirurgien Buccal</option>
+            <option value="Chirurgien Cancérologue">Chirurgien Cancérologue</option>
+            <option value="Chirurgien capillaire">Chirurgien capillaire</option>
+            <option value="Chirurgien Cardio-Vasculaire">Chirurgien Cardio-Vasculaire</option>
+            <option value="Chirurgien Cardio-Vasculaire Thoracique">Chirurgien Cardio-Vasculaire Thoracique</option>
+            <option value="Chirurgien cervico-facial">Chirurgien cervico-facial</option>
+            <option value="Chirurgien de l'obésité">Chirurgien de l'obésité</option>
+            <option value="Chirurgien Esthétique">Chirurgien Esthétique</option>
+            <option value="Chirurgien Généraliste">Chirurgien Généraliste</option>
+            <option value="Chirurgien Maxillo Facial et Esthétique">Chirurgien Maxillo Facial et Esthétique</option>
+            <option value="Chirurgien Maxillo Facial Stomatologue">Chirurgien Maxillo Facial Stomatologue</option>
+            <option value="Chirurgien Orthopédiste Pédiatrique">Chirurgien Orthopédiste Pédiatrique</option>
+            <option value="Chirurgien Orthopédiste Traumatologue">Chirurgien Orthopédiste Traumatologue</option>
+            <option value="Chirurgien Pédiatrique">Chirurgien Pédiatrique</option>
+            <option value="Chirurgien Plasticien">Chirurgien Plasticien</option>
+            <option value="Chirurgien Thoracique">Chirurgien Thoracique</option>
+            <option value="Chirurgien Urologue">Chirurgien Urologue</option>
+            <option value="Chirurgien vasculaire">Chirurgien vasculaire</option>
+            <option value="Chirurgien viscéral et digestif">Chirurgien viscéral et digestif</option>
+            <option value="Dentiste (Dents)">Dentiste (Dents)</option>
+            <option value="Dermatologue (Peau)">Dermatologue (Peau)</option>
+            <option value="Diabétologue">Diabétologue</option>
+            <option value="Diététicien">Diététicien</option>
+            <option value="Embryologiste">Embryologiste</option>
+            <option value="Endocrinologue">Endocrinologue</option>
+            <option value="Endocrinologue Diabétologue">Endocrinologue Diabétologue</option>
+            <option value="Endodontiste">Endodontiste</option>
+            <option value="Epidemiologiste">Epidemiologiste</option>
+            <option value="Ergothérapeute">Ergothérapeute</option>
+            <option value="Gastro-entérologue">Gastro-entérologue</option>
+            <option value="Généraliste">Généraliste</option>
+            <option value="Généticien">Généticien</option>
+            <option value="Gériatre">Gériatre</option>
+            <option value="Gynécologue">Gynécologue</option>
+            <option value="Gynécologue Obstétricien">Gynécologue Obstétricien</option>
+            <option value="Hématologue">Hématologue</option>
+            <option value="Hématologue Clinique">Hématologue Clinique</option>
+            <option value="Hématopathologiste">Hématopathologiste</option>
+            <option value="Hépatologue  (Foie)">Hépatologue  (Foie)</option>
+            <option value="Hypnothérapeute">Hypnothérapeute</option>
+            <option value="Imagerie Médicale">Imagerie Médicale</option>
+            <option value="Immunologiste">Immunologiste</option>
+            <option value="Immunopathologiste">Immunopathologiste</option>
+            <option value="Implantologue">Implantologue</option>
+            <option value="Infirmier">Infirmier</option>
+            <option value="Interniste">Interniste</option>
+            <option value="Interniste Hypertensiologue">Interniste Hypertensiologue</option>
+            <option value="Interniste Maladies Infectieuses">Interniste Maladies Infectieuses</option>
+            <option value="Interniste Réanimation Médicale">Interniste Réanimation Médicale</option>
+            <option value="Kinésithérapeute">Kinésithérapeute</option>
+            <option value="Laboratoire d'analyses de biologie médicale">Laboratoire d'analyses de biologie médicale</option>
+            <option value="Laboratoire d'anatomie et cytologie pathologiques">Laboratoire d'anatomie et cytologie pathologiques</option>
+            <option value="Laboratoire de cytogénétique">Laboratoire de cytogénétique</option>
+            <option value="Maladies Cardiovasculaire">Maladies Cardiovasculaire</option>
+            <option value="Maladies Infectieuses">Maladies Infectieuses</option>
+            <option value="Médecin Biologiste">Médecin Biologiste</option>
+            <option value="Médecin de famille">Médecin de famille</option>
+            <option value="Médecin du sommeil">Médecin du sommeil</option>
+            <option value="Médecin du sport">Médecin du sport</option>
+            <option value="Médecin du Travail">Médecin du Travail</option>
+            <option value="Médecin Esthétique">Médecin Esthétique</option>
+            <option value="Médecin Hémodialyseur">Médecin Hémodialyseur</option>
+            <option value="Médecin homéopathe">Médecin homéopathe</option>
+            <option value="Médecin Légiste">Médecin Légiste</option>
+            <option value="Médecin Nucléaire">Médecin Nucléaire</option>
+            <option value="Médecin Physique Réadaptateur">Médecin Physique Réadaptateur</option>
+            <option value="Médecin urgentiste">Médecin urgentiste</option>
+            <option value="Médecine douce et alternative">Médecine douce et alternative</option>
+            <option value="Médecine morphologique et anti-âge">Médecine morphologique et anti-âge</option>
+            <option value="Médecine Préventive">Médecine Préventive</option>
+            <option value="Médecine tropicale">Médecine tropicale</option>
+            <option value="Microbiologiste">Microbiologiste</option>
+            <option value="Néonatologiste">Néonatologiste</option>
+            <option value="Néphrologue">Néphrologue</option>
+            <option value="Neurochirurgien">Neurochirurgien</option>
+            <option value="Neurologue  (Cerveau et Nerfs)">Neurologue  (Cerveau et Nerfs)</option>
+            <option value="Neuropédiatre">Neuropédiatre</option>
+            <option value="Neurophysiologiste">Neurophysiologiste</option>
+            <option value="Neuropsychiatre">Neuropsychiatre</option>
+            <option value="Neuropsychologue">Neuropsychologue</option>
+            <option value="Nutrithérapeute">Nutrithérapeute</option>
+            <option value="Nutritionniste">Nutritionniste</option>
+            <option value="Oncologue">Oncologue</option>
+            <option value="Oncologue-Chimiothérapeute">Oncologue-Chimiothérapeute</option>
+            <option value="Oncologue-Radiothérapeute">Oncologue-Radiothérapeute</option>
+            <option value="Ophtalmologiste  (Yeux)">Ophtalmologiste  (Yeux)</option>
+            <option value="Opticien">Opticien</option>
+            <option value="Orthodontiste">Orthodontiste</option>
+            <option value="Orthopédiste  (Os)">Orthopédiste  (Os)</option>
+            <option value="Orthopédiste Traumatologue">Orthopédiste Traumatologue</option>
+            <option value="Orthophoniste">Orthophoniste</option>
+            <option value="Orthoprothésiste">Orthoprothésiste</option>
+            <option value="Orthoptiste">Orthoptiste</option>
+            <option value="Ostéopathe">Ostéopathe</option>
+            <option value="Oto-Rhino-Laryngologiste (ORL)  (Oreille nez gorge)">Oto-Rhino-Laryngologiste (ORL)  (Oreille nez gorge)</option>
+            <option value="Parasitologiste">Parasitologiste</option>
+            <option value="Parodontiste implantologiste">Parodontiste implantologiste</option>
+            <option value="Pédiatre  (Enfant)">Pédiatre  (Enfant)</option>
+            <option value="Pédodontiste">Pédodontiste</option>
+            <option value="Pédopsychiatre">Pédopsychiatre</option>
+            <option value="Perineologue">Perineologue</option>
+            <option value="Pharmacien">Pharmacien</option>
+            <option value="Pharmacien Biologiste">Pharmacien Biologiste</option>
+            <option value="Pharmacologue">Pharmacologue</option>
+            <option value="Phlébologue">Phlébologue</option>
+            <option value="Physiologiste">Physiologiste</option>
+            <option value="Physiothérapeute">Physiothérapeute</option>
+            <option value="Phytothérapeute">Phytothérapeute</option>
+            <option value="Pneumologue">Pneumologue</option>
+            <option value="Podologue">Podologue</option>
+            <option value="Posturologue">Posturologue</option>
+            <option value="Proctologue">Proctologue</option>
+            <option value="Prothésiste Capillaire">Prothésiste Capillaire</option>
+            <option value="Prothésiste dentaire">Prothésiste dentaire</option>
+            <option value="Psychanalyste">Psychanalyste</option>
+            <option value="Psychiatre  (Troubles mentaux)">Psychiatre  (Troubles mentaux)</option>
+            <option value="Psychologue">Psychologue</option>
+            <option value="Psychologue clinicien">Psychologue clinicien</option>
+            <option value="Psychomotricien">Psychomotricien</option>
+            <option value="Psychothérapeute">Psychothérapeute</option>
+            <option value="Radiologue">Radiologue</option>
+            <option value="Radiothérapeute">Radiothérapeute</option>
+            <option value="Réanimateur Médical">Réanimateur Médical</option>
+            <option value="Réflexologue">Réflexologue</option>
+            <option value="Rhumatologue">Rhumatologue</option>
+            <option value="Rythmologue interventionnel">Rythmologue interventionnel</option>
+            <option value="Sage femme">Sage femme</option>
+            <option value="Santé publique et médecine sociale">Santé publique et médecine sociale</option>
+            <option value="Sénologue">Sénologue</option>
+            <option value="Sexologue">Sexologue</option>
+            <option value="Stomatologue">Stomatologue</option>
+            <option value="Thérapeute manuel">Thérapeute manuel</option>
+            <option value="Urodynamique">Urodynamique</option>
+            <option value="Urologue">Urologue</option>
+            <option value="Vétérinaire">Vétérinaire</option>
+        </select>
+
+        </div>
+        <div class="field">
+            <label>Prix</label>
+        <div class="div1">
+            {{ form_widget(form.prix, { 'id': 'prix'}) }}</div>
+</div>
+        <div class="field">
+            <label>Pays</label>
+            <div class="div1">
+                        <select class="country" id="country" name="country" onchange="loadStates()" style="margin-left: 35px">
+                            <option selected >Select Country</option>
+                        </select>
+
+                <input type="text" hidden="hidden" style="display: none" value="none" id="countryh"  name="countryh">
+
+
+            </div>
+        </div>
+        <div class="field">
+            <label>Ville</label>
+            <div class="div1">
+                <select class="state" id="state" name="state" onchange="loadCities()" style="margin-left: 35px">
+                                                <option selected>Select City</option>
+                                            </select></div>
+            <input type="text" hidden="hidden" style="display: none"  value="none" id="stateh"  name="stateh">
+        </div>
+        <br>
+        <br>
+        <button type="submit" onclick="saveFormData()">Search</button>
+        {{ form_end(form) }}
+    </aside>
+    <section id="doctor-team" class="section-padding">
+
+        {% for med in meds %}
+        <div class="doctor-card">
+            <div class="col-md-3 col-sm-3 col-xs-6">
+                <div class="row_med" style="margin-right: -10px ; margin-left: -15px">
+                    <img src="https://img.freepik.com/free-photo/smiling-doctor-with-strethoscope-isolated-grey_651396-974.jpg?size=626&ext=jpg&ga=GA1.1.2007576259.1708250226&semt=sph" alt="..." class="team-img">
+                    <div class="row_med" style="margin-right: -10px ; margin-left: -2%">
+                        <div class="data">
+                            <h3>{{ med.lastName ~ ' ' ~ med.firstName }}</h3>
+                            <p>Spaicialite:{{ med.specialite }}</p>
+                            <p>Pays:{{ med.pays ~','~med.ville }}</p>
+                            <p>Prix:{{ med.prixc }}</p>
+                        </div>
+                       <div>
+                          {% if "ROLE_PATIENT" in app.user.roles %}
+                           <a class="rdv" href="{{ path('app_rendez_vous_new' , {'id':med.id}) }}" style="margin-left: 110px ; height: 40px">
+                               Rendez-vous
+                           </a>
+                              <a href="{{ path('app_avis' , {'id':app.user.userIdentifier , 'idm':med.id}) }}">
+                                  <button type="button"   style="margin-left: 110px; margin-top: 10px;" class='custom-button'>
+                                      <i class='fas fa-route' style="color: white; font-size: 20px; margin-right: 5px;"></i> Avis
+                                  </button>
+                              </a>
+                           {%  endif %}
+                           {% set id = id %}
+                           {% if med.lat is null %}
+                               {% set lat =36.83126732766565%}
+                               {% set lng = 10.146805943086248 %}
+                           {% else %}
+                            {% set lat = med.lat%}
+                            {% set lng = med.log  %}
+{% endif %}
+                           <a href="{{ path('map', {'id': id, 'lat': lat, 'lng': lng}) }}">
+                           <button type="button"   style="margin-left: 110px; margin-top: 30px;" class='custom-button'>
+                               <i class='fas fa-route' style="color: white; font-size: 20px; margin-right: 5px;"></i> Map
+                           </button>
+                           </a>
+
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</div>
+{#<script src="{{ asset('/js/country.js') }}"></script>#}
+<script>
+
+</script>
+<script>
+    function saveFormData() {
+        localStorage.setItem('enteredPrix', null);
+        localStorage.setItem('selectedSpecialite', null);
+        // localStorage.setItem('selectedCountry', "");
+        // localStorage.setItem('selectedsate', "");
+        var specialiteSelect = document.getElementById('specialite');
+        var selectedSpecialite = specialiteSelect.value;
+        localStorage.setItem('selectedSpecialite', selectedSpecialite);
+        var prixInput = document.getElementById('prix');
+        var enteredPrix = prixInput.value;
+        if (enteredPrix.trim() !== '') {
+            localStorage.setItem('enteredPrix', enteredPrix);
+        }
+
+    }
+
+    function retrieveSpecialite() {
+        var selectedSpecialite = localStorage.getItem('selectedSpecialite');
+        if (selectedSpecialite != null) {
+            var specialiteSelect = document.getElementById('specialite');
+            specialiteSelect.value = selectedSpecialite;
+        }
+        var enteredPrix = localStorage.getItem('enteredPrix');
+        if (enteredPrix) {
+            var prixInput = document.getElementById('prix');
+            prixInput.value = enteredPrix;
+        }
+
+
+
+
+    }
+
+    var config = {
+        cUrl: 'https://api.countrystatecity.in/v1/countries',
+        ckey: 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA=='
+    }
+
+
+    var countrySelect = document.querySelector('.country'),
+        stateSelect = document.querySelector('.state');
+    citySelect = document.querySelector('.city')
+    function loadCountries() {
+        // console.log(localStorage.getItem('selectedCountry'))
+        // console.log(localStorage.getItem('selectedsate'));
+        let apiEndPoint = config.cUrl
+
+        fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            .then(Response => Response.json())
+            .then(data => {
+                data.forEach(country => {
+                    const option = document.createElement('option')
+                    option.value = country.iso2
+                    option.textContent = country.name
+                    countrySelect.appendChild(option)
+                    stateSelect.disabled = true
+                    stateSelect.style.pointerEvents = 'none'
+                })
+            })
+            .catch(error => console.error('Error loading countries:', error))
+        // console.log("work22");
+        stateSelect.disabled = true
+        // citySelect.disabled = true
+        stateSelect.style.pointerEvents = 'none'
+        // citySelect.style.pointerEvents = 'none'
+
+    }
+    function loadStates() {
+        stateSelect.disabled = true
+        // citySelect.disabled = true
+        stateSelect.style.pointerEvents = 'auto'
+        // citySelect.style.pointerEvents = 'none'
+
+        const selectedCountryCode = countrySelect.value
+        document.getElementById('countryh').value = countrySelect.options[countrySelect.selectedIndex].textContent;
+        // console.log( countrySelect.selectedIndex);
+        localStorage.setItem('selectedCountry', countrySelect.selectedIndex.toString());
+
+        // console.log(selectedCountryCode);
+        stateSelect.innerHTML = '<option value="">Select State</option>' // for clearing the existing states
+        // citySelect.innerHTML = '<option value="">Select City</option>' // Clear existing city options
+
+        fetch(`${config.cUrl}/${selectedCountryCode}/states`, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            .then(response => response.json())
+            .then(data => {
+                stateSelect.disabled = false
+                stateSelect.style.pointerEvents = 'auto'
+                data.forEach(state => {
+                    const option = document.createElement('option')
+                    option.value = state.iso2
+                    option.textContent = state.name
+                    stateSelect.appendChild(option)
+                })
+            })
+            .catch(error => console.error('Error loading countries:', error))
+
+
+    }
+
+
+    function loadCities() {
+        // citySelect.disabled = false
+        // citySelect.style.pointerEvents = 'auto'
+        //
+        // const selectedCountryCode = countrySelect.value
+        const selectedStateCode = stateSelect.value
+        document.getElementById('stateh').value = stateSelect.options[stateSelect.selectedIndex].textContent;
+        localStorage.setItem('selectedsate', stateSelect.selectedIndex);
+        // console.log(selectedCountryCode, selectedStateCode);
+
+        // citySelect.innerHTML = '<option value="">Select City</option>' // Clear existing city options
+        //
+        // fetch(`${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`, {headers: {"X-CSCAPI-KEY": config.ckey}})
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         // console.log(data);
+        //
+        //         data.forEach(city => {
+        //             const option = document.createElement('option')
+        //             option.value = city.iso2
+        //             option.textContent = city.name
+        //             citySelect.appendChild(option)
+        //         })
+        //     })
+    }
+
+    // window.onload =
+    // Call retrieveSpecialite function when the page loads
+    window.onload = function() {
+        loadCountries();
+        // const selectedIndex = parseInt(localStorage.getItem('selectedCountry'));
+        // if (!isNaN(selectedIndex) && localStorage.getItem('selectedCountry') > 0) {
+        //     countrySelect.selectedIndex  = selectedIndex;
+        //     console.log( countrySelect.selectedIndex);
+        //     console.log(parseInt(localStorage.getItem('selectedCountry')))
+        // }
+        // if (localStorage.getItem('selectedsate') > 0) {
+        //     document.getElementById('state').disabled = false;
+        //     document.getElementById('state').selectedIndex  = localStorage.getItem('selectedsate');
+        // }
+
+        retrieveSpecialite();
+    };
+</script>
+
+</body>
+{% endblock %}

@@ -35,9 +35,12 @@
                                                                         </tr>
                                                                      </thead>
                                                                         <tbody>
+{#                                                                        {% set key = 0 %}#}
                                                                         {% for key,rendez_vou in rendez_vouses %}
+
                                                                          <tr>
-                                                                                <td>{{ key + 1 }}</td>
+
+                                                                                 <td>{{ key + 1 }}</td>
                                                                                 <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
                                                                                 <td>{{ rendez_vou.time ? rendez_vou.time|date('H:i') : '' }}</td>
                                                                                 <td>{{ rendez_vou.statusRdv }}</td>
@@ -50,6 +53,7 @@
                                                                                     <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">Afficher</a>
                                                                                     <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">Modifier</a>
                                                                                 </td>
+
                                                                             </tr>
                                                                      {% else %}
                                                                             <tr>
@@ -59,7 +63,7 @@
                                                                         </tbody>
                                                                     </table>
 
-                                                                    <a href="{{ path('app_rendez_vous_new') }}">Demander un rendez-vous</a>
+{#                                                                    <a href="{{ path('app_rendez_vous_new') }}">Demander un rendez-vous</a>#}
                                     </div>
 
         </div>

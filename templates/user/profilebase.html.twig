@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheets %}
+        <!--     Fonts and icons     -->
+        <link href="{{ asset('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700') }}" rel="stylesheet" />
+        <!-- Nucleo Icons -->
+        <link href="{{ asset('/user/css/nucleo-icons.css') }}" rel="stylesheet" />
+        <link href="{{ asset('/user/css/nucleo-svg.css') }}" rel="stylesheet" />
+        <!-- Font Awesome Icons -->
+        <script src="{{ asset('https://kit.fontawesome.com/42d5adcbca.js') }}" crossorigin="anonymous"></script>
+        <link href="{{ asset('/user/css/nucleo-svg.css') }}" rel="stylesheet" />
+        <!-- CSS Files -->
+        <link id="pagestyle" href="{{ asset('/user/css/argon-dashboard.css') }}" rel="stylesheet" />
+
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+
+        <script src="{{ asset('/user/js/core/popper.min.js') }}"></script>
+        <script src="{{ asset('/user/js/core/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('/user/js/plugins/perfect-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('/user/js/plugins/smooth-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('/user/js/plugins/chartjs.min.js') }}"></script>
+        <script src="{{ asset('/user/js/argon-dashboard.min.js') }}"></script>
+        <script src="{{ asset('/user/js/argon-dashboard.js') }}"></script>
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+{%  block sidebar %}
+    <div class="position-absolute w-100 min-height-300 top-0" style=" background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;  ;background-image: url('{{ asset('/images/i4.jpg') }}'); background-position-y: 50%;">
+{#        <span class="mask bg-primary opacity-6"></span>#}
+    </div>
+{% endblock sidebar %}
+{% block body %}
+{% endblock %}
+</body>
+</html>

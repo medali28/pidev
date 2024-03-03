@@ -24,14 +24,18 @@ class AmbulanceController extends AbstractController
     #[Route('/', name: 'app_ambulance_index', methods: ['GET'])]
     public function index(AmbulanceRepository $ambulanceRepository): Response
     {
-        return $this->render('ambulance/index.html.twig', [
-            'ambulances' => $ambulanceRepository->findAll(),
-        ]);
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+                return $this->render('ambulance/index.html.twig', [
+                    'ambulances' => $ambulanceRepository->findAll(),
+                ]);
+            }} return $this->redirectToRoute('app_login');
     }
 
     #[Route('/new/{id}', name: 'app_ambulance_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, RendezVous $rendezVous): Response
-    {
+    {if ($this->getUser()) {
+        if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
         $ambulance = new Ambulance();
         $ambulance->setRdv($rendezVous);
         $ambulance->setLocalActuelPatient(" ");
@@ -55,19 +59,27 @@ class AmbulanceController extends AbstractController
             'ambulance' => $ambulance,
             'id' => $rendezVous->getId(),
         ]);
+    }}
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/{id}', name: 'app_ambulance_show', methods: ['GET'])]
     public function show(Ambulance $ambulance): Response
     {
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
         return $this->render('ambulance/show.html.twig', [
             'ambulance' => $ambulance,
         ]);
+    }}
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/{id}/edit', name: 'app_ambulance_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ambulance $ambulance, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
         $form = $this->createForm(AmbulanceType::class, $ambulance);
         $form->handleRequest($request);
 
@@ -81,16 +93,22 @@ class AmbulanceController extends AbstractController
             'ambulance' => $ambulance,
             'form' => $form,
         ]);
+    }}
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/{id}', name: 'app_ambulance_delete', methods: ['POST'])]
     public function delete(Request $request, Ambulance $ambulance, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$ambulance->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($ambulance);
-            $entityManager->flush();
-        }
+    {if ($this->getUser()) {
+        if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->isCsrfTokenValid('delete' . $ambulance->getId(), $request->request->get('_token'))) {
+                $entityManager->remove($ambulance);
+                $entityManager->flush();
+            }
 
-        return $this->redirectToRoute('app_ambulance_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_ambulance_index', [], Response::HTTP_SEE_OTHER);
+        }
+    }
+        return $this->redirectToRoute('app_login');
     }
 }
