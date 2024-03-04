@@ -357,20 +357,20 @@ class UserController extends AbstractController
     public function profile(AuthenticationUtils $authenticationUtils,$id ,UserRepository $userRepository , EntityManagerInterface $entityManager,RendezVousRepository $rendezVousRepository): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT" ){
-                $user = $userRepository->find($id);
-                if (!$user->getDisponibilite()){
-                    $user->setDisponibilite(True);
-//                    $entityManager->persist($user);
-                    $entityManager->flush();
-                }
-                $rdvs = $rendezVousRepository->findBy(['expert' => null]);
-                foreach ($rdvs as $rdv) {
-                    $rdv->setExpert($this->getUser());
-//                    $entityManager->persist($rdv);
-                    $entityManager->flush();
-                }
-        }
+//            if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT" ){
+//                $user = $userRepository->find($id);
+//                if (!$user->getDisponibilite()){
+//                    $user->setDisponibilite(True);
+////                    $entityManager->persist($user);
+//                    $entityManager->flush();
+//                }
+//                $rdvs = $rendezVousRepository->findBy(['expert' => null]);
+//                foreach ($rdvs as $rdv) {
+//                    $rdv->setExpert($this->getUser());
+////                    $entityManager->persist($rdv);
+//                    $entityManager->flush();
+//                }
+//        }
             return $this->render('main/main.html.twig');
 
         }

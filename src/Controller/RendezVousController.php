@@ -49,15 +49,15 @@ class RendezVousController extends AbstractController
                     $patient = $this->getUser();
                     $medecin = $userRepository->find($id);
                     $experts = $userRepository->getExpertdispo();
-                    if ($experts){
-                        $userIds = [];
-                        foreach ($experts as $expert) {
-                            $userIds[] = $expert->getId();
-                        }
-                        $randomUserId = $userIds[ array_rand($userIds)];
-                    }else{
-                        $randomUserId = null;
-                    }
+//                    if ($experts){
+//                        $userIds = [];
+//                        foreach ($experts as $expert) {
+//                            $userIds[] = $expert->getId();
+//                        }
+//                        $randomUserId = $userIds[ array_rand($userIds)];
+//                    }else{
+//                        $randomUserId = null;
+//                    }
 
 
                     $rendezvous = new RendezVous();
