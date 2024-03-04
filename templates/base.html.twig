@@ -38,6 +38,41 @@
             <script src="{{ asset('js/custom.js') }}"></script>
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <style>
+
+
+            .buttonProfile {
+                margin-left: 50px;
+                margin-right: 50px;
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .login-link{
+                height: 15px;
+                margin-bottom: 8px;
+                color: #ffffff;
+                text-align: center;
+                border: none;
+                background-color: transparent;
+            }
+            .signup-button {
+                background: linear-gradient(-135deg, #529CA7, #529CA7);
+                height:25px ;
+                padding: 5px ;
+                margin-left: 8px;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                /*background-color: #228b22; !* Green *!*/
+            }
+
+            .signup-button:hover {
+                background-color: #000000;
+            }
+        </style>
     </head>
     <body>
         {% block body %}{% endblock %}
@@ -62,11 +97,20 @@
                             <li class="nav-item">
                                 <a class="nav-link click-scroll" href="{{ path('app_test') }}">accueil</a>
                             </li>
-
+                            {% if app.user %}
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#section_2">Nos Experts Médicaux</a>
+                                <a class="nav-link click-scroll" href="{{ path('medecin', {'id':app.user.userIdentifier}) }}">Nos Médecin</a>
                             </li>
-
+                            {% endif %}
+                            {% if app.user %}
+                            {% if "ROLE_EXPERT" in app.user.roles %}
+                                <li class="nav-item">
+                                    <a class="nav-link click-scroll" href="{{ path('expert_list', {'expertId':app.user.userIdentifier}) }}">Demande Rendez-Vous</a>
+                                </li>
+                            {% endif %}
+                            {% endif %}
+                            {% if app.user %}
+                            {% if "ROLE_MEDECIN" in app.user.roles %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">financer une bonne cause</a>
 
@@ -74,17 +118,23 @@
 
 
                                     <li><a class="dropdown-item" href="{{ path('progress_create')}}">Ajouter</a></li>
+
                                     <li><a class="dropdown-item"  href="{{ path ('progress_view')}}">Lister</a></li>
 
                                 </ul>
                             </li>
+                            {% endif %}
+                            {% endif %}
+                         {% if app.user and  "ROLE_MEDECIN" in app.user.roles%}
+
+                             <li class="nav-item">
+                                 <a class="nav-link click-scroll" href="{{ path('medecin_appointments',{'medecinId':app.user.userIdentifier}) }}">My Rendez-Vous</a>
+                             </li>
+
+                            {% endif %}
 
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#section_4">FAQs</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link click-scroll" href="#section_5">Contact</a>
+                                <a class="nav-link click-scroll" href="{{ path('app_question_show') }}">Blog</a>
                             </li>
 
 
@@ -95,16 +145,45 @@
                                     <li><a class="dropdown-item active" href="{{ path('app_rendez_vous_index')}}">Rendez Vous</a></li>
 
                                     <li><a class="dropdown-item" href="{{ path('app_ambulance_index')}}">Ambulance</a></li>
+                                    {% if app.user %}
                                     <li><a class="dropdown-item"  href="{{ path ('app_gestion_donation')}}">Liste des dons</a></li>
+                                    {% endif %}
+                                    {% if app.user  %}
+                                        <li><a class="dropdown-item"  href="{{ path ('app_gestion_donation_user', {'id':app.user.userIdentifier})}}">Liste de mes dons</a></li>
+                                    {% endif %}
 
                                 </ul>
                             </li>
+                            {%  if app.user %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reclamation</a>
+
+                                    <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                        <li><a class="dropdown-item active" href="{{ path('mes_reclamations',{'id':app.user.userIdentifier}) }}">Mes Reclamation</a></li>
+
+                                        <li><a class="dropdown-item" href="{{ path('app_reclamation',{'id':app.user.userIdentifier}) }}">Ajouter Reclamation</a></li>
+
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if app.user and ("ROLE_PATIENT" in app.user.roles  or  "ROLE_MEDECIN" in app.user.roles) %}
+                                <li class="nav-item">
+                                    <a class="nav-link click-scroll"  href="{{ path('Update_data' , {'id':app.user.userIdentifier}) }}">profile</a>
+                                </li>
+                            {% endif %}
+                            {% if app.user and "ROLE_EXPERT" in app.user.roles%}
+                                <li class="nav-item">
+                                    <a class="nav-link click-scroll" href="{{ path('app_logout' , {'id':app.user.userIdentifier}) }}">Sign Out</a>
+                                </li>
+                            {% endif %}
                         </ul>
 
-                        <div class="d-none d-lg-block">
-                            <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
-                        </div>
-                    </div>
+                        {% if not app.user %}
+                            <div class="buttonProfile">
+                                <a class="login-link"  href="{{ path('app_login') }}"  >Login</a>
+                                <a class="button signup-button" href="{{ path('Register') }}">Signup</a>
+                            </div>
+                        {% endif %}
                 </div>
             </nav>
 
@@ -122,24 +201,26 @@
                         </div>
 
                         <div class="col-lg-3 col-md-4 col-6">
-                            <h6 class="site-footer-title mb-3">Resources</h6>
+                            <h6 class="site-footer-title mb-3">Feedback</h6>
 
                             <ul class="site-footer-links">
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">Home</a>
-                                </li>
+                               {%  if app.user %}
+                                   <li class="site-footer-link-item">
+                                       <a href="{{ path('app_reclamation',{'id':app.user.userIdentifier}) }}" class="site-footer-link">Reclamation</a>
+                                   </li>
+                                {% endif %}
 
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">How it works</a>
-                                </li>
+{#                                <li class="site-footer-link-item">#}
+{#                                    <a href="#" class="site-footer-link">How it works</a>#}
+{#                                </li>#}
 
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">FAQs</a>
-                                </li>
+{#                                <li class="site-footer-link-item">#}
+{#                                    <a href="#" class="site-footer-link">FAQs</a>#}
+{#                                </li>#}
 
-                                <li class="site-footer-link-item">
-                                    <a href="#" class="site-footer-link">Contact</a>
-                                </li>
+{#                                <li class="site-footer-link-item">#}
+{#                                    <a href="#" class="site-footer-link">Contact</a>#}
+{#                                </li>#}
                             </ul>
                         </div>
 

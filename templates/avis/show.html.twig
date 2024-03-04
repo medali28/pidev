@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Avis{% endblock %}
+
+{% block body %}
+
+    {# Ajouter le style personnalisé #}
+    <style>
+        .field {
+            height: 50px;
+            background: white;
+            box-shadow: 0 0 2em #e6e9f9;
+            padding: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            border-radius: 20px;
+            color: #4d4d4d;
+            margin-top: 5px;
+        }
+
+        .Desc {
+            height: 200px;
+            background: white;
+            box-shadow: 0 0 2em #e6e9f9;
+            padding: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            border-radius: 20px;
+            color: #4d4d4d;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+    </style>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Mes Avis</h2>
+                </div>
+            </div>
+
+            {# Formulaire de recherche #}
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <form action="{{ path('search_avis',{'id': id}) }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="term" placeholder="Rechercher une réclamation...">
+                            <button class="btn btn-primary" type="submit">Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Sujet</th>
+                                <th>description</th>
+                                <th>Rate</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for avi in avis %}
+                                <tr class="alert" role="alert">
+
+                                    <td>{{ avi.sujet }}</td>
+                                    <td>{{ avi.description }}</td>
+
+                                    <td>{{ avi.rate }}</td>
+
+                                    <td>
+                                        <a href="{{ path('edit_avis', {'id': id, 'ida': avi.id}) }}" class="btn btn-link"  style="color: #9a6e3a"
+                                        >Modifier</a>
+                                        <a href="{{ path('details_avis', {'id': id, 'avisId': avi.id}) }}"
+                                           class="btn-link"
+                                           style="color: red"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');">Supprimer</a>
+
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">Aucune Avis trouvée.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+{#                            <div class="d-flex justify-content-center mt-4">#}
+{#                                <a href="{{ path('app_avis', {'id': id}) }}"#}
+{#                                   class="btn btn-primary" style="background-color: #1E90FF">Ajouter une nouvelle#}
+{#                                    Avis</a>#}
+{#                            </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Inclure les scripts JavaScript ici #}
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/popper.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+
+{% endblock %}

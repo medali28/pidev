@@ -27,33 +27,55 @@ class MedicamentController extends AbstractController
     #[Route('/gestion/mecimaent', name: 'app_gestion_donation')]//show all medicaments
     public function showallDonation(Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
     {
-        $query = $medicamentRepository->findAll();
-        $medicaments = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1), /*page number*/
-            4 /*limit per page*/
-        );
+        if ($this->getUser()) {
+            $query = $medicamentRepository->findAll();
+            $medicaments = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1), /*page number*/
+                4 /*limit per page*/
+            );
 
 
-        return $this->render('medicament/showall_medicaments.html.twig', [
-            'medicaments' => $medicaments,
-        ]);
-    }
-    #[Route('/user-medicaments', name: 'user_medicaments')]//medicamnt of the logged in user
-    public function showUserMedicaments(MedicamentRepository $medicamentRepository): Response
+            return $this->render('medicament/showall_medicaments.html.twig', [
+                'medicaments' => $medicaments,
+            ]);
+        }
+        return $this->redirectToRoute('app_login');
+    }#[Route('/gestion/mecimaent/{id}', name: 'app_gestion_donation_user')]//show all medicaments
+    public function showDonation( $id ,Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
     {
-        $userid = $this->getUser();
+        if ($this->getUser()) {
+            $query = $medicamentRepository->findMedsByid($id);
+            $medicaments = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1), /*page number*/
+                4 /*limit per page*/
+            );
 
 
-        return $this->render('medicament/medicalentsperuser.html.twig', array(
-            'medicaments'=>$medicamentRepository->findMedicamentsBuser($userid)))
-            ;
+            return $this->render('medicament/showmedecamentsuser.html.twig', [
+                'medicaments' => $medicaments,
+            ]);
+        }
+        return $this->redirectToRoute('app_login');
     }
+//    #[Route('/user-medicaments', name: 'user_medicaments')]//medicamnt of the logged in user
+//    public function showUserMedicaments(MedicamentRepository $medicamentRepository): Response
+//    {
+//        if ($this->getUser()) {
+//            $userid = $this->getUser();
+//
+//
+//            return $this->render('medicament/medicalentsperuser.html.twig', array(
+//                'medicaments' => $medicamentRepository->findMedicamentsBuser($userid)));
+//        }
+//        return $this->redirectToRoute('app_login');
+//    }
     #[Route('/ajout/donation', name: 'ajoutdonation')]
 
     public function ajoutProduit(Request $request, ManagerRegistry $managerRegistry, SluggerInterface $slugger)
     {
-
+        if ($this->getUser()) {
         $medicament = new Medicament();
 
         $form = $this->createForm(AjoutmedType::class, $medicament);
@@ -100,6 +122,7 @@ class MedicamentController extends AbstractController
             }
 
             $entityManager = $managerRegistry->getManager();
+            $medicament->setUser($this->getUser());
             $entityManager->persist($medicament);
             $entityManager->flush();
 
@@ -111,6 +134,8 @@ class MedicamentController extends AbstractController
         return $this->render('medicament/addprod.html.twig', [
             'form' => $form->createView(),
         ]);
+        }
+        return $this->redirectToRoute('app_login');
     }
 
     private function generateSafeFilename($originalFilename):string
@@ -133,6 +158,7 @@ class MedicamentController extends AbstractController
     #[Route('/update/{id}', name: 'updateProduit')]
     public function  updateProduit(MedicamentRepository $medicamentRepository,$id,  Request  $request,ManagerRegistry $managerRegistry) : Response
     {
+        if ($this->getUser()) {
         $medciament=$medicamentRepository->find($id);
         $form = $this->createForm(ModifiermedType::class, $medciament);
         $form->handleRequest($request);
@@ -141,29 +167,36 @@ class MedicamentController extends AbstractController
             $em=$managerRegistry->getManager();
             $em->flush();
 
-            return $this->redirectToRoute('app_gestion_donation');
+            return $this->redirectToRoute('app_gestion_donation_user');
         }
         return $this->renderForm("medicament/update.html.twig",
-            ["form"=>$form]) ;
+            [
+                "form"=>$form,
+            'mede'=>$medciament
+            ]) ;
 
-
+    }
+return $this->redirectToRoute('app_login');
     }
     #[Route("/delete/{id}", name:'deleteProduit')]
     public function delete($id, MedicamentRepository $medicamentRepository,ManagerRegistry $managerRegistry)
     {
-        $medciament=$medicamentRepository->find($id);
-        $em = $managerRegistry->getManager();
-        $em->remove($medciament);
-        $em->flush() ;
-        $remainingMedicaments = $medicamentRepository->findAll();
-        foreach ($remainingMedicaments as $index => $remainingMedicament) {
-            $remainingMedicament->setId($index + 1);
-            $em->persist($remainingMedicament);
+        if ($this->getUser()) {
+            $medciament = $medicamentRepository->find($id);
+            $em = $managerRegistry->getManager();
+            $em->remove($medciament);
+            $em->flush();
+            $remainingMedicaments = $medicamentRepository->findAll();
+            foreach ($remainingMedicaments as $index => $remainingMedicament) {
+                $remainingMedicament->setId($index + 1);
+                $em->persist($remainingMedicament);
+            }
+            $em->flush();
+
+            return $this->redirectToRoute('app_gestion_donation');
         }
-        $em->flush();
 
-        return $this->redirectToRoute('app_gestion_donation');
+        return $this->redirectToRoute('app_login');
     }
-
 
 }

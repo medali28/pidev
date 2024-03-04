@@ -1,0 +1,56 @@
+
+
+<link rel="stylesheet" href="{{ asset('https://www.w3schools.com/w3css/4/w3.css') }}">
+<div class="container">
+
+    <!-- Première rangée -->
+    <div class="row">
+        <div class="col">
+            <h4>Moyenne des notes</h4>
+            <!-- Insérez ici le code pour afficher la moyenne des notes -->
+            <p>Moyenne : {{ moyenne }}</p>
+        </div>
+        <div class="col">
+            <h4>Nombre de revues</h4>
+            <!-- Insérez ici le code pour afficher le nombre total de revues -->
+            <p>Total : {{ total_reviews }}</p>
+        </div>
+    </div>
+
+    <!-- Deuxième rangée -->
+    <div class="row">
+        <div class="col">
+            <h4>Nombre de chaque note</h4>
+            {{ c2 }}
+            {{ c3 }}
+            {{ c4 }}
+            {{ c5 }}
+{#            {{(total_reviews - c1) * 20}}#}
+            <div class="w3-light-grey">
+                <div class="w3-grey" style="height:5px;width:{{(  c1 /total_reviews ) * 20}}%  ; max-width: 200px"></div>
+            </div>
+            <br>
+            <div class="w3-light-grey">
+                <div class="w3-grey" style="height:5px;width:{{ (c2 /total_reviews)*20 }}%"></div>
+            </div>
+            <br>
+            <div class="w3-light-grey">
+                <div class="w3-grey" style="height:5px;width:{{ (c3 /total_reviews)*20 }}%"></div>
+            </div>
+            <br>
+            <div class="w3-light-grey">
+                <div class="w3-grey" style="height:5px;width:{{ (c4 /total_reviews)*20 }}%"></div>
+            </div>
+            <br>
+            <div class="w3-light-grey">
+                <div class="w3-grey" style="height:5px;width:{{ (c5 /total_reviews)*20 }}%"></div>
+            </div>
+
+            <!-- Insérez ici le code pour afficher le nombre de revues pour chaque note -->
+{#            {% for rate, count in ratings_count %}#}
+{#                <p>Note {{ rate }} : {{ count }}</p>#}
+{#            {% endfor %}#}
+        </div>
+    </div>
+</div>
+

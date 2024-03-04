@@ -472,6 +472,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -485,6 +486,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
 
         return $this;
     }
@@ -542,6 +544,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
@@ -605,92 +608,145 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, RendezVous>
      */
+    
+
+
+#[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]
+    private Collection $id_patient;
+
+    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: RendezVous::class, orphanRemoval: true)]
+    private Collection $id_medecin;
+
+    #[ORM\OneToMany(mappedBy: 'expert', targetEntity: RendezVous::class)]
+    private Collection $id_expert;
+
+
+
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Question::class, orphanRemoval: true)]
+    private Collection $questions;
+
+    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reponse::class, orphanRemoval: true)]
+    private Collection $reponses;
+
+    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reclamation::class, orphanRemoval: true)]
+    private Collection $reclame;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Medicament::class)]
+    private Collection $medicaments;
+
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Avis::class)]
+    private Collection $avis;
+
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Reclamation::class)]
+    private Collection $reclamations;
+
+
+
+    public function __construct()
+{
+    $this->id_patient = new ArrayCollection();
+    $this->id_medecin = new ArrayCollection();
+    $this->id_expert = new ArrayCollection();
+    $this->questions = new ArrayCollection();
+    $this->reponses = new ArrayCollection();
+    $this->reclame = new ArrayCollection();
+    $this->medicaments = new ArrayCollection();
+    $this->avis = new ArrayCollection();
+    $this->reclamations = new ArrayCollection();
+
+}
+
+
+
+    /**
+     * @return Collection<int, RendezVous>
+     */
     public function getIdPatient(): Collection
-    {
-        return $this->id_patient;
-    }
+{
+    return $this->id_patient;
+}
 
     public function addIdPatient(RendezVous $idPatient): static
-    {
-        if (!$this->id_patient->contains($idPatient)) {
-            $this->id_patient->add($idPatient);
-            $idPatient->setPatient($this);
-        }
-
-        return $this;
+{
+    if (!$this->id_patient->contains($idPatient)) {
+        $this->id_patient->add($idPatient);
+        $idPatient->setPatient($this);
     }
+
+    return $this;
+}
 
     public function removeIdPatient(RendezVous $idPatient): static
-    {
-        if ($this->id_patient->removeElement($idPatient)) {
-            // set the owning side to null (unless already changed)
-            if ($idPatient->getPatient() === $this) {
-                $idPatient->setPatient(null);
-            }
+{
+    if ($this->id_patient->removeElement($idPatient)) {
+        // set the owning side to null (unless already changed)
+        if ($idPatient->getPatient() === $this) {
+            $idPatient->setPatient(null);
         }
-
-        return $this;
     }
+
+    return $this;
+}
 
     /**
      * @return Collection<int, RendezVous>
      */
     public function getIdMedecin(): Collection
-    {
-        return $this->id_medecin;
-    }
+{
+    return $this->id_medecin;
+}
 
     public function addIdMedecin(RendezVous $idMedecin): static
-    {
-        if (!$this->id_medecin->contains($idMedecin)) {
-            $this->id_medecin->add($idMedecin);
-            $idMedecin->setMedecin($this);
-        }
-
-        return $this;
+{
+    if (!$this->id_medecin->contains($idMedecin)) {
+        $this->id_medecin->add($idMedecin);
+        $idMedecin->setMedecin($this);
     }
+
+    return $this;
+}
 
     public function removeIdMedecin(RendezVous $idMedecin): static
-    {
-        if ($this->id_medecin->removeElement($idMedecin)) {
-            // set the owning side to null (unless already changed)
-            if ($idMedecin->getMedecin() === $this) {
-                $idMedecin->setMedecin(null);
-            }
+{
+    if ($this->id_medecin->removeElement($idMedecin)) {
+        // set the owning side to null (unless already changed)
+        if ($idMedecin->getMedecin() === $this) {
+            $idMedecin->setMedecin(null);
         }
-
-        return $this;
     }
+
+    return $this;
+}
 
     /**
      * @return Collection<int, RendezVous>
      */
     public function getIdExpert(): Collection
-    {
-        return $this->id_expert;
-    }
+{
+    return $this->id_expert;
+}
 
     public function addIdExpert(RendezVous $idExpert): static
-    {
-        if (!$this->id_expert->contains($idExpert)) {
-            $this->id_expert->add($idExpert);
-            $idExpert->setExpert($this);
-        }
-
-        return $this;
+{
+    if (!$this->id_expert->contains($idExpert)) {
+        $this->id_expert->add($idExpert);
+        $idExpert->setExpert($this);
     }
+
+    return $this;
+}
 
     public function removeIdExpert(RendezVous $idExpert): static
-    {
-        if ($this->id_expert->removeElement($idExpert)) {
-            // set the owning side to null (unless already changed)
-            if ($idExpert->getExpert() === $this) {
-                $idExpert->setExpert(null);
-            }
+{
+    if ($this->id_expert->removeElement($idExpert)) {
+        // set the owning side to null (unless already changed)
+        if ($idExpert->getExpert() === $this) {
+            $idExpert->setExpert(null);
         }
-
-        return $this;
     }
+
+    return $this;
+}
 
 
 
@@ -698,56 +754,146 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @return Collection<int, Question>
      */
     public function getQuestions(): Collection
-    {
-        return $this->questions;
-    }
+{
+    return $this->questions;
+}
 
     public function addQuestion(Question $question): static
-    {
-        if (!$this->questions->contains($question)) {
-            $this->questions->add($question);
-            $question->setPatient($this);
-        }
-
-        return $this;
+{
+    if (!$this->questions->contains($question)) {
+        $this->questions->add($question);
+        $question->setPatient($this);
     }
+
+    return $this;
+}
 
     public function removeQuestion(Question $question): static
-    {
-        if ($this->questions->removeElement($question)) {
-            // set the owning side to null (unless already changed)
-            if ($question->getPatient() === $this) {
-                $question->setPatient(null);
-            }
+{
+    if ($this->questions->removeElement($question)) {
+        // set the owning side to null (unless already changed)
+        if ($question->getPatient() === $this) {
+            $question->setPatient(null);
         }
-
-        return $this;
     }
+
+    return $this;
+}
 
     /**
      * @return Collection<int, Reponse>
      */
     public function getReponses(): Collection
-    {
-        return $this->reponses;
-    }
+{
+    return $this->reponses;
+}
 
     public function addReponse(Reponse $reponse): static
+{
+    if (!$this->reponses->contains($reponse)) {
+        $this->reponses->add($reponse);
+        $reponse->setMedecin($this);
+    }
+
+    return $this;
+}
+
+    public function removeReponse(Reponse $reponse): static
+{
+    if ($this->reponses->removeElement($reponse)) {
+        // set the owning side to null (unless already changed)
+        if ($reponse->getMedecin() === $this) {
+            $reponse->setMedecin(null);
+        }
+    }
+
+    return $this;
+}
+
+    /**
+     * @return Collection<int, Reclamation>
+     */
+    public function getReclame(): Collection
+{
+    return $this->reclame;
+}
+
+    public function addReclame(Reclamation $reclame): static
+{
+    if (!$this->reclame->contains($reclame)) {
+        $this->reclame->add($reclame);
+        $reclame->setMedecin($this);
+    }
+
+    return $this;
+}
+
+    public function removeReclame(Reclamation $reclame): static
+{
+    if ($this->reclame->removeElement($reclame)) {
+        // set the owning side to null (unless already changed)
+        if ($reclame->getMedecin() === $this) {
+            $reclame->setMedecin(null);
+        }
+    }
+
+    return $this;
+}
+
+    /**
+     * @return Collection<int, Medicament>
+     */
+    public function getMedicaments(): Collection
+{
+    return $this->medicaments;
+}
+
+    public function addMedicament(Medicament $medicament): static
+{
+    if (!$this->medicaments->contains($medicament)) {
+        $this->medicaments->add($medicament);
+        $medicament->setUser($this);
+    }
+
+    return $this;
+}
+
+    public function removeMedicament(Medicament $medicament): static
+{
+    if ($this->medicaments->removeElement($medicament)) {
+        // set the owning side to null (unless already changed)
+        if ($medicament->getUser() === $this) {
+            $medicament->setUser(null);
+        }
+    }
+
+    return $this;
+}
+
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvis(): Collection
     {
-        if (!$this->reponses->contains($reponse)) {
-            $this->reponses->add($reponse);
-            $reponse->setMedecin($this);
+        return $this->avis;
+    }
+
+    public function addAvi(Avis $avi): static
+    {
+        if (!$this->avis->contains($avi)) {
+            $this->avis->add($avi);
+            $avi->setPatient($this);
         }
 
         return $this;
     }
 
-    public function removeReponse(Reponse $reponse): static
+    public function removeAvi(Avis $avi): static
     {
-        if ($this->reponses->removeElement($reponse)) {
+        if ($this->avis->removeElement($avi)) {
             // set the owning side to null (unless already changed)
-            if ($reponse->getMedecin() === $this) {
-                $reponse->setMedecin(null);
+            if ($avi->getPatient() === $this) {
+                $avi->setPatient(null);
             }
         }
 
@@ -757,61 +903,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Reclamation>
      */
-    public function getReclame(): Collection
+    public function getReclamations(): Collection
     {
-        return $this->reclame;
+        return $this->reclamations;
     }
 
-    public function addReclame(Reclamation $reclame): static
+    public function addReclamation(Reclamation $reclamation): static
     {
-        if (!$this->reclame->contains($reclame)) {
-            $this->reclame->add($reclame);
-            $reclame->setMedecin($this);
+        if (!$this->reclamations->contains($reclamation)) {
+            $this->reclamations->add($reclamation);
+            $reclamation->setPatient($this);
         }
 
         return $this;
     }
 
-    public function removeReclame(Reclamation $reclame): static
+    public function removeReclamation(Reclamation $reclamation): static
     {
-        if ($this->reclame->removeElement($reclame)) {
+        if ($this->reclamations->removeElement($reclamation)) {
             // set the owning side to null (unless already changed)
-            if ($reclame->getMedecin() === $this) {
-                $reclame->setMedecin(null);
+            if ($reclamation->getPatient() === $this) {
+                $reclamation->setPatient(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Medicament>
-     */
-    public function getMedicaments(): Collection
+    public function __toString(): string
     {
-        return $this->medicaments;
+        return $this->id;
     }
 
-    public function addMedicament(Medicament $medicament): static
-    {
-        if (!$this->medicaments->contains($medicament)) {
-            $this->medicaments->add($medicament);
-            $medicament->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMedicament(Medicament $medicament): static
-    {
-        if ($this->medicaments->removeElement($medicament)) {
-            // set the owning side to null (unless already changed)
-            if ($medicament->getUser() === $this) {
-                $medicament->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
 }

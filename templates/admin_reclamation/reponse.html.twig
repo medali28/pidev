@@ -1,0 +1,32 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+    {% block content %}
+        <div class="bodyusers">
+            <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') }}">
+            <main class="main-content position-relative border-radius-lg bodyuser" >
+                <div class="min-height-300 bg-primary position-absolute w-100 "></div>
+                <div class="container-fluid py-4" style="background-color: transparent">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header pb-0 text-center">
+                                    <h6>Répondre à la réclamation</h6>
+                                </div>
+                                <div class="card-body px-4 pt-4 pb-2">
+                                    <form method="post">
+                                        <div class="mb-3">
+                                            <label for="reponse" class="form-label">Réponse</label>
+                                            <textarea class="form-control" id="reponse" name="reponse" rows="5"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background-color: #0cb8b6;">Envoyer</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    {% endblock %}
+{% endblock %}

@@ -21,7 +21,7 @@
                                         <section id="appointment">
                                             <h3>Prendre un rendez-vous</h3>
                                             <div class="container">
-                                                <form action="{{ path('app_rendez_vous_new') }}" method="post" onsubmit="return validateForm()">
+                                                <form  method="post" onsubmit="return validateForm()">
                                                     <input name="date" id="selectedDate" type="date" class="date" onchange="updateTimeOptions()">
                                                     <p style="color: black;">Entrer l'horaire souhaité</p>
                                                     <select id="horaire" name="time" class="horaire"> </select>

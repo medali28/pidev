@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{#{% block title %}AJouter une Reclamation{% endblock %}#}
+
+{% block body %}
+
+
+
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-4">Ajouter Avis</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <body>
+    <!-- partial:index.partial.html -->
+    <div class="screen-1">
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        <h1>Ajouter Votre Avis Ici</h1>
+        <div >
+            <label >Nom Medecin</label>
+{#            <div class="sec-2">#}
+{#                {{ form_widget(form.medecin ,  {'attr': {'placeholder': 'Enter Nom Medecin' , 'class':'field'}}) }}#}
+{#                {{ form_errors(form.medecin) }}#}
+{#            </div>#}
+        </div>
+        <div >
+            <label >Sujet</label>
+            <div class="sec-2">
+                {{ form_widget(form.sujet ,  {'attr': {'placeholder': 'Enter le Sujet' , 'class':'field'}}) }}
+                {{ form_errors(form.sujet) }}
+            </div>
+        </div>
+        <div >
+            <label >Rate</label>
+            <div class="">
+                {{ form_widget(form.rate ,  {'attr': {'placeholder': 'Enter rate' , 'class':'field'}}) }}
+                {{ form_errors(form.rate) }}
+            </div>
+        </div>
+        <div >
+            <label >Description</label>
+            <div class="sec-2">
+                {{ form_widget(form.description ,  {'attr': {'placeholder': 'Enter votre description' , 'class':'Desc'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+        </div>
+
+
+        {{ form_widget(form.submit ,  {'attr': {'class':'login'}}) }}
+
+    </div>
+    {{ form_end(form) }}
+    <!-- partial -->
+
+    </body>
+{% endblock %}
+

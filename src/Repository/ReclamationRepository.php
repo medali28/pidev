@@ -20,6 +20,16 @@ class ReclamationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Reclamation::class);
     }
+    public function findByPatientAndSearchTerm(int $id, string $term): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.patient = :id')
+            ->andWhere('r.sujet LIKE :term')
+            ->setParameter('id', $id)
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Reclamation[] Returns an array of Reclamation objects

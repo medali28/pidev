@@ -1,0 +1,986 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Multi Step Form | CodingNepal</title>
+{#    <link rel="stylesheet" href="{{ asset('/css/style_profile.css') }}">#}
+    <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css') }}">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*height: 10%;*/
+            /*min-height: 100vh;*/
+            /*overflow: hidden;*/
+            background: url('{{ asset('/user/images/i5.png') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        ::selection{
+            color: #fff;
+            background: #529CA7;
+        }
+        .container{
+            width: 800px;
+            height: 600px;
+            background: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 30px 35px 10px 35px;
+            margin-top: 20px;
+        }
+        .container header{
+            font-size: 35px;
+            font-weight: 600;
+            margin: 0 0 0 0;
+        }
+        .container .form-outer{
+            width: 100%;
+            overflow: hidden;
+        }
+        .container .form-outer form{
+            display: flex;
+            width: 400%;
+        }
+        .form-outer form .page{
+            width: 25%;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .form-outer form .page .title{
+            text-align: left;
+            font-size: 25px;
+            font-weight: 500;
+        }
+        .form-outer form .page .field{
+            width: 700px;
+            height: 60px;
+            margin: 15px 0 10px 0;
+            display: flex;
+            position: relative;
+
+        }
+        /*form .page .field .label{*/
+        /*    position: relative;*/
+        /*    top: -10px;*/
+        /*    margin-bottom: 10px;*/
+        /*    font-weight: 500;*/
+        /*}*/
+        /*form .page .field .row .inputf{*/
+        /*    height: 100%;*/
+        /*    width: 100%;*/
+        /*    border: 1px solid lightgrey;*/
+        /*    border-radius: 5px;*/
+        /*    margin-right: 30px;*/
+        /*    padding-left: 15px;*/
+        /*    font-size: 18px;*/
+        /*}*/
+        form .page .field input{
+            height: 100%;
+            width: 100%;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            margin-right: 30px;
+
+            padding-left: 15px;
+            font-size: 18px;
+        }
+
+        form .page .field select{
+            width: 100%;
+            height: 100%;
+            margin-right: 40px;
+            padding-left: 15px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        form .page .field .reset{
+            width: 120px;
+            height: calc(100%);
+            border: none;
+            background: #529CA7;
+            margin-right: 30px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 100;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.5s ease;
+        }
+        form .page .field .firstNext{
+            width: 50%;
+            height: calc(100% + 0px);
+            border: none;
+            background: #529CA7;
+            margin-bottom: 10px;
+            margin-left: 20px;
+            margin-right: 30px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.5s ease;
+        }
+        form .page .field .login-link{
+            width: 50%;
+            color: #262626;
+            margin-left: 20px;
+            margin-right: 30px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        form .page .field .SecondButton{
+            width: 100%;
+            height: calc(100% + 5px);
+            border: none;
+            background: #529CA7;
+            margin-top: 10px;
+            margin-left: 10px;
+            margin-right: 30px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.5s ease;
+        }
+        form .page .field button:hover{
+            background: #000;
+        }
+        form .page .btns button{
+            margin-top: 20px!important;
+        }
+        form .page .btns .SecondButton.prev{
+            margin-right: 3px;
+            font-size: 17px;
+            width: 50%;
+        }
+        form .page .btns .SecondButton.next{
+            width: 50%;
+            margin-left: 3px;
+        }
+        form .page .btns .SecondButton.submit{
+            width: 50%;
+            margin-left: 3px;
+        }
+        .container .progress-bar{
+            display: flex;
+            margin: 10px 0;
+            user-select: none;
+        }
+        .container .progress-bar .step{
+            text-align: center;
+            width: 100%;
+            position: relative;
+        }
+        .container .progress-bar .step p{
+            font-weight: 500;
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 8px;
+        }
+        .progress-bar .step .bullet{
+            height: 30px;
+            width: 30px;
+            border: 2px solid #000;
+            display: inline-block;
+            border-radius: 50%;
+            position: relative;
+            transition: 0.2s;
+            font-weight: 500;
+            font-size: 17px;
+            line-height: 30px;
+        }
+        .progress-bar .step .bullet.active{
+            border-color: #529CA7;
+            background: #529CA7;
+        }
+        .progress-bar .step .bullet span{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .progress-bar .step .bullet.active span{
+            display: none;
+        }
+        .progress-bar .step .bullet:before,
+        .progress-bar .step .bullet:after{
+            position: absolute;
+            content: '';
+            bottom: 11px;
+            right: -170px;
+            height: 3px;
+            width: 170px;
+            background: #262626;
+        }
+        .progress-bar .step .bullet.active:after{
+            background: #529CA7;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: animate 0.3s linear forwards;
+        }
+        @keyframes animate {
+            100%{
+                transform: scaleX(1);
+            }
+        }
+        .progress-bar .step:last-child .bullet:before,
+        .progress-bar .step:last-child .bullet:after{
+            display: none;
+        }
+        .progress-bar .step p.active{
+            color: #529CA7;
+            transition: 0.2s linear;
+        }
+        .progress-bar .step .check{
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            font-size: 15px;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .progress-bar .step .check.active{
+            display: block;
+            color: #fff;
+        }
+        .field{
+            width: 330px;
+            height: 45px;
+            margin: 45px 0;
+            display: flex;
+            position: relative;
+        }
+
+        .field .row {
+            align-items: center;
+            padding: revert;
+            width: 100%;
+            display: flex;
+            /*margin-bottom: 20px;*/
+
+        }
+        .field .row .div1{
+            height: 70px;
+            width:305px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        .field .row .div3 {
+            height: 70px;
+            width: 305px;
+            display: flex;
+        }
+        .field .row .div4 {
+            height: 70px;
+            margin-left: 45px;
+            width: 305px;
+            display: flex;
+        }
+        .field .row .div2{
+            height: 70px;
+            margin-left: 45px;
+            width:305px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            /*display: block;*/
+        }
+        .date{
+            display: inline;
+            align-items: baseline;
+
+            text-align: start;
+            margin-left: 45px;
+            width: 100px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+        }
+
+        .image {
+            text-align: center;
+        }
+
+        .image-input {
+            display: inline-block;
+        }
+
+        /*.error-message {*/
+        /*    color: red;*/
+        /*    font-size: 14px;*/
+        /*    margin-top: 5px;*/
+        /*}*/
+    </style>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        /*
+            Function: loadCountries
+            Description: Query the API for a list of countries to populate the select list.
+                         NOTE: Function will execute once the document is fully loaded.
+        */
+
+    </script>
+    <link rel="stylesheet" href="{{ asset('https://unpkg.com/leaflet@1.9.3/dist/leaflet.css') }}" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+    <script src="{{ asset('https://unpkg.com/leaflet@1.9.3/dist/leaflet.js') }}" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+</head>
+<body>
+<script src="{{ asset('https://kit.fontawesome.com/a076d05399.js') }}"></script>
+<div class="container">
+    <header>Signup Form</header>
+    <div class="progress-bar">
+        <div class="step">
+            <p>Info</p>
+            <div class="bullet">
+                <span>1</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+
+        <div class="step">
+            <p>Role</p>
+            <div class="bullet">
+                <span>2</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+        <div class="step">
+            <p>Password</p>
+            <div class="bullet">
+                <span>3</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+        <div class="step">
+            <p>Submit</p>
+            <div class="bullet">
+                <span>4</span>
+            </div>
+            <div class="check fas fa-check"></div>
+        </div>
+    </div>
+    <div class="form-outer">
+        {{ form_start(form ,{attr:{novalidate:'novalidate'}}) }}
+
+            <div class="page slide-page" style="margin-top:-10px ">
+                <div class="image-container">
+                    <div class="image">
+                        <div class="row">
+                            <label>Image:</label>
+                            {{ form_widget(form.image) }}
+                            {{ form_errors(form.image) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="row">
+                        <div class="div1">
+                            <label >Nom</label>
+                            {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Entrer votre Nom'}})  }}
+                            {{ form_errors(form.first_name , {'attr': {'class': 'error-message'}} ) }}
+                        </div>
+                        <div class="div2">
+                            <label>Prenom</label>
+                            {{ form_widget(form.last_name ,  {'attr': {'placeholder': 'Entrer votre prenom'}})  }}
+                            {{ form_errors(form.last_name, {'attr': {'class': 'error-message'}} ) }}
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="field">
+                    <div class="row">
+                       <div class="div1">
+                           <label>Email</label>
+                           {{ form_widget(form.email ,  {'attr': {'placeholder': 'Entrer votre Email'}})  }}
+                           {{ form_errors(form.email) }}
+
+                       </div>
+                     <div class="div2">
+                         <label>Telephone</label>
+                         {{ form_widget(form.num_tel ,  {'attr': {'placeholder': 'Entrer votre Telephone'}} ) }}
+                         {{ form_errors(form.num_tel) }}</div>
+
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="row">
+                       <div class="div1">
+                           <label>Gender</label>
+                           <select name="gender" id="gender"  >
+                               <option value="male">Male</option>
+                               <option value="female">Female</option>
+                           </select></div>
+                        <div class="div2">
+                            <label>Date de naissance</label>
+                            <input type="date" id="date_naissance"  name="date_naissance" placeholder="Date of Birth">
+                            <div id="dateError1" style="color: red; display: none;font-size:12px">La date de naissance ne doit pas être vide</div>
+                            <div id="dateError3" style="color: red; display: none;font-size:12px">L'age > 18 </div>
+                            <div id="dateError" style="color: red; display: none; font-size:12px">La date de naissance doit être dans le passé</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="row">
+
+                      <div class="div1">
+                          <label>Es-tu ?</label>
+                          <select name="roleSelect" id="roleSelect">
+                              <option value="patient">Patient</option>
+                              <option value="doctor">Medecin</option>
+                          </select></div>
+
+
+                    </div>
+                </div>
+                <div class="field" style="margin-top: 30px">
+                    <div class="login-link" >
+                        Have an account? <a href="{{ path('app_login') }}" type="button" id="login">Login</a>
+                    </div>
+                       <button class="firstNext next"  id="nextButton">Next</button></div>
+            </div>
+
+            <div class="page" style="margin-left: 90px">
+                <!-- Champs supplémentaires pour le rôle "patient" -->
+                <div class="patient-fields" style="display: none;">
+                    <div class="field">
+                        <div class="row">
+                           <div class="div1">
+                               <label>Maladie Chronique</label>
+                               <select name="maladie_chronique" id="maladie_chronique">
+                                   <option value="None">None</option>
+                                   <option value="Cardiaques">Cardiaques</option>
+                                   <option value="Diabète">Diabète</option>
+                                   <option value="Cancer">Cancer</option>
+                                   <option value="respiratoires chroniques">Respiratoires Chroniques</option>
+                                   <option value="rénales chroniques">Rénales Chroniques</option>
+                               </select></div>
+                           <div class="div2">
+                               <label>Groupe Sanguin</label>
+                               <select name="groupe_sanguin" id="groupe_sanguin">
+                                   <option value="None">None</option>
+                                   <option value="A+">A+</option>
+                                   <option value="A-">A-</option>
+                                   <option value="B+">B+</option>
+                                   <option value="B-">B-</option>
+                                   <option value="AB+">AB+</option>
+                                   <option value="AB-">AB-</option>
+                                   <option value="O+">O+</option>
+                                   <option value="O-">O-</option>
+                               </select></div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="row">
+                            <div class="div1" >
+                                <label>Antecedent Maladie</label>
+                                {{ form_widget(form.antecedent_maladie,  { 'id':'antecedent_maladie', 'attr': {'placeholder': 'Entrer votre Antecedent Maladie'}}) }}
+                                {{ form_errors(form.antecedent_maladie) }}</div>
+                            <div class="div2">
+                                <label>Antecedent Medicaux</label>
+                                {{ form_widget(form.antecedent_medicaux,  { 'id':'antecedent_medicaux','attr': {'placeholder': 'Entrer votre Antecedent Medicaux'}}) }}
+                                {{ form_errors(form.antecedent_medicaux) }} </div>
+
+                        </div>
+                    </div>
+                    <div class="field">
+                      <div class="row">
+                          <div class="div1">
+                              <label>Allergies</label>
+                              {{ form_widget(form.allergies ,  {'id':'allergies','attr': {'placeholder': 'Entrer votre Allergies'}}) }}
+                              {{ form_errors(form.allergies) }}
+                          </div>
+                      </div>
+
+                    </div>
+                </div>
+                <!-- Champs supplémentaires pour le rôle "medecin" -->
+                <div class="medecin-fields" style="display: none;">
+                    <div >
+                        <div class="row">
+                            <label>Diplômes:</label>
+                           <div class="div1"> {{ form_widget(form.diplomes ,  {'id':'diplomes' ,'attr': {'placeholder': 'Entrer votre doplomes'}} ) }}
+                               {{ form_errors(form.diplomes) }}</div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="row">
+                            <div class="div1">
+                                <label>Specialite</label>
+{#                                {{ form_widget(form.specialite ,  {'id':'specialite', 'attr': {'placeholder': 'Entrer votre Specialite' }}) }}#}
+{#                                {{ form_errors(form.specialite) }}#}
+                                <select id="specialite" name="specialite">
+                                    <option value="None">None</option>
+                                    <option value="Acupuncture">Acupuncture</option>
+                                    <option value="Addictologue">Addictologue</option>
+                                    <option value="Algologue (Douleur)">Algologue (Douleur)</option>
+                                    <option value="Allergologue">Allergologue</option>
+                                    <option value="Anatomo-Cyto-Pathologiste">Anatomo-Cyto-Pathologiste</option>
+                                    <option value="Andrologue">Andrologue</option>
+                                    <option value="Anesthésiste-Réanimateur">Anesthésiste-Réanimateur</option>
+                                    <option value="Angiologue">Angiologue</option>
+                                    <option value="Audiologiste">Audiologiste</option>
+                                    <option value="Audioprothésiste">Audioprothésiste</option>
+                                    <option value="Auriculothérapeute">Auriculothérapeute</option>
+                                    <option value="Biochimiste">Biochimiste</option>
+                                    <option value="Biochimiste Clinique">Biochimiste Clinique</option>
+                                    <option value="Biologiste Medicale">Biologiste Medicale</option>
+                                    <option value="Biophysique">Biophysique</option>
+                                    <option value="Cancérologue">Cancérologue</option>
+                                    <option value="Cardiologue (Cœur)">Cardiologue (Cœur)</option>
+                                    <option value="Cardiologue pédiatrique">Cardiologue pédiatrique</option>
+                                    <option value="Centre d'imagerie médicale">Centre d'imagerie médicale</option>
+                                    <option value="Chiropracteur">Chiropracteur</option>
+                                    <option value="Chirurgie Arthroscopique et du Sport">Chirurgie Arthroscopique et du Sport</option>
+                                    <option value="Chirurgie plastique et réparatrice">Chirurgie plastique et réparatrice</option>
+                                    <option value="Chirurgien">Chirurgien</option>
+                                    <option value="Chirurgien Buccal">Chirurgien Buccal</option>
+                                    <option value="Chirurgien Cancérologue">Chirurgien Cancérologue</option>
+                                    <option value="Chirurgien capillaire">Chirurgien capillaire</option>
+                                    <option value="Chirurgien Cardio-Vasculaire">Chirurgien Cardio-Vasculaire</option>
+                                    <option value="Chirurgien Cardio-Vasculaire Thoracique">Chirurgien Cardio-Vasculaire Thoracique</option>
+                                    <option value="Chirurgien cervico-facial">Chirurgien cervico-facial</option>
+                                    <option value="Chirurgien de l'obésité">Chirurgien de l'obésité</option>
+                                    <option value="Chirurgien Esthétique">Chirurgien Esthétique</option>
+                                    <option value="Chirurgien Généraliste">Chirurgien Généraliste</option>
+                                    <option value="Chirurgien Maxillo Facial et Esthétique">Chirurgien Maxillo Facial et Esthétique</option>
+                                    <option value="Chirurgien Maxillo Facial Stomatologue">Chirurgien Maxillo Facial Stomatologue</option>
+                                    <option value="Chirurgien Orthopédiste Pédiatrique">Chirurgien Orthopédiste Pédiatrique</option>
+                                    <option value="Chirurgien Orthopédiste Traumatologue">Chirurgien Orthopédiste Traumatologue</option>
+                                    <option value="Chirurgien Pédiatrique">Chirurgien Pédiatrique</option>
+                                    <option value="Chirurgien Plasticien">Chirurgien Plasticien</option>
+                                    <option value="Chirurgien Thoracique">Chirurgien Thoracique</option>
+                                    <option value="Chirurgien Urologue">Chirurgien Urologue</option>
+                                    <option value="Chirurgien vasculaire">Chirurgien vasculaire</option>
+                                    <option value="Chirurgien viscéral et digestif">Chirurgien viscéral et digestif</option>
+                                    <option value="Dentiste (Dents)">Dentiste (Dents)</option>
+                                    <option value="Dermatologue (Peau)">Dermatologue (Peau)</option>
+                                    <option value="Diabétologue">Diabétologue</option>
+                                    <option value="Diététicien">Diététicien</option>
+                                    <option value="Embryologiste">Embryologiste</option>
+                                    <option value="Endocrinologue">Endocrinologue</option>
+                                    <option value="Endocrinologue Diabétologue">Endocrinologue Diabétologue</option>
+                                    <option value="Endodontiste">Endodontiste</option>
+                                    <option value="Epidemiologiste">Epidemiologiste</option>
+                                    <option value="Ergothérapeute">Ergothérapeute</option>
+                                    <option value="Gastro-entérologue">Gastro-entérologue</option>
+                                    <option value="Généraliste">Généraliste</option>
+                                    <option value="Généticien">Généticien</option>
+                                    <option value="Gériatre">Gériatre</option>
+                                    <option value="Gynécologue">Gynécologue</option>
+                                    <option value="Gynécologue Obstétricien">Gynécologue Obstétricien</option>
+                                    <option value="Hématologue">Hématologue</option>
+                                    <option value="Hématologue Clinique">Hématologue Clinique</option>
+                                    <option value="Hématopathologiste">Hématopathologiste</option>
+                                    <option value="Hépatologue  (Foie)">Hépatologue  (Foie)</option>
+                                    <option value="Hypnothérapeute">Hypnothérapeute</option>
+                                    <option value="Imagerie Médicale">Imagerie Médicale</option>
+                                    <option value="Immunologiste">Immunologiste</option>
+                                    <option value="Immunopathologiste">Immunopathologiste</option>
+                                    <option value="Implantologue">Implantologue</option>
+                                    <option value="Infirmier">Infirmier</option>
+                                    <option value="Interniste">Interniste</option>
+                                    <option value="Interniste Hypertensiologue">Interniste Hypertensiologue</option>
+                                    <option value="Interniste Maladies Infectieuses">Interniste Maladies Infectieuses</option>
+                                    <option value="Interniste Réanimation Médicale">Interniste Réanimation Médicale</option>
+                                    <option value="Kinésithérapeute">Kinésithérapeute</option>
+                                    <option value="Laboratoire d'analyses de biologie médicale">Laboratoire d'analyses de biologie médicale</option>
+                                    <option value="Laboratoire d'anatomie et cytologie pathologiques">Laboratoire d'anatomie et cytologie pathologiques</option>
+                                    <option value="Laboratoire de cytogénétique">Laboratoire de cytogénétique</option>
+                                    <option value="Maladies Cardiovasculaire">Maladies Cardiovasculaire</option>
+                                    <option value="Maladies Infectieuses">Maladies Infectieuses</option>
+                                    <option value="Médecin Biologiste">Médecin Biologiste</option>
+                                    <option value="Médecin de famille">Médecin de famille</option>
+                                    <option value="Médecin du sommeil">Médecin du sommeil</option>
+                                    <option value="Médecin du sport">Médecin du sport</option>
+                                    <option value="Médecin du Travail">Médecin du Travail</option>
+                                    <option value="Médecin Esthétique">Médecin Esthétique</option>
+                                    <option value="Médecin Hémodialyseur">Médecin Hémodialyseur</option>
+                                    <option value="Médecin homéopathe">Médecin homéopathe</option>
+                                    <option value="Médecin Légiste">Médecin Légiste</option>
+                                    <option value="Médecin Nucléaire">Médecin Nucléaire</option>
+                                    <option value="Médecin Physique Réadaptateur">Médecin Physique Réadaptateur</option>
+                                    <option value="Médecin urgentiste">Médecin urgentiste</option>
+                                    <option value="Médecine douce et alternative">Médecine douce et alternative</option>
+                                    <option value="Médecine morphologique et anti-âge">Médecine morphologique et anti-âge</option>
+                                    <option value="Médecine Préventive">Médecine Préventive</option>
+                                    <option value="Médecine tropicale">Médecine tropicale</option>
+                                    <option value="Microbiologiste">Microbiologiste</option>
+                                    <option value="Néonatologiste">Néonatologiste</option>
+                                    <option value="Néphrologue">Néphrologue</option>
+                                    <option value="Neurochirurgien">Neurochirurgien</option>
+                                    <option value="Neurologue  (Cerveau et Nerfs)">Neurologue  (Cerveau et Nerfs)</option>
+                                    <option value="Neuropédiatre">Neuropédiatre</option>
+                                    <option value="Neurophysiologiste">Neurophysiologiste</option>
+                                    <option value="Neuropsychiatre">Neuropsychiatre</option>
+                                    <option value="Neuropsychologue">Neuropsychologue</option>
+                                    <option value="Nutrithérapeute">Nutrithérapeute</option>
+                                    <option value="Nutritionniste">Nutritionniste</option>
+                                    <option value="Oncologue">Oncologue</option>
+                                    <option value="Oncologue-Chimiothérapeute">Oncologue-Chimiothérapeute</option>
+                                    <option value="Oncologue-Radiothérapeute">Oncologue-Radiothérapeute</option>
+                                    <option value="Ophtalmologiste  (Yeux)">Ophtalmologiste  (Yeux)</option>
+                                    <option value="Opticien">Opticien</option>
+                                    <option value="Orthodontiste">Orthodontiste</option>
+                                    <option value="Orthopédiste  (Os)">Orthopédiste  (Os)</option>
+                                    <option value="Orthopédiste Traumatologue">Orthopédiste Traumatologue</option>
+                                    <option value="Orthophoniste">Orthophoniste</option>
+                                    <option value="Orthoprothésiste">Orthoprothésiste</option>
+                                    <option value="Orthoptiste">Orthoptiste</option>
+                                    <option value="Ostéopathe">Ostéopathe</option>
+                                    <option value="Oto-Rhino-Laryngologiste (ORL)  (Oreille nez gorge)">Oto-Rhino-Laryngologiste (ORL)  (Oreille nez gorge)</option>
+                                    <option value="Parasitologiste">Parasitologiste</option>
+                                    <option value="Parodontiste implantologiste">Parodontiste implantologiste</option>
+                                    <option value="Pédiatre  (Enfant)">Pédiatre  (Enfant)</option>
+                                    <option value="Pédodontiste">Pédodontiste</option>
+                                    <option value="Pédopsychiatre">Pédopsychiatre</option>
+                                    <option value="Perineologue">Perineologue</option>
+                                    <option value="Pharmacien">Pharmacien</option>
+                                    <option value="Pharmacien Biologiste">Pharmacien Biologiste</option>
+                                    <option value="Pharmacologue">Pharmacologue</option>
+                                    <option value="Phlébologue">Phlébologue</option>
+                                    <option value="Physiologiste">Physiologiste</option>
+                                    <option value="Physiothérapeute">Physiothérapeute</option>
+                                    <option value="Phytothérapeute">Phytothérapeute</option>
+                                    <option value="Pneumologue">Pneumologue</option>
+                                    <option value="Podologue">Podologue</option>
+                                    <option value="Posturologue">Posturologue</option>
+                                    <option value="Proctologue">Proctologue</option>
+                                    <option value="Prothésiste Capillaire">Prothésiste Capillaire</option>
+                                    <option value="Prothésiste dentaire">Prothésiste dentaire</option>
+                                    <option value="Psychanalyste">Psychanalyste</option>
+                                    <option value="Psychiatre  (Troubles mentaux)">Psychiatre  (Troubles mentaux)</option>
+                                    <option value="Psychologue">Psychologue</option>
+                                    <option value="Psychologue clinicien">Psychologue clinicien</option>
+                                    <option value="Psychomotricien">Psychomotricien</option>
+                                    <option value="Psychothérapeute">Psychothérapeute</option>
+                                    <option value="Radiologue">Radiologue</option>
+                                    <option value="Radiothérapeute">Radiothérapeute</option>
+                                    <option value="Réanimateur Médical">Réanimateur Médical</option>
+                                    <option value="Réflexologue">Réflexologue</option>
+                                    <option value="Rhumatologue">Rhumatologue</option>
+                                    <option value="Rythmologue interventionnel">Rythmologue interventionnel</option>
+                                    <option value="Sage femme">Sage femme</option>
+                                    <option value="Santé publique et médecine sociale">Santé publique et médecine sociale</option>
+                                    <option value="Sénologue">Sénologue</option>
+                                    <option value="Sexologue">Sexologue</option>
+                                    <option value="Stomatologue">Stomatologue</option>
+                                    <option value="Thérapeute manuel">Thérapeute manuel</option>
+                                    <option value="Urodynamique">Urodynamique</option>
+                                    <option value="Urologue">Urologue</option>
+                                    <option value="Vétérinaire">Vétérinaire</option>
+                                    </select>
+                               </div>
+                            <div class="div2">
+                                <label>Telephone 2</label>
+                                {{ form_widget(form.num_tel2 ,  { 'id':'num_tel2' ,'attr': {'placeholder': 'Entrer votre 2eme numero Telephone'}}) }}
+                                {{ form_errors(form.num_tel2) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="row " >
+                            <div class="div1" style="align-items: start">
+                                <label>Date debut</label>
+                                <input type="time" id="date_debut" name="date_debut" ></div>
+                            <div class="div2">
+                                <label>Date fin</label>
+                                <input type="time"  id="date_fin" name="date_fin"></div>
+
+                        </div>
+
+                    </div>
+                    <div id="timeerror" style="color: red;margin-bottom: -10px ; margin-left: -30px ;display: none;font-size:14px">La différence entre l'heure de début et l'heure de fin doit être d'au moins 3 heures.</div>
+                    <br>
+                    <div class="field">
+                        <div class="row">
+                            <div class="div1" style="margin-top: -40px">
+                                <label>Prix de concultation</label>
+                                {{ form_widget(form.prix_c ,  {'id':'prix_c' ,'attr': {'placeholder': 'Entrer votre prix',}}) }}
+                                {{ form_errors(form.prix_c) }}</div>
+                           <div class="div2" style="margin-top: -40px">
+                               <label>Durée de rendez-vouz</label>
+                               <select name="dure_rdv" id="dure_rdv">
+                                   <option value="15:00">15 min</option>
+                                   <option value="20:00">20 min</option>
+                                   <option value="30:00">30 min</option>
+                                   <option value="40:00">40 min</option>
+                                   <option value="50:00">50 min</option>
+                                   <option value="60:00">60 min</option>
+                               </select></div>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="field btns " style="margin-top: -50px">
+                    <button class="prev-1 SecondButton prev" >Previous</button>
+                    <button class="next-1 SecondButton next">Next </button>
+                </div>
+            </div>
+
+            <div class="page">
+                <div id="map" style="width: 80%; height: 200px;"></div>
+                <script>
+                    {#<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>#}
+
+                let first =true ;
+                    let marker , circle , lat , lng;
+                    var map = L.map('map');
+                    map.setView([51.505, -0.09], 13);
+
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    navigator.geolocation.watchPosition(success, error);
+                    function success(pos) {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const accuracy = pos.coords.accuracy;
+                        if (marker){
+                            marker.remove();
+                            circle.remove();
+                        }
+
+                        if (first){
+                            first = false;
+                            map.setView([lat,lng], 14);
+                        }
+                        marker =   L.marker([lat,lng] , {
+                            draggable:true,
+                        }).addTo(map);
+                        reverseGeocode(lat, lng);
+                        circle=   L.circle([lat,lng], {radius:accuracy}).addTo(map);
+
+                    }
+                    function reverseGeocode(lat, lng) {
+                        // Send a reverse geocoding request to Nominatim API
+                        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+                            .then(response => response.json())
+                            .then(data => {
+                                var country = data.address.country;
+                                var city = data.address.state  || data.address.city || data.address.village || data.address.hamlet;
+                                console.log('Country: ' + country);
+                                console.log('City: ' + city);
+                                console.log('lat: ' + lat);
+                                console.log('lng: ' + lng);
+                                document.getElementById('countryInput').value = country;
+                                document.getElementById('stateDisplay').value = city;
+                                document.getElementById('latitudeDisplay').value = lat;
+                                document.getElementById('longitudeDisplay').value = lng;
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    }
+
+                    map.on('click',(e)=>{
+                        console.log(e);
+                        lat = e.latlng.lat;
+                        lng = e.latlng.lng ;
+                        console.log(lat);
+                        map.setView([lat,lng], 16);
+                        marker.remove();
+                        marker = L.marker([lat,lng] , {
+                            draggable:true,
+                        }).addTo(map);
+                        reverseGeocode(lat,lng);
+                    })
+
+                    function error(err) {
+                        if (err.code === 1) {
+                            alert("Please allow geolocation access");
+                        } else {
+                            alert("Cannot get current location");
+                        }
+                    }
+
+
+
+                </script>
+                <br>
+                <div class="field">
+                    <div class="row">
+                        <div class="div1">
+                            Pays<br>
+
+                            <input type="text" id="countryInput" name="countryInput" placeholder="Country" readonly>
+
+                        </div>
+                        <div class="div2">
+                            Ville<br>
+
+                            <input type="text" id="stateDisplay" name="stateDisplay" placeholder="City" readonly>
+
+                        </div>
+                    </div>
+                    <input type="number" id="latitudeDisplay" value="" name="latitudeDisplay" hidden="hidden" readonly>
+                    <input type="number" id="longitudeDisplay" value="" name="longitudeDisplay" hidden="hidden" readonly>
+
+                </div>
+                <div class="field btns">
+                    <button class="prev-2 SecondButton prev">Previous</button>
+                    <button class="next-2 SecondButton next">Next</button>
+                </div>
+            </div>
+
+            <div class="page">
+                <div class="field" style="height: 30% ; ">
+                    <div class="row" >
+                        <div style="height: 40% ;width: 100%;">
+                            {{ form_widget(form.password ,  {'attr': {'placeholder': 'Entrer votre Password'}}) }}
+                            {{ form_errors(form.password) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="field" style="height: 30% ">
+                    <div class="row">
+                        <div style="height: 40% ; width: 120%;">{{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Entrer votre Confirm Password'}}) }}
+                            {{ form_errors(form.confirm_password) }}</div>
+                    </div>
+                </div>
+                <div class="field btns ">
+                    <button class="prev-3 SecondButton prev">Previous</button>
+                    <button  class="SecondButton submit" id="lastbutton">Submit</button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+<script src="{{ asset('/user/js/script.js') }}"></script>
+<script>
+    document.getElementById('date_debut').addEventListener('change', function() {
+        validateTimeDifference();
+    });
+
+    document.getElementById('date_fin').addEventListener('change', function() {
+        validateTimeDifference();
+    });
+
+    function validateTimeDifference() {
+        var startTime = document.getElementById('date_debut').value;
+        var endTime = document.getElementById('date_fin').value;
+        var startDate = new Date('2000-01-01 ' + startTime);
+        var endDate = new Date('2000-01-01 ' + endTime);
+        var timeDiff = endDate - startDate;
+        var hoursDiff = timeDiff / (1000 * 60 * 60);
+        if (hoursDiff < 3) {
+            document.getElementById('timeerror').style.display = 'block';
+        }else{
+            document.getElementById('timeerror').style.display = 'none';
+        }
+    }
+
+    document.getElementById('date_naissance').addEventListener('change', function() {
+        var selectedDate = new Date(this.value);
+
+        var today = new Date();
+        console.log(today.getFullYear() - selectedDate.getFullYear());
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate > today) {
+            document.getElementById('dateError1').style.display = 'none';
+
+            document.getElementById('dateError').style.display = 'block';
+            document.getElementById('nextButton').disabled = true;
+        } else if (today.getFullYear() - selectedDate.getFullYear()  < -1 ) {
+            document.getElementById('dateError1').style.display = 'none';
+
+            document.getElementById('dateError3').style.display = 'block';
+                document.getElementById('nextButton').disabled = true;
+        }else{
+            document.getElementById('dateError1').style.display = 'none';
+
+            document.getElementById('dateError3').style.display = 'none';
+            document.getElementById('dateError').style.display = 'none';
+            document.getElementById('nextButton').disabled = false;
+        }
+    });
+
+    function toggleFields() {
+        var dateNaissanceValue = document.getElementById('date_naissance').value;
+        console.log("test")
+        console.log(dateNaissanceValue)
+        if (!dateNaissanceValue.trim()) {
+            document.getElementById('dateError1').style.display = 'block';
+            document.getElementById('nextButton').disabled = true;
+            document.getElementById('lastbutton').disabled = true;
+        } else {
+            document.getElementById('dateError1').style.display = 'none';
+            document.getElementById('lastbutton').disabled = false;
+            const roleSelect = document.getElementById('roleSelect');
+            const patientFields = document.querySelector('.page .patient-fields');
+            const medecinFields = document.querySelector('.page .medecin-fields');
+            console.log(roleSelect.value);
+            if (roleSelect.value === 'patient') {
+                patientFields.style.display = 'block';
+                medecinFields.style.display = 'none';
+                document.getElementById('diplomes').value = '';
+                document.getElementById('specialite').value = 'none';
+                document.getElementById('num_tel2').value = '';
+                document.getElementById('date_debut').value = '';
+                document.getElementById('date_fin').value = '';
+                document.getElementById('prix_c').value = '';
+                document.getElementById('dure_rdv').value = '15';
+            } else if (roleSelect.value === 'doctor') {
+                patientFields.style.display = 'none';
+                medecinFields.style.display = 'block';
+                console.log(document.getElementById('antecedent_maladie').value);
+                document.getElementById('maladie_chronique').value = 'None';
+                document.getElementById('groupe_sanguin').value = 'None';
+                document.getElementById('antecedent_maladie').value = '';
+                document.getElementById('antecedent_medicaux').value = '';
+                document.getElementById('allergies').value = '';
+                console.log(document.getElementById('antecedent_maladie').value);
+            }
+        }
+
+
+    }
+    document.getElementById('nextButton').addEventListener('click', toggleFields);
+    document.querySelector('.submit').addEventListener('click', function() {
+        console.log("it's work")
+        document.querySelector('form').submit();
+    });
+    // function login() {
+    //     console.log("here")
+    //     window.location.href = `https://127.0.0.1:8000/login` ;
+    // }
+    // document.getElementById('login').addEventListener('click', login);
+    // Function to fetch country data
+
+
+
+</script>
+<script src="{{ asset('/user/js/country.js') }}"></script>
+</body>
+</html>

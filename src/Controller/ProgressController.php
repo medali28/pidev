@@ -21,21 +21,26 @@ class ProgressController extends AbstractController
     #[Route('/progress/create', name: 'progress_create')]
     public function create(Request $request,ManagerRegistry $managerRegistry): Response
     {
-        $progressBar = new ProgressBar();
-        $form = $this->createForm(TargetFormType::class, $progressBar);
-        $form->handleRequest($request);
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+                $progressBar = new ProgressBar();
+                $form = $this->createForm(TargetFormType::class, $progressBar);
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $managerRegistry->getManager();
-            $entityManager->persist($progressBar);
-            $entityManager->flush();
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $entityManager = $managerRegistry->getManager();
+                    $entityManager->persist($progressBar);
+                    $entityManager->flush();
 
-            return $this->redirectToRoute('progress_view', ['id' => $progressBar->getId()]);
+                    return $this->redirectToRoute('progress_view', ['id' => $progressBar->getId()]);
+                }
+
+                return $this->render('progress/create.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
         }
-
-        return $this->render('progress/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('app_login');
     }
 
 
@@ -44,69 +49,79 @@ class ProgressController extends AbstractController
 
     public function view(ProgressBarRepository $progressBarRepository): Response
     {
-        $progressBar=$progressBarRepository->findAll();
-        return $this->render('progress/view.html.twig', [
-            'progressBar' => $progressBar,
-        ]);
+        if ($this->getUser() ) {
+
+            $progressBar = $progressBarRepository->findAll();
+            return $this->render('progress/view.html.twig', [
+                'progressBar' => $progressBar,
+            ]);
+        }
+        return $this->redirectToRoute('app_login');
     }
     #[Route('/progress/{id}', name: 'progress_edit')]
-
     public function edit($id, Request $request, ManagerRegistry $managerRegistry, ProgressBarRepository $progressBarRepository): Response
     {
-        $progressBar = $progressBarRepository->find($id);
+        if ($this->getUser()) {
+            $progressBar = $progressBarRepository->find($id);
 
-        // Create form for editing current value
-        $form = $this->createForm(EditProgreesType::class);
-        $form->handleRequest($request);
+            // Create form for editing current value
+            $form = $this->createForm(EditProgreesType::class);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $amounttopay = $form->get('flous')->getData();
-            $targetValue = $progressBar->getTarget();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $amounttopay = $form->get('flous')->getData();
+                $targetValue = $progressBar->getTarget();
 
-            if ($amounttopay <= $targetValue) {
-                $progressBar->setCurrent($progressBar->getCurrent() + $amounttopay);
-                $entityManager = $managerRegistry->getManager();
-                $entityManager->flush();
-                return $this->redirectToRoute('stripe_payment', ['amount' => $amounttopay]);
-            } else {
-                $this->addFlash('error', 'Current value cannot exceed the target value.');
+                if ($amounttopay <= $targetValue) {
+                    $progressBar->setCurrent($progressBar->getCurrent() + $amounttopay);
+                    $entityManager = $managerRegistry->getManager();
+                    $entityManager->flush();
+                    return $this->redirectToRoute('stripe_payment', ['amount' => $amounttopay]);
+                } else {
+                    $this->addFlash('error', 'Current value cannot exceed the target value.');
+                }
             }
-        }
 
-        return $this->render('progress/edit.html.twig', [
-            'form' => $form->createView(),
-            'progressBar' => $progressBar,
-        ]);
+            return $this->render('progress/edit.html.twig', [
+                'form' => $form->createView(),
+                'progressBar' => $progressBar,
+            ]);
+
+        }
+        return $this->redirectToRoute('app_login');
     }
     #[Route('/stripe/payment', name: 'stripe_payment')]
 
     public function stripePayment(Request $request)
     {
-        // Get amount from request
-        $amount = $request->query->get('amount');
+        if ($this->getUser()) {
+            // Get amount from request
+            $amount = $request->query->get('amount');
 
-        // Create payment session with Stripe
-        Stripe::setApiKey('sk_test_51Oo6gMEbvcankNU3vagYs8vZKYbEoKrIqEtFVRT5hZYX2V6SYw9IZlpNj7uw3YbspPp8jR9gesDnXFwi7KUexaAJ00kBgKyXTx');
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [
-                [
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'unit_amount' => $amount * 100, // Amount in cents
-                        'product_data' => [
-                            'name' => 'Progress Bar Payment',
+            // Create payment session with Stripe
+            Stripe::setApiKey('sk_test_51Oo6gMEbvcankNU3vagYs8vZKYbEoKrIqEtFVRT5hZYX2V6SYw9IZlpNj7uw3YbspPp8jR9gesDnXFwi7KUexaAJ00kBgKyXTx');
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'usd',
+                            'unit_amount' => $amount * 100, // Amount in cents
+                            'product_data' => [
+                                'name' => 'Progress Bar Payment',
+                            ],
                         ],
+                        'quantity' => 1,
                     ],
-                    'quantity' => 1,
                 ],
-            ],
-            'mode' => 'payment',
-            'success_url' => $this->generateUrl('stripe_payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'cancel_url' => $this->generateUrl('stripe_payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-        ]);
+                'mode' => 'payment',
+                'success_url' => $this->generateUrl('stripe_payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'cancel_url' => $this->generateUrl('stripe_payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ]);
 
-        return $this->redirect($session->url);
+            return $this->redirect($session->url);
+        }
+        return $this->redirectToRoute('app_login');
     }
 
 
@@ -115,23 +130,28 @@ class ProgressController extends AbstractController
     {
         // Handle payment success
         // Update progress bar based on the payment amount
-
+if ($this->getUser()){
 
         return $this->redirectToRoute('progress_view');
     }
+return $this->redirectToRoute('app_login');
+    }
 
     #[Route('/stripe/payment/cancel', name: 'stripe_payment_cancel')]
-
-
     public function stripePaymentCancel()
     {
-        // Handle payment cancellation
+        if ($this->getUser()){
+
+            // Handle payment cancellation
         $this->addFlash('error', 'Payment was cancelled.');
         return $this->redirectToRoute('progress_view');
+    }
+        return $this->redirectToRoute('app_login');
     }
     #[Route('/progress/{id}/delete', name: 'progress_delete')]
     public function delete($id, ProgressBarRepository $progressBarRepository, ManagerRegistry $managerRegistry): Response
     {
+        if ($this->getUser()){
         $progressBar = $progressBarRepository->find($id);
 
         if (!$progressBar) {
@@ -146,6 +166,8 @@ class ProgressController extends AbstractController
 
         return $this->redirectToRoute('progress_view');
     }
+return $this->redirectToRoute('app_login');
+}
 
 
 

@@ -45,4 +45,15 @@ class MedicamentRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findMedsByid($id)
+    {
+        $queryBuilder = $this->createQueryBuilder('m')
+          ->join('m.user', 'u')
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $id);
+
+        return $queryBuilder->getQuery()->getResult();
+
+    }
 }
