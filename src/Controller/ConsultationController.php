@@ -29,7 +29,7 @@ class ConsultationController extends AbstractController
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
                 return $this->render('consultation/index.html.twig', [
-                    'consultations' => $consultationRepository->findAll(),
+                    'consultations' => $consultationRepository->find(),
                 ]);
             }
         }
