@@ -472,7 +472,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-public function getId(): ?int
+
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -486,26 +487,27 @@ public function getId(): ?int
     {
         $this->email = $email;
 
+
         return $this;
     }
 
-/**
- * A visual identifier that represents this user.
- *
- * @see UserInterface
- */
-public function getUserIdentifier(): int
-{
-    return (int)$this->id;
-}
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): int
+    {
+        return (int)$this->id;
+    }
 
-/**
- * @deprecated since Symfony 5.3, use getUserIdentifier instead
- */
-public function getUsername(): string
-{
-    return (string)$this->email;
-}
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
+    {
+        return (string)$this->email;
+    }
 
     /**
      * @see UserInterface
@@ -542,6 +544,7 @@ public function getUsername(): string
     }
 
     /**
+
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
@@ -561,6 +564,51 @@ public function getUsername(): string
         // $this->plainPassword = null;
     }
 
+
+
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]
+    private Collection $id_patient;
+
+    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: RendezVous::class, orphanRemoval: true)]
+    private Collection $id_medecin;
+
+    #[ORM\OneToMany(mappedBy: 'expert', targetEntity: RendezVous::class)]
+    private Collection $id_expert;
+
+
+
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Question::class, orphanRemoval: true)]
+    private Collection $questions;
+
+    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reponse::class, orphanRemoval: true)]
+    private Collection $reponses;
+
+    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reclamation::class, orphanRemoval: true)]
+    private Collection $reclame;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Medicament::class)]
+    private Collection $medicaments;
+
+
+
+    public function __construct()
+    {
+        $this->id_patient = new ArrayCollection();
+        $this->id_medecin = new ArrayCollection();
+        $this->id_expert = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->reponses = new ArrayCollection();
+        $this->reclame = new ArrayCollection();
+        $this->medicaments = new ArrayCollection();
+
+    }
+
+
+
+    /**
+     * @return Collection<int, RendezVous>
+     */
+    
 
 
 #[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]

@@ -3,8 +3,9 @@
 {% block title %}Ambulance index{% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    {{ include('navigation.html.twig') }}
     {{ include('header.html.twig') }}
     <section class="section-padding">
         <div >
@@ -32,11 +33,28 @@
         {% for key ,ambulance in ambulances %}
             <tr>
                 <td>{{ key + 1 }}</td>
-                <td>{{ ambulance.localActuelPatient }}</td>
+                <td>
+                    <div id="map_{{ key }}" style="height: 200px; width: 200px;"></div>
+                </td>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        function showMap(mapId, latitude, longitude) {
+                            var map = L.map(mapId).setView([latitude, longitude], 13);
+
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+
+                            L.marker([latitude, longitude]).addTo(map);
+                        }
+
+                        {% for key, ambulance in ambulances %}
+                        showMap('map_{{ key }}', {{ ambulance.latitude }}, {{ ambulance.longitude }});
+                        {% endfor %}
+                    });
+                </script>
                 <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
                 <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
                 <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
-                <td>{{ ambulance.getRdv().time|date('H:i:s') }}</td>
+                <td>{{ ambulance.getRdv().time|date('H:i') }}</td>
                 <td>
                     <a href="{{ path('app_ambulance_show', {'id': ambulance.id}) }}">Afficher</a>
                     <a href="{{ path('app_ambulance_edit', {'id': ambulance.id}) }}">Modifier</a>
