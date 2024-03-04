@@ -98,7 +98,7 @@
 
 
             <table class="table table-striped">
-                <thead
+                <thead>
                 <tr>
                     <th scope="col">Nom du Patient</th>
                     <th scope="col">Description</th>
@@ -116,6 +116,7 @@
                 </thead>
                 <tbody>
                 {% for consultation in consultations %}
+                {%  if consultation.getRdv().getMedecin().getId() == app.user.userIdentifier %}
                     <tr>
                         <td>{{ consultation.getRdv().getPatient().getLastName() }}</td>
                         <td>{{ consultation.description }}</td>
@@ -134,6 +135,7 @@
                             <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                         </td>
                     </tr>
+                    {%  endif %}
                 {% else %}
                     <tr>
                         <td colspan="12">Aucun enregistrement trouvé</td>

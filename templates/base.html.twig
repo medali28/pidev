@@ -94,66 +94,68 @@
 
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                            {% if app.user %}
                             <li class="nav-item">
-                                <a class="nav-link click-scroll" href="{{ path('app_test') }}">accueil</a>
+                                <a class="nav-link click-scroll" href="{{ path('profile' , {'id':app.user.userIdentifier}) }}">accueil</a>
                             </li>
+                            {%  else %}
+                                <li class="nav-item">
+                                    <a class="nav-link click-scroll" href="{{ path('app_test') }}">accueil</a>
+                                </li>
+                            {% endif %}
                             {% if app.user %}
                             <li class="nav-item">
                                 <a class="nav-link click-scroll" href="{{ path('medecin', {'id':app.user.userIdentifier}) }}">Nos Médecin</a>
                             </li>
                             {% endif %}
+
+                               {% if app.user %}
+
+                                   <li class="nav-item dropdown">
+                                       <a class="nav-link dropdown-toggle" href="" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rendez-Vous</a>
+
+                                       <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                           {%  if  "ROLE_MEDECIN" in  app.user.roles  %}
+                                           <li><a class="dropdown-item"  href="{{ path ('medecin_appointments', {'medecinId':app.user.userIdentifier})}}">Mes Rendez-Vous</a></li>
+                                           {% endif %}
+                                           {%  if  "ROLE_PATIENT" in  app.user.roles  %}
+                                               <li><a class="dropdown-item"  href="{{ path ('app_rendez_vous_patient_list', {'id_patient':app.user.userIdentifier})}}">Mes Rendez-Vous</a></li>
+                                           {% endif %}
+                                           {%  if  "ROLE_EXPERT" in  app.user.roles  %}
+                                               <li><a class="dropdown-item"  href="{{ path('expert_list', {'expertId':app.user.userIdentifier}) }}">Mes Demande Rendez-Vous</a></li>
+                                           {% endif %}
+                                       </ul>
+                                   </li>
+                                   {% endif %}
                             {% if app.user %}
-                            {% if "ROLE_EXPERT" in app.user.roles %}
-                                <li class="nav-item">
-                                    <a class="nav-link click-scroll" href="{{ path('expert_list', {'expertId':app.user.userIdentifier}) }}">Demande Rendez-Vous</a>
+                                {%  if  "ROLE_MEDECIN" in  app.user.roles  %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Consultation</a>
+                                    <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                            <li><a class="dropdown-item"  href="{{ path ('app_consultation_index')}}">Mes Consultation</a></li>
+                                    </ul>
                                 </li>
-                            {% endif %}
+                                {% endif %}
                             {% endif %}
                             {% if app.user %}
-                            {% if "ROLE_MEDECIN" in app.user.roles %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">financer une bonne cause</a>
-
-                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-
-
-                                    <li><a class="dropdown-item" href="{{ path('progress_create')}}">Ajouter</a></li>
-
-                                    <li><a class="dropdown-item"  href="{{ path ('progress_view')}}">Lister</a></li>
-
-                                </ul>
-                            </li>
-                            {% endif %}
-                            {% endif %}
-                         {% if app.user and  "ROLE_MEDECIN" in app.user.roles%}
-
-                             <li class="nav-item">
-                                 <a class="nav-link click-scroll" href="{{ path('medecin_appointments',{'medecinId':app.user.userIdentifier}) }}">My Rendez-Vous</a>
-                             </li>
-
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dons</a>
+                                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                            <li><a class="dropdown-item" href="{{ path ('app_gestion_donation_user', {'id':app.user.userIdentifier})}}" >Mes Medicament</a></li>
+                                            <li><a class="dropdown-item" href="{{ path ('app_gestion_donation')}}" >Lister Medicament</a></li>
+                                                <li><a class="dropdown-item"  href="{{ path ('ajoutdonation')}}">Ajouter  Medicament</a></li>
+                                            <li><a class="dropdown-item"  href="{{ path ('progress_view')}}">Lister les dons</a></li>
+                                            {% if  "ROLE_MEDECIN" in app.user.roles%}
+                                                <li><a class="dropdown-item"  href="{{ path ('progress_create')}}">Ajouter Dons</a></li>
+                                            {%  endif %}
+                                        </ul>
+                                    </li>
                             {% endif %}
 
                             <li class="nav-item">
                                 <a class="nav-link click-scroll" href="{{ path('app_question_show') }}">Blog</a>
                             </li>
 
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-
-                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                    <li><a class="dropdown-item active" href="{{ path('app_rendez_vous_index')}}">Rendez Vous</a></li>
-
-                                    <li><a class="dropdown-item" href="{{ path('app_ambulance_index')}}">Ambulance</a></li>
-                                    {% if app.user %}
-                                    <li><a class="dropdown-item"  href="{{ path ('app_gestion_donation')}}">Liste des dons</a></li>
-                                    {% endif %}
-                                    {% if app.user  %}
-                                        <li><a class="dropdown-item"  href="{{ path ('app_gestion_donation_user', {'id':app.user.userIdentifier})}}">Liste de mes dons</a></li>
-                                    {% endif %}
-
-                                </ul>
-                            </li>
                             {%  if app.user %}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reclamation</a>
@@ -184,6 +186,7 @@
                                 <a class="button signup-button" href="{{ path('Register') }}">Signup</a>
                             </div>
                         {% endif %}
+                </div>
                 </div>
             </nav>
 

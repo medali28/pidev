@@ -43,8 +43,6 @@
                             </thead>
                             <tbody>
                             {% for medicament in medicaments  %}
-
-                                {% if app.user.userIdentifier == medicament.user.id %}
                                 <tr>
                                     <td>{{ medicament.name }}</td>
                                     <td>{{ medicament.description }}</td>
@@ -66,7 +64,7 @@
                                     </td>
 
                                 </tr>
-                                {%  endif %}
+
                             {% endfor %}
                             </tbody>
                         </table>

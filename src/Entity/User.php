@@ -85,8 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $rate = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $disponibilite = null;
+
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_debut = null;
@@ -133,6 +132,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $active = null;
+    #[ORM\Column]
+    private ?bool $disponibilite = null;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
@@ -297,15 +298,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->rate = $rate;
     }
 
-    public function getDisponibilite(): ?\DateTimeInterface
+    public function getDisponibilite(): ?bool
     {
         return $this->disponibilite;
     }
 
-    public function setDisponibilite(?\DateTimeInterface $disponibilite): void
+    public function setDisponibilite(?bool $disponibilite): void
     {
         $this->disponibilite = $disponibilite;
     }
+
 
     public function getDateDebut(): ?\DateTimeInterface
     {
@@ -591,17 +593,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-    public function __construct()
-    {
-        $this->id_patient = new ArrayCollection();
-        $this->id_medecin = new ArrayCollection();
-        $this->id_expert = new ArrayCollection();
-        $this->questions = new ArrayCollection();
-        $this->reponses = new ArrayCollection();
-        $this->reclame = new ArrayCollection();
-        $this->medicaments = new ArrayCollection();
 
-    }
 
 
 
@@ -611,28 +603,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
 
 
-#[ORM\OneToMany(mappedBy: 'patient', targetEntity: RendezVous::class, orphanRemoval: true)]
-    private Collection $id_patient;
-
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: RendezVous::class, orphanRemoval: true)]
-    private Collection $id_medecin;
-
-    #[ORM\OneToMany(mappedBy: 'expert', targetEntity: RendezVous::class)]
-    private Collection $id_expert;
-
-
-
-    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Question::class, orphanRemoval: true)]
-    private Collection $questions;
-
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reponse::class, orphanRemoval: true)]
-    private Collection $reponses;
-
-    #[ORM\OneToMany(mappedBy: 'medecin', targetEntity: Reclamation::class, orphanRemoval: true)]
-    private Collection $reclame;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Medicament::class)]
-    private Collection $medicaments;
 
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Avis::class)]
     private Collection $avis;

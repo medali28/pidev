@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\RendezVous;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -351,19 +354,27 @@ class UserController extends AbstractController
 //        return $this->redirectToRoute('app_home_page');
 //    }
     #[Route('/profile/{id}', name: 'profile')]
-    public function profile(AuthenticationUtils $authenticationUtils): Response
+    public function profile(AuthenticationUtils $authenticationUtils,$id ,UserRepository $userRepository , EntityManagerInterface $entityManager,RendezVousRepository $rendezVousRepository): Response
     {
         if ($this->getUser()) {
-            $role = $this->getUser()->getRoles();
-//            return new Response($role[0]);
-            $id = $this->getUser()->getUserIdentifier();
-            return $this->render('user/profile.html.twig', [
-                'role' => $role[0],
-                'id' => $id
-            ]);
+            if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT" ){
+                $user = $userRepository->find($id);
+                if (!$user->getDisponibilite()){
+                    $user->setDisponibilite(True);
+//                    $entityManager->persist($user);
+                    $entityManager->flush();
+                }
+                $rdvs = $rendezVousRepository->findBy(['expert' => null]);
+                foreach ($rdvs as $rdv) {
+                    $rdv->setExpert($this->getUser());
+//                    $entityManager->persist($rdv);
+                    $entityManager->flush();
+                }
+        }
+            return $this->render('main/main.html.twig');
 
         }
-        return $this->redirectToRoute('app_home_page');
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/dashboard', name: 'dashboard')]

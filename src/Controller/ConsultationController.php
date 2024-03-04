@@ -29,7 +29,7 @@ class ConsultationController extends AbstractController
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
                 return $this->render('consultation/index.html.twig', [
-                    'consultations' => $consultationRepository->find(),
+                    'consultations' => $consultationRepository->findAll(),
                 ]);
             }
         }
@@ -109,18 +109,18 @@ class ConsultationController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    #[Route('/{id}', name: 'app_consultation_show', methods: ['GET'])]
-    public function show(Consultation $consultation): Response
-    {
-        if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
-                return $this->render('consultation/show.html.twig', [
-                    'consultation' => $consultation,
-                ]);
-            }
-        }
-        return $this->redirectToRoute('app_login');
-    }
+//    #[Route('/{id}', name: 'app_consultation_show', methods: ['GET'])]
+//    public function show(Consultation $consultation): Response
+//    {
+//        if ($this->getUser()) {
+//            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+//                return $this->render('consultation/show.html.twig', [
+//                    'consultation' => $consultation,
+//                ]);
+//            }
+//        }
+//        return $this->redirectToRoute('app_login');
+//    }
 
 
     #[Route('/{id}/edit', name: 'app_consultation_edit', methods: ['GET', 'POST'])]
@@ -128,6 +128,7 @@ class ConsultationController extends AbstractController
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+                if ($this->getUser()->getUserIdentifier() == $consultation->getRdv()->getMedecin()->getId()){
                 $form = $this->createForm(ConsultationType::class, $consultation);
                 $form->handleRequest($request);
 
@@ -141,7 +142,7 @@ class ConsultationController extends AbstractController
                     'consultation' => $consultation,
                     'form' => $form,
                 ]);
-            }}
+            }}}
         return $this->redirectToRoute('app_login');
     }
 
@@ -150,13 +151,14 @@ class ConsultationController extends AbstractController
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
-        if ($this->isCsrfTokenValid('delete'.$consultation->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($consultation);
-            $entityManager->flush();
-        }
+                if ($this->getUser()->getUserIdentifier() == $consultation->getRdv()->getMedecin()->getId()){
+                    if ($this->isCsrfTokenValid('delete'.$consultation->getId(), $request->request->get('_token'))) {
+                        $entityManager->remove($consultation);
+                        $entityManager->flush();
+                    }
 
         return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
-    }}
+    }}}
         return $this->redirectToRoute('app_login');
     }
 

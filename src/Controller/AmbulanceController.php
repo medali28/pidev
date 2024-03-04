@@ -25,7 +25,7 @@ class AmbulanceController extends AbstractController
     public function index(AmbulanceRepository $ambulanceRepository): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
                 return $this->render('ambulance/index.html.twig', [
                     'ambulances' => $ambulanceRepository->findAll(),
                 ]);
@@ -35,7 +35,7 @@ class AmbulanceController extends AbstractController
     #[Route('/new/{id}', name: 'app_ambulance_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, RendezVous $rendezVous): Response
     {if ($this->getUser()) {
-        if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+        if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
         $ambulance = new Ambulance();
         $ambulance->setRdv($rendezVous);
         $ambulance->setLocalActuelPatient(" ");
@@ -67,7 +67,7 @@ class AmbulanceController extends AbstractController
     public function show(Ambulance $ambulance): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
         return $this->render('ambulance/show.html.twig', [
             'ambulance' => $ambulance,
         ]);
@@ -79,7 +79,7 @@ class AmbulanceController extends AbstractController
     public function edit(Request $request, Ambulance $ambulance, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
         $form = $this->createForm(AmbulanceType::class, $ambulance);
         $form->handleRequest($request);
         // Handle form submission
@@ -109,7 +109,7 @@ class AmbulanceController extends AbstractController
     #[Route('/{id}', name: 'app_ambulance_delete', methods: ['POST'])]
     public function delete(Request $request, Ambulance $ambulance, EntityManagerInterface $entityManager): Response
     {if ($this->getUser()) {
-        if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+        if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
             if ($this->isCsrfTokenValid('delete' . $ambulance->getId(), $request->request->get('_token'))) {
                 $entityManager->remove($ambulance);
                 $entityManager->flush();

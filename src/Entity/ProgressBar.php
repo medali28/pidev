@@ -18,6 +18,18 @@ class ProgressBar
 
     #[ORM\Column]
     private ?int $current = null;
+    #[ORM\Column]
+    private ?string $description = null;
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
 
     public function getId(): ?int
     {

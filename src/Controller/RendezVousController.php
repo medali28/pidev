@@ -45,18 +45,28 @@ class RendezVousController extends AbstractController
     public function new( $id,Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, SendAppointmentRemindersCommand $SendAppointmentRemindersCommand): Response
         {
             if ($this->getUser()) {
-                if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+                if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
                     $patient = $this->getUser();
                     $medecin = $userRepository->find($id);
+                    $experts = $userRepository->getExpertdispo();
+                    if ($experts){
+                        $userIds = [];
+                        foreach ($experts as $expert) {
+                            $userIds[] = $expert->getId();
+                        }
+                        $randomUserId = $userIds[ array_rand($userIds)];
+                    }else{
+                        $randomUserId = null;
+                    }
+
 
                     $rendezvous = new RendezVous();
                     $rendezvous->setStatusRdv('En attent');
                     $rendezvous->setReponseRefuse('');
                     $rendezvous->setPatient($patient);
                     $rendezvous->setMedecin($medecin);
-                    $rendezvous->setExpert(null);
+                    $rendezvous->setExpert($randomUserId);
                     if ($request->isMethod('POST')) {
-
                         $date = $request->request->get('date');
                         $time = $request->request->get('time');
                         $message = $request->request->get('description');
@@ -75,7 +85,9 @@ class RendezVousController extends AbstractController
                         }
                         return $this->redirectToRoute('app_rendez_vous_patient_list', ['id_patient' => $patient->getUserIdentifier()]);
                     }
-                    return $this->render('rendez_vous/new.html.twig');
+                    return $this->render('rendez_vous/new.html.twig', [
+                        'randomUserId'=>$randomUserId,
+                    ]);
                 }
             }
             return $this->redirectToRoute('app_login');
@@ -84,7 +96,7 @@ class RendezVousController extends AbstractController
     public function show(RendezVous $rendezVou): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN" ||$this->getUser()->getRoles()[0] == "ROLE_PATIENT" ) {
                 $idmed = $rendezVou->getMedecin()->getId();
                 if ($this->getUser()->getUserIdentifier() == $idmed) {
                     return $this->render('rendez_vous/show.html.twig', [
@@ -293,7 +305,7 @@ class RendezVousController extends AbstractController
     public function approveByDoctor(int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
         $rendezvous = $rendezVousRepository->find($rendezvousId);
 
         if ($rendezvousId) {

@@ -78,6 +78,7 @@ class CnamController extends AbstractController
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+                if ($this->getUser()->getUserIdentifier() == $cnam->getConsultation()->getRdv()->getMedecin()->getId()){
                 $form = $this->createForm(CnamType::class, $cnam);
                 $form->handleRequest($request);
 
@@ -92,7 +93,7 @@ class CnamController extends AbstractController
                     'form' => $form,
                 ]);
             }
-        }
+        }}
         return $this->redirectToRoute('app_login');
     }
 
@@ -101,7 +102,7 @@ class CnamController extends AbstractController
             {
                 if ($this->getUser()) {
                     if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
-
+                        if ($this->getUser()->getUserIdentifier() == $cnam->getConsultation()->getRdv()->getMedecin()->getId()){
                         if ($this->isCsrfTokenValid('delete' . $cnam->getId(), $request->request->get('_token'))) {
                             $entityManager->remove($cnam);
                             $entityManager->flush();
@@ -109,7 +110,7 @@ class CnamController extends AbstractController
 
                         return $this->redirectToRoute('app_cnam_index', [], Response::HTTP_SEE_OTHER);
                     }
-                }
+                }}
                 return $this->redirectToRoute('app_login');
 
             }

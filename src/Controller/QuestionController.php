@@ -38,7 +38,7 @@ class QuestionController extends AbstractController
     public function add(Request $request,ManagerRegistry $managerRegistry,sluggerinterface $slugger,mailerinterface $mailer): Response
     {
         if ($this->getUser() ) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
                 $currentDateTime = new \DateTime();
                 $question = new Question();
                 $form = $this->createForm(QuestionType::class, $question);
@@ -100,7 +100,7 @@ class QuestionController extends AbstractController
     function edit(QuestionRepository $repository,$id,Request $request ,ManagerRegistry $managerRegistry,sluggerinterface $slugger,MailerInterface $mailer)
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
                 $question = $repository->find($id);
                 $currentDateTime = new \DateTime();
                 $form = $this->createForm(QuestionType::class, $question);
@@ -161,7 +161,7 @@ class QuestionController extends AbstractController
     function delete($id,QuestionRepository $repository,ManagerRegistry $managerRegistry)
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
                 $question = $repository->find($id);
                 $em = $managerRegistry->getManager();
                 $em->remove($question);

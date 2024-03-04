@@ -22,7 +22,7 @@ class ReponseController extends AbstractController
     public function add(Request $request, ManagerRegistry $managerRegistry,QuestionRepository $questionRepository,$id,MailerInterface $mailer): Response
     {
       if ($this->getUser()) {
-          if ($this->getUser()->getRoles() == "ROLE_MEDECIN") {
+          if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
               $qestionid = $questionRepository->find($id);
               $reponse = new Reponse();
               $currentDateTime = new \DateTime();
@@ -71,7 +71,7 @@ class ReponseController extends AbstractController
     function edit(QuestionRepository $questionRepository,ReponseRepository $repository, $id, Request $request, ManagerRegistry $managerRegistry,MailerInterface $mailer): Response
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles() == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
                 $reponse = $repository->find($id);
                 $question = $reponse->getQuestion()->getId();
                 $currentDateTime = new \DateTime();
@@ -117,7 +117,7 @@ class ReponseController extends AbstractController
     function deleter($id, ReponseRepository $repository, ManagerRegistry $managerRegistry) : \Symfony\Component\HttpFoundation\RedirectResponse
     {
         if ($this->getUser()) {
-            if ($this->getUser()->getRoles() == "ROLE_MEDECIN") {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
         $reponse = $repository->find($id);
         $question = $reponse->getQuestion()->getId();
         $em = $managerRegistry->getManager();

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function Symfony\Component\Translation\t;
 
 class ProgressController extends AbstractController
 {
@@ -24,6 +25,7 @@ class ProgressController extends AbstractController
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
                 $progressBar = new ProgressBar();
+                $progressBar->setCurrent(0);
                 $form = $this->createForm(TargetFormType::class, $progressBar);
                 $form->handleRequest($request);
 
@@ -36,6 +38,27 @@ class ProgressController extends AbstractController
                 }
 
                 return $this->render('progress/create.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+        }
+        return $this->redirectToRoute('app_login');
+    }
+     #[Route('/progress/{id}/edit', name: 'progress_edit_med')]
+    public function editmed(Request $request,$id ,ProgressBarRepository $progressBarRepository ,ManagerRegistry $managerRegistry): Response
+    {
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
+                $progressBar = $progressBarRepository->find($id);
+                $form = $this->createForm(TargetFormType::class, $progressBar);
+                $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $entityManager = $managerRegistry->getManager();
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('progress_view', ['id' => $progressBar->getId()]);
+                }
+                return $this->render('progress/edit_med.html.twig', [
                     'form' => $form->createView(),
                 ]);
             }
@@ -152,6 +175,7 @@ return $this->redirectToRoute('app_login');
     public function delete($id, ProgressBarRepository $progressBarRepository, ManagerRegistry $managerRegistry): Response
     {
         if ($this->getUser()){
+            if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN"){
         $progressBar = $progressBarRepository->find($id);
 
         if (!$progressBar) {
@@ -165,7 +189,7 @@ return $this->redirectToRoute('app_login');
         $this->addFlash('success', 'Progress bar deleted successfully.');
 
         return $this->redirectToRoute('progress_view');
-    }
+    }}
 return $this->redirectToRoute('app_login');
 }
 

@@ -16,8 +16,7 @@ class TargetFormType extends AbstractType
     {
         $builder
             ->add('target')
-            ->add('current'
-            );
+            ->add('description');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

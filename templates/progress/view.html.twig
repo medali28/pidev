@@ -13,7 +13,9 @@
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
         </div>
-
+        {% if app.user.userIdentifier == id %}
+        <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Edit_dons</a>
+        <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">delete_dons</a>
         <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Edit</a>
     {% endfor %}
 
