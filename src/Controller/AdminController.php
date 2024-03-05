@@ -15,6 +15,7 @@ use App\Repository\AmbulanceRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CnamRepository;
 use App\Repository\ConsultationRepository;
+use App\Repository\ForbiddenKeywordRepository;
 use App\Repository\MedicamentRepository;
 use App\Repository\ProgressBarRepository;
 use App\Repository\QuestionRepository;
@@ -76,7 +77,7 @@ class AdminController extends AbstractController
 
     ///sami
     #[Route('/tabeuser', name: 'tableUser')]
-    public function index1( Request $request,CategoryRepository $categoryRepository,PaginatorInterface $paginator ,MedicamentRepository $medicamentRepository,ProgressBarRepository $progressBarRepository): Response
+    public function index1( Request $request,CategoryRepository $categoryRepository,PaginatorInterface $paginator ,MedicamentRepository $medicamentRepository,ProgressBarRepository $progressBarRepository,ForbiddenKeywordRepository $forbiddenKeywordRepository): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
@@ -86,26 +87,33 @@ class AdminController extends AbstractController
 
                 $categories = $paginator->paginate(
                     $query,
-                    $request->query->getInt('page', 1), /*page number*/
-                    4 /*limit per page*/
+                    $request->query->getInt('page', 1),
+                    4
                 );
 
                 $query = $medicamentRepository->findAll();
                 $medicaments = $paginator->paginate(
                     $query,
-                    $request->query->getInt('page', 1), /*page number*/
-                    4 /*limit per page*/
+                    $request->query->getInt('page', 1),
+                    4
                 );
 
                 $query = $progressBarRepository->findAll();
                 $progrres = $paginator->paginate(
                     $query,
-                    $request->query->getInt('page', 1), /*page number*/
-                    4 /*limit per page*/
+                    $request->query->getInt('page', 1),
+                    4
+                );
+                $query = $forbiddenKeywordRepository->findAll();
+                $forbiden = $paginator->paginate(
+                    $query,
+                    $request->query->getInt('page', 1),
+                    4
                 );
 
                 return $this->render('main/tableuser.html.twig', [
-                    'categories' => $categories, 'medicaments' => $medicaments, 'progress' => $progrres
+                    'categories' => $categories, 'medicaments' => $medicaments, 'progress' => $progrres,
+                    'forbidens' => $forbiden
                 ]);
             }
         }

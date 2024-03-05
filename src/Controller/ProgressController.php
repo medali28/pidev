@@ -7,6 +7,7 @@ use App\Form\EditProgreesType;
 use App\Form\TargetFormType;
 use App\Repository\ProgressBarRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ use function Symfony\Component\Translation\t;
 class ProgressController extends AbstractController
 {
     #[Route('/progress/create', name: 'progress_create')]
-    public function create(Request $request,ManagerRegistry $managerRegistry): Response
+    public function createmedecin(Request $request,ManagerRegistry $managerRegistry): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
@@ -28,7 +29,7 @@ class ProgressController extends AbstractController
                 $progressBar->setCurrent(0);
                 $form = $this->createForm(TargetFormType::class, $progressBar);
                 $form->handleRequest($request);
-
+                $progressBar->setUser($this->getUser());;
                 if ($form->isSubmitted() && $form->isValid()) {
                     $entityManager = $managerRegistry->getManager();
                     $entityManager->persist($progressBar);
@@ -70,19 +71,26 @@ class ProgressController extends AbstractController
 
     #[Route('/progress', name: 'progress_view')]
 
-    public function view(ProgressBarRepository $progressBarRepository): Response
+    public function view(ProgressBarRepository $progressBarRepository,PaginatorInterface $paginator,Request $request): Response
     {
         if ($this->getUser() ) {
-
-            $progressBar = $progressBarRepository->findAll();
+            $query = $progressBarRepository->findAll();
+            $progressBar = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1), /*page number*/
+                4 /*limit per page*/
+            );
             return $this->render('progress/view.html.twig', [
                 'progressBar' => $progressBar,
             ]);
+
+
+
         }
         return $this->redirectToRoute('app_login');
     }
     #[Route('/progress/{id}', name: 'progress_edit')]
-    public function edit($id, Request $request, ManagerRegistry $managerRegistry, ProgressBarRepository $progressBarRepository): Response
+    public function Pay($id, Request $request, ManagerRegistry $managerRegistry, ProgressBarRepository $progressBarRepository): Response
     {
         if ($this->getUser()) {
             $progressBar = $progressBarRepository->find($id);
