@@ -610,6 +610,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Reclamation::class)]
     private Collection $reclamations;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ProgressBar::class)]
+    private Collection $pbars;
+
 
 
     public function __construct()
@@ -623,6 +626,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     $this->medicaments = new ArrayCollection();
     $this->avis = new ArrayCollection();
     $this->reclamations = new ArrayCollection();
+    $this->pbars = new ArrayCollection();
 
 }
 
@@ -903,6 +907,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return Collection<int, ProgressBar>
+     */
+    public function getPbars(): Collection
+    {
+        return $this->pbars;
+    }
+
+    public function addPbar(ProgressBar $pbar): static
+    {
+        if (!$this->pbars->contains($pbar)) {
+            $this->pbars->add($pbar);
+            $pbar->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePbar(ProgressBar $pbar): static
+    {
+        if ($this->pbars->removeElement($pbar)) {
+            // set the owning side to null (unless already changed)
+            if ($pbar->getUser() === $this) {
+                $pbar->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 

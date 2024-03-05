@@ -13,6 +13,10 @@
     <div class="form-group">
         {{ form_label(form.Description) }} {{ form_widget(form.Description, {'attr': {'class': 'form-control'}}) }} {{ form_errors(form.Description) }}
     </div>
+    <div class="form-group">
+        {{ form_label(form.image) }} {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }} {{ form_errors(form.image) }}
+    </div>
+
 
     <div class="form-group">
         {{ form_label(form.date_fin) }} {{ form_widget(form.date_fin, {'attr': {'class': 'form-control-file'}}) }} {{ form_errors(form.date_fin) }}

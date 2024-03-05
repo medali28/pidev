@@ -1,22 +1,92 @@
-{# templates/progress/view.html.twig #}
-{% extends 'base.html.twig' %}
 
-{% block title %}View Progress Bar{% endblock %}
 
-{% block body %}
 
-    <h1>Progress Bar</h1>
-    {% for progressBar in progressBar  %}
-        <p>Target Value: {{ progressBar.target }}</p>
-        <p>Current Value: {{ progressBar.current }}</p>
+    {% extends 'base.html.twig' %}
 
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
+    {% block body %}
+
+        <body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
+
+        <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-12 mx-auto">
+                        <h1 class="text-white text-center display-4">Explorez </h1>
+                        <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bi-search" id="basic-addon1"></span>
+                                <input name="keyword" type="search" class="form-control" id="keyword" placeholder="" aria-label="Recherche">
+                                <button type="submit" class="form-control btn btn-primary">Rechercher</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+            <div class="card border-0 shadow-lg rounded-5 bg-light p-5">
+                {% for progressBar in progressBar  %}
+                    <p>Target Value: {{ progressBar.target }}</p>
+                    <p>Current Value: {{ progressBar.current }}</p>
+                    <p>Description: {{ progressBar.description }}</p>
+
+
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
+                    </div>
+                    <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Contribuer </a>
+
+
+                {% endfor %}
+            </div>
+
+
+
+
+
         </div>
-        {% if app.user.userIdentifier == id %}
-        <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Edit_dons</a>
-        <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">delete_dons</a>
-        <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Edit</a>
-    {% endfor %}
 
-{% endblock %}
+        <!-- Pop-up modal code -->
+        <div id="imageModal" class="modal" onclick="closeModal()">
+            <img class="modal-content rounded-5" id="modalImage" style="max-width: 80%; max-height: 80vh; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        </div>
+
+        <style>
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 10000000;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+
+            .modal-content {
+                margin: auto;
+                display: block;
+            }
+        </style>
+
+        <script>
+            function openModal(imageSrc) {
+                var modal = document.getElementById('imageModal');
+                var modalImage = document.getElementById('modalImage');
+                modalImage.src = imageSrc;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                var modal = document.getElementById('imageModal');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        </script>
+
+        </body>
+
+    {% endblock %}
+
+
