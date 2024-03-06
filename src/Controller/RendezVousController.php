@@ -231,8 +231,8 @@ class RendezVousController extends AbstractController
                 });
 
 
-
-        $processedAppointments = array_filter($appointments, function (RendezVous $appointment) {
+                $ALLappointments2=$rendezVousRepository->getAppointmentsForExpert($expertId);
+        $processedAppointments = array_filter($ALLappointments2, function (RendezVous $appointment) {
             $status = $appointment->getStatusRdv();
             return $status === 'Approuve_Expert' || $status === 'Refuse_Expert';
         });
