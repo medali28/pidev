@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\ReponseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ReponseRepository::class)]
 class Reponse
 {
@@ -15,6 +15,8 @@ class Reponse
     private ?int $id = null;
 
     #[ORM\Column(length: 400)]
+    #[Assert\NotBlank(message: "Le contenu est un champ obligatoire")]
+    #[Assert\Regex(pattern: "/^[a-zA-Z0-9\/\*\x22\x27\(\)&{}\?!:,]+$/", message: "Le contenu '{{ value }}' ne doit contenir que des lettres, des chiffres et les caractères spécifiques autorisés.")]
     private ?string $description_r = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

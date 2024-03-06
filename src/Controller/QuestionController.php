@@ -32,7 +32,7 @@ class QuestionController extends AbstractController
     function show(QuestionRepository $repository )
     {
         $questions = $repository->findBy([], ['datetempQ' => 'DESC']);
-        return $this->render('question/question_show.html.twig',['question'=>$questions]);
+        return $this->render('question/question_show.html.twig',['questions'=>$questions]);
     }
     #[Route('/question/question_add', name: 'app_question_add')]
     public function add(Request $request,ManagerRegistry $managerRegistry,sluggerinterface $slugger,mailerinterface $mailer): Response
