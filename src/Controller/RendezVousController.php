@@ -48,16 +48,6 @@ class RendezVousController extends AbstractController
                 if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
                     $patient = $this->getUser();
                     $medecin = $userRepository->find($id);
-                    $experts = $userRepository->getExpertdispo();
-//                    if ($experts){
-//                        $userIds = [];
-//                        foreach ($experts as $expert) {
-//                            $userIds[] = $expert->getId();
-//                        }
-//                        $randomUserId = $userIds[ array_rand($userIds)];
-//                    }else{
-//                        $randomUserId = null;
-//                    }
 
 
                     $rendezvous = new RendezVous();
@@ -65,7 +55,7 @@ class RendezVousController extends AbstractController
                     $rendezvous->setReponseRefuse('');
                     $rendezvous->setPatient($patient);
                     $rendezvous->setMedecin($medecin);
-                    $rendezvous->setExpert($randomUserId);
+                    $rendezvous->setExpert(null);
                     if ($request->isMethod('POST')) {
                         $date = $request->request->get('date');
                         $time = $request->request->get('time');
@@ -86,7 +76,7 @@ class RendezVousController extends AbstractController
                         return $this->redirectToRoute('app_rendez_vous_patient_list', ['id_patient' => $patient->getUserIdentifier()]);
                     }
                     return $this->render('rendez_vous/new.html.twig', [
-                        'randomUserId'=>$randomUserId,
+
                     ]);
                 }
             }
@@ -97,8 +87,7 @@ class RendezVousController extends AbstractController
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN" ||$this->getUser()->getRoles()[0] == "ROLE_PATIENT" ) {
-                $idmed = $rendezVou->getMedecin()->getId();
-                if ($this->getUser()->getUserIdentifier() == $idmed) {
+
                     return $this->render('rendez_vous/show.html.twig', [
                         'rendez_vou' => $rendezVou,
                     ]);
@@ -106,7 +95,7 @@ class RendezVousController extends AbstractController
                     return new Response( "you not the real medecin");
                 }
 
-            }}
+            }
         return $this->redirectToRoute('app_login');
     }
 
@@ -172,18 +161,19 @@ class RendezVousController extends AbstractController
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_PATIENT") {
 
-        $appointments = $rendezVousRepository->getAppointmentsForPatient($id_patient);
+                $appointments = $rendezVousRepository->findBy(['patient' => $id_patient]);
 
         $acceptedAppointments = array_filter($appointments, function (RendezVous $appointment) {
-            return $appointment->getStatusRdv() === 'Approuve_Expert_Medecin';
+            return $appointment->getStatusRdv() === 'Approuve_Expert_Medecin' ;
         });
 
-        $refusedAppointments = array_filter($appointments, function (RendezVous $appointment) {
+                $appointments2 = $rendezVousRepository->findBy(['patient' => $id_patient]);
+        $refusedAppointments = array_filter($appointments2, function (RendezVous $appointment) {
             return str_starts_with($appointment->getStatusRdv(), 'Refuse');
         });
-
-        $pendingAppointments = array_filter($appointments, function (RendezVous $appointment) {
-            return $appointment->getStatusRdv() === null || str_starts_with($appointment->getStatusRdv(), 'En_attente');
+                $appointments3 = $rendezVousRepository->findBy(['patient' => $id_patient]);
+        $pendingAppointments = array_filter($appointments3, function (RendezVous $appointment) {
+            return str_starts_with($appointment->getStatusRdv(), 'En_attente');
         });
 
         return $this->render('rendez_vous/indexPatient.html.twig', [
@@ -234,10 +224,13 @@ class RendezVousController extends AbstractController
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT") {
         $appointments = $rendezVousRepository->getAppointmentsForExpert($expertId);
+                $ALLappointments=$rendezVousRepository->findAll();
+                $pendingAppointments = array_filter($ALLappointments, function (RendezVous $appointment) {
+                    $status = $appointment->getStatusRdv();
+                    return $status === 'En_attente';
+                });
 
-        $pendingAppointments = array_filter($appointments, function (RendezVous $appointment) {
-            return $appointment->getExpert() === null;
-        });
+
 
         $processedAppointments = array_filter($appointments, function (RendezVous $appointment) {
             $status = $appointment->getStatusRdv();
@@ -254,55 +247,46 @@ class RendezVousController extends AbstractController
 
     // Expert approves the appointment
     #[Route('/rendez/vous/expert_approve/{rendezvousId}', name: 'approveByExpert')]
-    public function approveByExpert(int $rendezvousId, RendezVousRepository $rendezVousRepository, UserRepository1 $userRepository, EntityManagerInterface $entityManager): Response
-    { /*$userRepository = $this->getDoctrine()->getRepository(User::class);
-        $user = $userRepository->findUserById(1);
-
-        if (!$user) {
-            throw $this->createNotFoundException('User not found.');
-        }*/
+    public function approveByExpert(int $rendezvousId, RendezVousRepository $rendezVousRepository, SendAppointmentRemindersCommand $SendAppointmentRemindersCommand, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT") {
                 $rendezvous = $rendezVousRepository->find($rendezvousId);
-                $Expert = $userRepository->findUserById(1);
+                $Expert = $this->getUser();
                 if ($rendezvousId) {
                     $expert = $userRepository->find($Expert->getId());
                     $rendezvous->setStatusRdv('Approuve_Expert');
                     $rendezvous->setExpert($expert);
                     $entityManager->flush();
                 }
+                $SendAppointmentRemindersCommand->sendReminderEmail($rendezvous->getMedecin()->getEmail(), "Myedr : nouveau rendez-vous", "Vous avez un nouveau rendez-vous à traiter");
+                return $this->redirectToRoute('expert_list', ['expertId' => $rendezvous->getExpert()->getId()]);
 
-                return new Response('OK');
             }
         }
         return $this->redirectToRoute('app_login');
     }
 
     #[Route('/rendez/vous/expert_refuse/{rendezvousId}', name: 'refuseByExpert')]
-    public function refuseByExpert(int $rendezvousId, RendezVousRepository $rendezVousRepository, UserRepository1 $userRepository, EntityManagerInterface $entityManager): Response
-    { /*$userRepository = $this->getDoctrine()->getRepository(User::class);
-        $user = $userRepository->findUserById(1);
-
-        if (!$user) {
-            throw $this->createNotFoundException('User not found.');
-        }*/
+    public function refuseByExpert(SendAppointmentRemindersCommand $SendAppointmentRemindersCommand,int $rendezvousId, RendezVousRepository $rendezVousRepository, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT") {
         $rendezvous = $rendezVousRepository->find($rendezvousId);
-        $Expert = $userRepository->findUserById(1);
+        $Expert = $this->getUser();
         if ($rendezvousId) {
             $expert = $userRepository->find($Expert->getId());
             $rendezvous->setStatusRdv('Refuse_Expert');
             $rendezvous->setExpert($expert);
             $entityManager->flush();
+            $SendAppointmentRemindersCommand->sendReminderEmail($rendezvous->getPatient()->getEmail(), "Myedr : rendez-vous refusé", "Votre rendez-vous a été refusé d'après l'expert malheureusement");
         }
-
-        return  new Response('OK');
-    }}
+                return $this->redirectToRoute('expert_list', ['expertId' => $rendezvous->getExpert()->getId()]);
+            }}
         return $this->redirectToRoute('app_login');
     }
     #[Route('/rendez/vous/medecin_approve/{rendezvousId}', name: 'approveBymedecin')]
-    public function approveByDoctor(int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
+    public function approveByDoctor(SendAppointmentRemindersCommand $SendAppointmentRemindersCommand,int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
@@ -311,6 +295,8 @@ class RendezVousController extends AbstractController
         if ($rendezvousId) {
             $rendezvous->setStatusRdv('Approuve_Expert_Medecin');
             $entityManager->flush();
+            $SendAppointmentRemindersCommand->sendReminderEmail($rendezvous->getPatient()->getEmail(), "Myedr : rendez-vous accepte", "Votre rendez-vous est accepter d'après le medecin");
+
         }
 
         return $this->redirectToRoute('medecin_appointments', ['medecinId' => $rendezvous->getMedecin()->getId()]);
@@ -319,7 +305,7 @@ class RendezVousController extends AbstractController
     }
 
     #[Route('/rendez/vous/medecin_refuse/{rendezvousId}', name: 'refuseBymedecin')]
-    public function refuseByDoctor(int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
+    public function refuseByDoctor(SendAppointmentRemindersCommand $SendAppointmentRemindersCommand,int $rendezvousId, RendezVousRepository $rendezVousRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_MEDECIN") {
@@ -328,6 +314,8 @@ class RendezVousController extends AbstractController
         if ($rendezvousId) {
             $rendezvous->setStatusRdv('Refuse_Expert_Medecin');
             $entityManager->flush();
+            $SendAppointmentRemindersCommand->sendReminderEmail($rendezvous->getPatient()->getEmail(), "Myedr : rendez-vous refusé", "Votre rendez-vous a été refusé d'après le medecin malheureusement");
+
         }
         return $this->redirectToRoute('medecin_appointments', ['medecinId' => $rendezvous->getMedecin()->getId()]);
     }}

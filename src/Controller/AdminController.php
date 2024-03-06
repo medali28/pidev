@@ -56,25 +56,32 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
     #[Route('/admin2', name: 'app_admin1')]
-    public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository): Response
-    {
-        if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
+    public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository,UserRepository $userRepository): Response
+    {$rendezVousData =$RendezVousRepository->findAll();
+        $ambulanceData=$ambulanceRepository->findAll();
+        $statuses = ['En_attente', 'Approuve_Expert', 'Approuve_Expert_Medecin','Refuse_Expert_Medecin','Refuse_Expert']; // Replace with your actual statuses
+        $data = [];
 
-                $rendezVousData = $RendezVousRepository->findAll();
+        foreach ($statuses as $status) {
+            $count = 0;
 
-                $ambulanceData = $ambulanceRepository->findAll();
-
-                return $this->render('admin/issra.html.twig', [
-                    'controller_name' => 'AdminController',
-                    'rendez_vouses' => $rendezVousData,
-                    'ambulances' => $ambulanceData,
-                ]);
+            foreach ($rendezVousData as $appointment) {
+                if ($appointment->getStatusRdv() === $status) {
+                    $count++;
+                }
             }
-        }
-        return $this->redirectToRoute('app_login');
-    }
 
+            $data[] = [$status, $count];
+        }
+
+
+        return $this->render('admin/issra.html.twig', [
+            'controller_name' => 'AdminController',
+            'rendez_vouses' => $rendezVousData,
+            'ambulances' => $ambulanceData,
+            'chartData' => $data,
+        ]);
+    }
     ///sami
     #[Route('/tabeuser', name: 'tableUser')]
     public function index1( Request $request,CategoryRepository $categoryRepository,PaginatorInterface $paginator ,MedicamentRepository $medicamentRepository,ProgressBarRepository $progressBarRepository,ForbiddenKeywordRepository $forbiddenKeywordRepository): Response

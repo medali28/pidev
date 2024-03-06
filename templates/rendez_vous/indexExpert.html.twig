@@ -1,0 +1,61 @@
+
+{% extends 'base.html.twig' %}
+{% block title %}RendezVous{% endblock %}
+
+{% block body %}
+    <main>
+
+
+        {{ include('header.html.twig') }}
+
+
+        <div class="tabs">
+            <button id="pastTab" class="tablinks btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'pastAppointments')">traitée</button>
+            <button id="pendingTab" class="tablinks btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'pendingAppointments')">En attente</button>
+        </div>
+
+        <div id="pendingAppointments" class="tabcontent active" style="display:none">
+            {% include 'rendez_vous/appointmentsTableExpert.html.twig' with {'appointments': pendingAppointments , tableTitle: 'Rendez-vous en attente', 'showButtons': true} %}
+        </div>
+
+        <div id="processedAppointments" class="tabcontent " style="display:none">
+            {% include 'rendez_vous/appointmentsTableExpert.html.twig' with {'appointments': processedAppointments , tableTitle: 'Rendez-vous passés', 'showButtons': false} %}
+        </div>
+
+
+
+
+
+
+
+    </main>
+
+    <script>
+
+
+
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block javascripts %}
+
+
+
+
+{% endblock %}

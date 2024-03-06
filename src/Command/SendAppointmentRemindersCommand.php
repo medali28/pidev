@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -52,14 +53,15 @@ class SendAppointmentRemindersCommand extends Command
         $entityManager->flush();*/
     }
 
-     function sendReminderEmail(): void
+
+    function sendReminderEmail(String $to, String $subject, String $text): void
     {
 
         $email = (new Email())
             ->from(new Address('myedr@gmail.com', 'My edr'))
-            ->to("issrakhemir33@gmail.com")
-            ->subject('Reminder: Your Appointment')
-            ->text('Test');
+            ->to($to)
+            ->subject($subject)
+            ->text($text);
 
         $this->mailer->send($email);
     }
