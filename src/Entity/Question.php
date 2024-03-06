@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,14 +17,17 @@ class Question
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le Titre est un champ obligatoire")]
+    #[Assert\Regex(pattern: "/^[a-zA-Z]+$/", message: "Le titre '{{ value }}' ne doit contenir que des lettres")]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
     #[ORM\Column(length: 400)]
+    #[Assert\NotBlank(message: "Le contenu est un champ obligatoire")]
+    #[Assert\Regex(pattern: "/^[a-zA-Z0-9\/\*\x22\x27\(\)&{}\?!:,]+$/", message: "Le contenu '{{ value }}' ne doit contenir que des lettres, des chiffres et les caractères spécifiques autorisés.")]
     private ?string $description = null;
-
 
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

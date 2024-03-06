@@ -33,11 +33,11 @@
             </div>
         {% endif %}
         {% endif %}
-        {% if question is not empty %}
-            <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
-                {% for question in question %}
-                    <div class="col">
-                        <div class="card border-0 shadow-lg rounded-5 h-100 p-4 card-img-top">
+        {% if questions is not empty %}
+            <div class="row row-cols-4 row-cols-md-2 g-4 mt-4">
+                {% for question in questions %}
+                    <div class="col-lg-5" style="margin-left: 30px ; margin-top: 60px">
+                        <div class="card border-0 shadow-lg rounded-5 h-100 p-3 card-img-top">
                             <a href="{{ path('app_question_show_id', {'id': question.id}) }}" class="text-decoration-none text-dark">
                                 <img src="/uploads/image/{{question.image}}" class="img-fluid rounded-5 image-popup" alt="{{question.image}}">
                             </a>
