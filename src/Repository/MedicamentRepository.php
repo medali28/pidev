@@ -20,6 +20,14 @@ class MedicamentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Medicament::class);
     }
+    public function findByName(string $name): array
+    {
+        return  $this->createQueryBuilder('m')
+                ->andWhere('m.name LIKE :name')
+            ->setParameter('name', $name)
+             ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Medicament[] Returns an array of Medicament objects

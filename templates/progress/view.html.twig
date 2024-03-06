@@ -1,92 +1,51 @@
+{% extends 'base.html.twig' %}
 
+{% block body %}
 
+    <body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
 
-    {% extends 'base.html.twig' %}
-
-    {% block body %}
-
-        <body style="background-image: url('{{ asset('/uploads/image/v870-tang-36.jpg') }}'); background-size: cover;">
-
-        <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-12 mx-auto">
-                        <h1 class="text-white text-center display-4">Explorez </h1>
-                        <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-text bi-search" id="basic-addon1"></span>
-                                <input name="keyword" type="search" class="form-control" id="keyword" placeholder="" aria-label="Recherche">
-                                <button type="submit" class="form-control btn btn-primary">Rechercher</button>
-                            </div>
-                        </form>
-                    </div>
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-4">Explorez</h1>
+                    <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
+                        <div class="input-group input-group-lg">
+                            <input name="keyword" type="search" class="form-control" id="keyword" placeholder="Recherchez des sujets..." aria-label="Recherche">
+                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-
-            <div class="card border-0 shadow-lg rounded-5 bg-light p-5">
-                {% for progressBar in progressBar  %}
-                    <p>Target Value: {{ progressBar.target }}</p>
-                    <p>Current Value: {{ progressBar.current }}</p>
-                    <p>Description: {{ progressBar.description }}</p>
-
-
+    <div class="container">
+        <div class="card border-0 shadow-lg rounded-5 bg-light p-5 mt-5">
+            {% for progressBar in progressBar  %}
+                <div class="mb-4">
+                    <p class="mb-1">Target Value: {{ progressBar.target }}</p>
+                    <p class="mb-1">Current Value: {{ progressBar.current }}</p>
+                    <p class="mb-1">Description: {{ progressBar.description }}</p>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: {{ (progressBar.current / progressBar.target) * 100 }}%;" aria-valuenow="{{ progressBar.current }}" aria-valuemin="0" aria-valuemax="{{ progressBar.target }}"></div>
                     </div>
-                    <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary">Contribuer </a>
+                    <a href="{{ path('progress_edit', {'id': progressBar.id}) }}" class="btn btn-primary mt-3" onclick="return confirm('vous serez redirigé vers le paiement')">Contribuer</a>
 
-
-                {% endfor %}
-            </div>
-
-
-
-
-
+                    {% if app.user.userIdentifier==progressBar.user.id %}
+                        <a href="{{ path('progress_edit_med', {'id': progressBar.id}) }}" class="btn btn-primary mt-3" onclick="return confirm('Êtes-vous sûr de vouloir modifier ce Medicament')">Modifier</a>
+                        <a href="{{ path('progress_delete', {'id': progressBar.id}) }}" class="btn btn-danger mt-3" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce Medicament')">Supprimer</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
+    </div>
 
-        <!-- Pop-up modal code -->
-        <div id="imageModal" class="modal" onclick="closeModal()">
-            <img class="modal-content rounded-5" id="modalImage" style="max-width: 80%; max-height: 80vh; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        </div>
+    <!-- Pop-up modal code -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <img class="modal-content rounded-5" id="modalImage" style="max-width: 80%; max-height: 80vh; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    </div>
 
-        <style>
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 10000000;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0, 0, 0, 0.9);
-            }
+    </body>
 
-            .modal-content {
-                margin: auto;
-                display: block;
-            }
-        </style>
-
-        <script>
-            function openModal(imageSrc) {
-                var modal = document.getElementById('imageModal');
-                var modalImage = document.getElementById('modalImage');
-                modalImage.src = imageSrc;
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeModal() {
-                var modal = document.getElementById('imageModal');
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        </script>
-
-        </body>
-
-    {% endblock %}
-
-
+{% endblock %}
