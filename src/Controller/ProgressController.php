@@ -69,24 +69,25 @@ class ProgressController extends AbstractController
 
 
 
-    #[Route('/progress', name: 'progress_view')]
 
+    #[Route('/progress', name: 'progress_view')]
     public function view(ProgressBarRepository $progressBarRepository,PaginatorInterface $paginator,Request $request): Response
     {
         if ($this->getUser() ) {
-            $query = $progressBarRepository->findAll();
-            $progressBar = $paginator->paginate(
-                $query,
-                $request->query->getInt('page', 1), /*page number*/
-                4 /*limit per page*/
-            );
-            return $this->render('progress/view.html.twig', [
-                'progressBar' => $progressBar,
-            ]);
+                $query = $progressBarRepository->findAll();
+                $progressBar = $paginator->paginate(
+                    $query,
+                    $request->query->getInt('page', 1), /*page number*/
+                    4 /*limit per page*/
+                );
+                return $this->render('progress/view.html.twig', [
+                    'progressBar' => $progressBar,
+                ]);
+            }
 
 
 
-        }
+
         return $this->redirectToRoute('app_login');
     }
     #[Route('/progress/{id}', name: 'progress_edit')]

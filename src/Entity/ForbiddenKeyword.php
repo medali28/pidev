@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ForbiddenKeywordRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ForbiddenKeywordRepository::class)]
 class ForbiddenKeyword
@@ -14,6 +16,10 @@ class ForbiddenKeyword
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\-_\'\s]+$/',
+        message: "The keyword can only contain letters, numbers, hyphens, underscores, and single quotes."
+    )]
     private ?string $keyword = null;
 
     public function getId(): ?int

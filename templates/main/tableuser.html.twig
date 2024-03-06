@@ -13,7 +13,7 @@
                     </svg>
                 </button><a class="header-brand d-md-none" href="#">
                     <svg width="118" height="46" alt="CoreUI Logo">
-                        <use xlink:href="assets/brand/coreui.svg#full"></use>
+                        <use%xlink:href="assets/brand/coreui.svg#full"></use>
                     </svg></a>
 
                 <ul class="header-nav ms-auto">
@@ -164,6 +164,82 @@
                             </div>
                         </div>
 
+
+                            </ul>
+
+
+
+                                        </tr>
+                                        </thead>
+
+
+
+
+
+
+
+                                    </table>
+                                    <div class ="d-flex justify-content-center">
+                                    </div>
+                                </div>
+            </div>
+        <div class="card mb-4">
+            <div class="card-header"><strong>Médicaments Restreints</strong></div>
+            <div class="card-body">
+                <div class="example">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item"><a class="nav-link active" data-coreui-toggle="tab" href="#preview-1018" role="tab">
+                                Preview Table Médicaments Restreints</a></li>
+
+                    </ul>
+                    <div class="tab-content rounded-bottom">
+                        <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1018">
+                            <a href="{{ path('add_forbiden') }}" class="btn btn mb-2" style="width: 100%; background-color: white ;color: black; border: 2px solid #4CAF50;">Restreindre un médicament</a>
+                            <table class="table">
+                                <thead class="table-light">
+                                <tr>
+
+                                    <th scope="col">Nom de Medicament</th>
+                                    <th scope="col">Modifier</th>
+                                    <th scope="col">Suprimmer</th>
+
+                                </tr>
+                                </thead>
+
+
+                                <tbody>
+                                {% for f in forbidens  %}
+                                    <tr>
+                                        <td>{{ f.keyword }}</td>
+
+
+
+                                        <td>
+                                            <a href="{{ path('updateforbiden', {'id': f.id}) }}" onclick="return confirm('Are you sure you want to Update?')">Update</a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('deleteforbiden', {'id': f.id}) }}" onclick="return confirm('Are you sure you want to Delete?')">delete</a>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+
+
+
+                            </table>
+                            <div class ="d-flex justify-content-center">
+                                {{ knp_pagination_render(categories,'pagination.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
                         <!-- JavaScript to handle inline editing -->
                         <script>
                             // Get the table element
@@ -192,6 +268,7 @@
         </div>
 
     </div>
+
     <!-- CoreUI and necessary plugins-->
     <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
     <script src="vendors/simplebar/js/simplebar.min.js"></script>

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProgressBarRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProgressBarRepository::class)]
 class ProgressBar
@@ -14,11 +15,14 @@ class ProgressBar
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\LessThanOrEqual(value: 10000, message: "The target value cannot exceed 10000.")]
+    #[Assert\GreaterThan(value: 0, message: "The target value must be greater than zero.")]
     private ?int $target = null;
 
     #[ORM\Column]
     private ?int $current = null;
     #[ORM\Column]
+    #[Assert\Length(min: 3, max: 255)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'pbars')]

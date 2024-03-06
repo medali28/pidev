@@ -27,24 +27,7 @@ class MedicamentController extends AbstractController
 
 
 
-    #[Route('/gestion/mecimaent', name: 'app_gestion_donation')]//show all medicaments
-    public function showallDonation(Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
-    {
-        if ($this->getUser()) {
-            $query = $medicamentRepository->findAll();
-            $medicaments = $paginator->paginate(
-                $query,
-                $request->query->getInt('page', 1), /*page number*/
-                4 /*limit per page*/
-            );
-
-
-            return $this->render('medicament/showall_medicaments.html.twig', [
-                'medicaments' => $medicaments,
-            ]);
-        }
-        return $this->redirectToRoute('app_login');
-    }#[Route('/gestion/mecimaent/{id}', name: 'app_gestion_donation_user')]//show all medicaments
+    #[Route('/gestion/mecimaent/{id}', name: 'app_gestion_donation_user')]//show all medicaments
     public function showDonation( $id ,Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
     {
         if ($this->getUser()) {
@@ -290,6 +273,41 @@ class MedicamentController extends AbstractController
             'form' => $form,
             'mede' => $medciament
         ]);}
+
+
+
+    #[Route('/gestion/mecimaent', name: 'app_gestion_donation',methods: ['GET','POST'])]//show all medicaments
+    public function showallDonation(Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
+    {
+        if ($this->getUser()) {
+
+
+            if ($request->isMethod('GET') ) {
+                $name = $request->query->get('name_med');
+                $query = $medicamentRepository->findByName($name);
+                $medicaments = $paginator->paginate(
+                    $query,
+                    $request->query->getInt('page', 1), /*page number*/
+                    4 /*limit per page*/
+                );
+
+                return $this->render('medicament/showall_medicaments.html.twig', [
+                    'medicaments' => $medicaments,
+                ]);
+            }
+            $query = $medicamentRepository->findAll();
+            $medicaments = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1), /*page number*/
+                4 /*limit per page*/
+            );
+
+            return $this->render('medicament/showall_medicaments.html.twig', [
+                'medicaments' => $medicaments,
+            ]);
+        }
+        return $this->redirectToRoute('app_login');
+    }
 
 
 

@@ -56,13 +56,12 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
     #[Route('/admin2', name: 'app_admin1')]
-    public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository): Response
+    public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository,ForbiddenKeywordRepository $forbiddenKeywordRepository): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
 
                 $rendezVousData = $RendezVousRepository->findAll();
-
                 $ambulanceData = $ambulanceRepository->findAll();
 
                 return $this->render('admin/issra.html.twig', [
@@ -77,12 +76,15 @@ class AdminController extends AbstractController
 
     ///sami
     #[Route('/tabeuser', name: 'tableUser')]
-    public function index1( Request $request,CategoryRepository $categoryRepository,PaginatorInterface $paginator ,MedicamentRepository $medicamentRepository,ProgressBarRepository $progressBarRepository,ForbiddenKeywordRepository $forbiddenKeywordRepository): Response
+    public function index1( Request $request,CategoryRepository $categoryRepository,PaginatorInterface $paginator , 
+                            MedicamentRepository $medicamentRepository,ProgressBarRepository $progressBarRepository
+        ,ForbiddenKeywordRepository $forbiddenKeywordRepository): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
 
                 $query = $categoryRepository->findAll();
+
 
 
                 $categories = $paginator->paginate(
@@ -91,30 +93,24 @@ class AdminController extends AbstractController
                     4
                 );
 
-                $query = $medicamentRepository->findAll();
+                $query1 = $medicamentRepository->findAll();
                 $medicaments = $paginator->paginate(
-                    $query,
+                    $query1,
                     $request->query->getInt('page', 1),
                     4
                 );
 
-                $query = $progressBarRepository->findAll();
+                $query2 = $progressBarRepository->findAll();
                 $progrres = $paginator->paginate(
-                    $query,
-                    $request->query->getInt('page', 1),
-                    4
-                );
-                $query = $forbiddenKeywordRepository->findAll();
-                $forbiden = $paginator->paginate(
-                    $query,
+                    $query2,
                     $request->query->getInt('page', 1),
                     4
                 );
 
+                $forbiden=$forbiddenKeywordRepository->findAll();
                 return $this->render('main/tableuser.html.twig', [
                     'categories' => $categories, 'medicaments' => $medicaments, 'progress' => $progrres,
-                    'forbidens' => $forbiden
-                ]);
+                    'forbidens' => $forbiden,]);
             }
         }
         return $this->redirectToRoute('app_login');
