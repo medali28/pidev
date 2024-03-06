@@ -388,11 +388,26 @@ class AdminController extends AbstractController
 
 
     #[Route('/admin8', name: 'all_reclamation')]
-    public function allReclamation(ReclamationRepository $repository,): Response
+    public function allReclamation(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator): Response
     {
-        $recs = $repository->findAll();
+
+        $term = $request->query->get('term');
+        $queryBuilder = $repository->createQueryBuilder('r')
+            ->andWhere('  r.sujet LIKE :term ')
+            ->setParameter('term', '%' . $term . '%');
+
+        $queryBuilder->addSelect('CASE WHEN r.reponse IS NULL THEN 0 ELSE 1 END AS HIDDEN hasResponse')
+            ->orderBy('hasResponse', 'ASC')
+            ->addOrderBy('r.description_rec', 'ASC');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1),
+            5
+        );
+
         return $this->render('admin_reclamation/tableuser.html.twig', [
-            'recs' => $recs
+            'pagination' => $pagination,
         ]);
     }
 

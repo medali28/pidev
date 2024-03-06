@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Médecins{% endblock %}
+
+{% block body %}
+
+    <style>
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-body h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .card-body ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .card-body ul li {
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .card-body ul li p {
+            margin: 0;
+        }
+
+    </style>
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 mx-auto">
+                    <h1 class="text-white text-center display-4">Explorez et Partagez vos Questions Avec Des Experts</h1>
+                    <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bi-search" id="basic-addon1"></span>
+                            <input name="keyword" type="search" class="form-control" id="keyword" placeholder="Recherchez des sujets..." aria-label="Recherche">
+                            <button type="submit" class="form-control btn btn-primary">Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <h1>Details de Médecins</h1>
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ medecins.firstName }} {{ medecins.lastName }}</h2>
+                <p>{{ medecins.specialite }}</p>
+                <p>{{ medecins.pays }}  {{  medecins.ville }}</p>
+                <p>{{ medecins.numTel }}</p>
+            </div>
+            <div class="card-body">
+                <h3>Avis :</h3>
+                <ul class="list-group">
+                    {% for avi in avis %}
+                        <li class="list-group-item">
+                            <p>Sujet : {{ avi.sujet }}</p>
+                            <p>Note : {{ avi.rate}}/5</p>
+                            <p>Description : {{ avi.description }}/5</p>
+                        </li>
+
+                    {% endfor %}
+                </ul>
+            </div>
+            <a href="{{ path('app_avis' , {'id':app.user.userIdentifier , 'idm':medecins.id}) }}">
+                <button type="button"   style="margin-left: 110px; margin-top: 10px;" class='custom-button'>
+                    <i class='fas fa-route' style="color: white; font-size: 20px; margin-right: 5px;"></i> Avis
+                </button>
+            </a>
+        </div>
+
+{% endblock %}

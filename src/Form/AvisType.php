@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Avis;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +16,13 @@ class AvisType extends AbstractType
     {
         $builder
             ->add('description')
+            ->add('medecin', EntityType::class ,[
+                'class' => User::class,
+                'choice_label' => function($user)  {
+                    if ($user->getRoles()[0]=='ROLE_MEDECIN')
+                        return $user->getFirstName() . ' ' . $user->getLastName();
+                },
+            ])
             ->add('sujet')
             ->add('rate')
             ->add('submit', SubmitType::class)

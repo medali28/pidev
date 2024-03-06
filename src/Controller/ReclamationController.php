@@ -103,6 +103,7 @@ class ReclamationController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
+
     #[Route('/{id}/edit-reclamation', name: 'edit_reclamation')]
     public function editReclamation(Request $request, int $id, ReclamationRepository $reclamationRepository): Response
     {
@@ -151,7 +152,7 @@ class ReclamationController extends AbstractController
 
 
     // Adminnnnnnnnnn
-    #[Route('/dashboard/reclamation/examiner/{id}/reponse', name: 'reponse')]
+    #[Route('/admin8/reclamation/{id}/reponse', name: 'reponse_reclamation')]
     public function repondreReclamation(Request $request, int $id , MailerInterface $mailer): Response
     {
         if ($this->getUser()) {
@@ -177,10 +178,10 @@ class ReclamationController extends AbstractController
 
                 $reclamation->setEtat('Reclamation Traité');
                 $entityManager->flush();
-                $email = (new Email())
-                    ->from('test@example.com')
-                    ->to('myedr83@example.com')
-                    ->subject('Reponse')
+                $email = (new \Symfony\Component\Mime\Email())
+                    ->from('myedr@gmail.com')
+                    ->to('myedr83@gmail.com')
+                    ->subject('Reponse a votre reclamation')
                     ->text($reponse);
 
                 $mailer->send($email);
@@ -193,7 +194,6 @@ class ReclamationController extends AbstractController
         }
         return $this->redirectToRoute('app_login');
     }
-
     #[Route('/dashboard/reclamation/search', name: 'admin_search_reclamation')]
     public function searchReclamationadmin(Request $request, ReclamationRepository $repository): Response
     {
@@ -215,23 +215,18 @@ class ReclamationController extends AbstractController
 
 
 
-    #[Route('/dashboard/reclamation/{reclamationId}', name: 'admin/delete_reclamation')]
+    #[Route('/admin8/{reclamationId}', name: 'admin_delete_reclamation')]
     public function deleteReclamationadmin(string $reclamationId, ReclamationRepository $repository, ManagerRegistry $managerRegistry): RedirectResponse
     {
         if ($this->getUser()) {
-            $reclamation = $repository->find($reclamationId);
-
-            if (!$reclamation) {
-                throw $this->createNotFoundException('Réclamation non trouvée avec l\'ID : ' . $reclamationId);
+            if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
+                $reclamation = $repository->find($reclamationId);
+                $em = $managerRegistry->getManager();
+                $em->remove($reclamation);
+                $em->flush();
+                $this->addFlash('success', 'Réclamation supprimée avec succès.');
+                return $this->redirectToRoute('all_reclamation');
             }
-
-            $em = $managerRegistry->getManager();
-            $em->remove($reclamation);
-            $em->flush();
-
-            $this->addFlash('success', 'Réclamation supprimée avec succès.');
-
-            return $this->redirectToRoute('all_reclamation');
         }
         return $this->redirectToRoute('app_login');
     }

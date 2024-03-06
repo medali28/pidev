@@ -378,47 +378,49 @@
     <section id="doctor-team" class="section-padding">
 
         {% for med in meds %}
-        <div class="doctor-card">
-            <div class="col-md-3 col-sm-3 col-xs-6">
-                <div class="row_med" style="margin-right: -10px ; margin-left: -15px">
-                    <img src="https://img.freepik.com/free-photo/smiling-doctor-with-strethoscope-isolated-grey_651396-974.jpg?size=626&ext=jpg&ga=GA1.1.2007576259.1708250226&semt=sph" alt="..." class="team-img">
-                    <div class="row_med" style="margin-right: -10px ; margin-left: -2%">
-                        <div class="data">
-                            <h3>{{ med.lastName ~ ' ' ~ med.firstName }}</h3>
-                            <p>Spaicialite:{{ med.specialite }}</p>
-                            <p>Pays:{{ med.pays ~','~med.ville }}</p>
-                            <p>Prix:{{ med.prixc }}</p>
-                        </div>
-                       <div>
-                          {% if "ROLE_PATIENT" in app.user.roles %}
-                           <a class="rdv" href="{{ path('app_rendez_vous_new' , {'id':med.id}) }}" style="margin-left: 110px ; height: 40px">
-                               Rendez-vous
-                           </a>
-                              <a href="{{ path('app_avis' , {'id':app.user.userIdentifier , 'idm':med.id}) }}">
-                                  <button type="button"   style="margin-left: 110px; margin-top: 10px;" class='custom-button'>
-                                      <i class='fas fa-route' style="color: white; font-size: 20px; margin-right: 5px;"></i> Avis
-                                  </button>
-                              </a>
-                           {%  endif %}
-                           {% set id = id %}
-                           {% if med.lat is null %}
-                               {% set lat =36.83126732766565%}
-                               {% set lng = 10.146805943086248 %}
-                           {% else %}
-                            {% set lat = med.lat%}
-                            {% set lng = med.log  %}
-{% endif %}
-                           <a href="{{ path('map', {'id': id, 'lat': lat, 'lng': lng}) }}">
-                           <button type="button"   style="margin-left: 110px; margin-top: 30px;" class='custom-button'>
-                               <i class='fas fa-route' style="color: white; font-size: 20px; margin-right: 5px;"></i> Map
-                           </button>
-                           </a>
 
-                       </div>
+            <div class="doctor-card" >
+
+                <div class="col-md-3 col-sm-3 col-xs-6">
+                    <a href="{{ path('details_medcin',{'idmed':med.id , 'id':app.user.userIdentifier}) }}">
+                    <div class="row_med" style="margin-right: -10px ; margin-left: -15px">
+                        <img src="https://img.freepik.com/free-photo/smiling-doctor-with-strethoscope-isolated-grey_651396-974.jpg?size=626&ext=jpg&ga=GA1.1.2007576259.1708250226&semt=sph" alt="..." class="team-img">
+                        <div class="row_med" style="margin-right: -10px ; margin-left: -2%">
+                            <div class="data">
+                                <h3>{{ med.lastName ~ ' ' ~ med.firstName }}</h3>
+                                <p>Spaicialite:{{ med.specialite }}</p>
+                                <p>Pays:{{ med.pays ~','~med.ville }}</p>
+                                <p>Prix:{{ med.prixc }}</p>
+                            </div>
+                            <div>
+                                {% if "ROLE_PATIENT" in app.user.roles %}
+                                    <a class="rdv" href="{{ path('app_rendez_vous_new' , {'id':med.id}) }}" style="margin-left: 110px ; height: 40px">
+                                        Rendez-vous
+                                    </a>
+
+                                {%  endif %}
+                                {% set id = id %}
+                                {% if med.lat is null %}
+                                    {% set lat =36.83126732766565%}
+                                    {% set lng = 10.146805943086248 %}
+                                {% else %}
+                                    {% set lat = med.lat%}
+                                    {% set lng = med.log  %}
+                                {% endif %}
+                                <a href="{{ path('map', {'id': id, 'lat': lat, 'lng': lng}) }}">
+                                    <button type="button"   style="margin-left: 110px; margin-top: 30px;" class='custom-button'>
+                                        <i class='fas fa-route' style="color: white; font-size: 20px; margin-right: 5px;"></i> Map
+                                    </button>
+                                </a>
+
+                            </div>
+                        </div>
                     </div>
+                </a>
                 </div>
+
             </div>
-        </div>
+
         {% endfor %}
     </section>
 </div>

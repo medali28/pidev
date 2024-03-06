@@ -132,7 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $active = null;
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $disponibilite = null;
 
     #[ORM\Column(type: 'boolean')]
