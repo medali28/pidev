@@ -56,7 +56,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
     #[Route('/admin2', name: 'app_admin1')]
-    public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository,ForbiddenKeywordRepository $forbiddenKeywordRepository): Response
+    public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository): Response
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
