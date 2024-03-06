@@ -136,7 +136,7 @@
                                                         {% endfor %}
                                                     });
                                                 </script>
-                                                <td>{{ ambulance.getRdv().getMedecin().getAddress() }}</td>
+                                                <td>{{ ambulance.getRdv().getMedecin().getPays() }}</td>
                                                 <td>{{ ambulance.besoinInfirmier ? 'Oui' : 'Non' }}</td>
                                                 <td>{{ ambulance.getRdv().date|date('Y-m-d') }}</td>
                                                 <td>{{ ambulance.getRdv().time|date('H:i') }}</td>

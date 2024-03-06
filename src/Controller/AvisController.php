@@ -52,7 +52,7 @@ class AvisController extends AbstractController
 //
 
 
-                return $this->redirectToRoute('medecin', ['id' => $id]);
+                return $this->redirectToRoute('details_medcin', ['idmed'=>$idm,'id' => $id]);
             }
 
             return $this->render('avis/avis.html.twig', [

@@ -1,6 +1,33 @@
 {% extends 'baseBack.html.twig' %}
 
 {% block body %}
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            color: #333;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination a:hover {
+            background-color: black;
+        }
+
+    </style>
         <div class="bodyusers" style="margin-left: 20% ; width: 80%">
             <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') }}">
             <main class="main-content position-relative border-radius-lg bodyuser" >
@@ -14,7 +41,7 @@
                                     <h6>Reclamation Table</h6>
                                 </div>
                                 <div class="card-body px-0 pt-0 pb-2 d-flex justify-content-center">
-                                    <form action="{{ path('admin_search_reclamation') }}" method="GET" class="mx-auto">
+                                    <form action="{{ path('all_reclamation') }}" method="GET" class="mx-auto">
                                         <div class="input-group">
                                             <input type="text" name="term" class="form-control" placeholder="Search by sujet...">
                                             <button type="submit" class="btn btn-primary" style="background-color: #0cb8b6">Search</button>
@@ -36,7 +63,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for rec in recs %}
+                                        {% for rec in pagination %}
                                             <tr>
                                                 <td class="align-middle text-center text-sm">
                                                     <span class="mb-0 text-sm">{{ rec.type }}</span>
@@ -71,14 +98,18 @@
                                                     {%  if rec.reponse %}
                                                         <span  class="btn" style="background-color: green">Repondu</span>
                                                     {%  else %}
-                                                        <a href="{{ path('reponse', {'id': rec.id}) }}" class="btn" style="background-color: grey">Repondre</a>
+                                                        <a href="{{ path('reponse_reclamation', {'id': rec.id}) }}" class="btn" style="background-color: grey">Repondre</a>
                                                     {% endif %}
-                                                    <a href="{{ path('admin/delete_reclamation',{'reclamationId':rec.id})}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');">Supprimer</a>
+                                                    <a href="{{ path('admin_delete_reclamation',{'reclamationId':rec.id})}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');">Supprimer</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+
                                     </table>
+                                    <div class="pagination">
+                                        {{ knp_pagination_render(pagination) }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

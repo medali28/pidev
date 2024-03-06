@@ -4,7 +4,9 @@ namespace App\Controller;
 use App\Entity\RendezVous;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\AvisRepository;
 use App\Repository\RendezVousRepository;
+use App\Repository\ReponseRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -373,6 +375,19 @@ class UserController extends AbstractController
 //        }
             return $this->render('main/main.html.twig');
 
+        }
+        return $this->redirectToRoute('app_login');
+    }
+    #[Route('/profile/{id}/medecin/{idmed}/details', name: 'details_medcin')]
+    public function detailsmed($idmed , AvisRepository $avisRepository , UserRepository $userRepository ,AuthenticationUtils $authenticationUtils,$id , EntityManagerInterface $entityManager,RendezVousRepository $rendezVousRepository): Response
+    {
+        if ($this->getUser()) {
+            $med = $userRepository->find($idmed);
+            $avis = $avisRepository->findBy(['medecin' => $med]);
+            return $this->render('user/detailsmed.html.twig', [
+                'medecins' => $med,
+                'avis' => $avis,
+            ]);
         }
         return $this->redirectToRoute('app_login');
     }
