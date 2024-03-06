@@ -142,17 +142,36 @@
         </tbody>
     </table>
 
+            <h2>QR Code</h2>
+            <br>
+
+            <img id="qrCode" src="{{ qrCodes.simple }}" alt="Simple QR Code for consultation ID">
             <div class="text-center">
                 <a href="{{ path('app_consultation_index') }}" class="btn btn-primary mx-2">Back to List</a>
 
                 <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}" class="btn btn-secondary mx-2">Edit</a>
             </div>
-
-
-
-
-
         </div>
+        <script>
+            document.getElementById('qrCode').addEventListener('click', function() {
+                // Récupérer les données du code QR depuis l'attribut src de l'image
+                var qrData = this.src;
+
+                // Ouvrir une nouvelle fenêtre avec les données de la consultation
+                var newWindow = window.open('', '_blank');
+
+                // Construire le contenu HTML de la nouvelle fenêtre
+                var htmlContent = '<html><head><title>Consultation Details</title></head><body>';
+                htmlContent += '<h1>Consultation Details</h1>';
+                htmlContent += '<p>QR Code Data: ' + qrData + '</p>'; // Afficher les données du code QR
+                // Ajoutez d'autres informations de consultation ici
+                htmlContent += '</body></html>';
+
+                // Écrire le contenu HTML dans la nouvelle fenêtre
+                newWindow.document.write(htmlContent);
+            });
+
+        </script>
     </section>
 </main>
     <footer class="site-footer section-padding">
