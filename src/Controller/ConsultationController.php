@@ -122,6 +122,53 @@ class ConsultationController extends AbstractController
 //        return $this->redirectToRoute('app_login');
 //    }
 
+    #[Route('/{id}', name: 'app_consultation_show', methods: ['GET'])]
+    #[ParamConverter('consultation', class: Consultation::class)]
+    public function show2(Consultation $consultation): Response
+
+    {
+        $qrCodeData = [
+            'simple' => $this->generateQRCode($consultation),
+        ];
+
+        $writer = new PngWriter();
+
+        /* $qrCodeData = [
+             'img' => $this->generateQRCode('https://www.binaryboxtuts.com/'),
+             'simple' => $this->generateQRCode('https://www.binaryboxtuts.com/', 'Simple', 8),
+             'changeColor' => $this->generateQRCode('https://www.binaryboxtuts.com/', 'Color Change', 8, new Color(255, 0, 0)),
+             'changeBgColor' => $this->generateQRCode('https://www.binaryboxtuts.com/', 'Background Color Change', 8, new Color(0, 0, 0), new Color(255, 0, 0)),
+             'withImage' => $this->generateQRCode('https://www.binaryboxtuts.com/', 'With Image', 20, new Color(0, 0, 0), new Color(255, 255, 255), true)
+         ];*/
+
+        return $this->render('consultation/show.html.twig', [
+            'consultation' => $consultation,
+            'qrCodes' => $qrCodeData,
+        ]);
+    }
+
+    private function generateQRCode(Consultation $consultation): string
+    {
+        $data = json_encode([
+            //'id' => $consultation->getId(),
+            'Conseils' => $consultation->getConseils(),
+            'Nom_medicaments'=>$consultation->getMedicament(),
+            'Votre controle'=>$consultation->getDateProchaine(),
+            // Ajoutez d'autres informations de consultation ici
+        ]);
+
+        $qrCode = QrCode::create($data)
+            ->setSize(300)
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+
+        $writer = new PngWriter();
+        return $writer->write($qrCode)->getDataUri();
+    }
+
+
 
     #[Route('/{id}/edit', name: 'app_consultation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
