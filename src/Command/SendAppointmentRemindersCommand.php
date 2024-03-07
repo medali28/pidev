@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -39,27 +40,28 @@ class SendAppointmentRemindersCommand extends Command
 
         $this->mailer->send($email);
         return 1;
-      /*  $entityManager = $this->getContainer()->get('doctrine')->getManager();
-        $appointments = $entityManager->getRepository(RendezVous::class)->findAppointmentsToRemind();
+        /*  $entityManager = $this->getContainer()->get('doctrine')->getManager();
+          $appointments = $entityManager->getRepository(RendezVous::class)->findAppointmentsToRemind();
 
-        foreach ($appointments as $appointment) {
-            $patientEmail = $appointment->getPatient()->getEmail();
-            $this->sendReminderEmail($patientEmail, $appointment);
-            $appointment->setReminderSent(true);
-            $entityManager->persist($appointment);
-        }
+          foreach ($appointments as $appointment) {
+              $patientEmail = $appointment->getPatient()->getEmail();
+              $this->sendReminderEmail($patientEmail, $appointment);
+              $appointment->setReminderSent(true);
+              $entityManager->persist($appointment);
+          }
 
-        $entityManager->flush();*/
+          $entityManager->flush();*/
     }
 
-     function sendReminderEmail(): void
+
+    function sendReminderEmail(String $to, String $subject, String $text): void
     {
 
         $email = (new Email())
             ->from(new Address('myedr@gmail.com', 'My edr'))
-            ->to("issrakhemir33@gmail.com")
-            ->subject('Reminder: Your Appointment')
-            ->text('Test');
+            ->to($to)
+            ->subject($subject)
+            ->text($text);
 
         $this->mailer->send($email);
     }

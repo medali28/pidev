@@ -47,8 +47,9 @@
                                             </td>
                                             {% else %}
                                                 <td>
-                                                    <a href="{{ path('approveBymedecin', {'rendezvousId': rendez_vou.id}) }}" class="custom-btn">Approuver</a>
-                                                    <a href="{{ path('refuseBymedecin', {'rendezvousId': rendez_vou.id}) }}" class="custom-btn">Refuser</a>
+
+                                                    <a href="{{ path('approveByExpert', {'rendezvousId': rendez_vou.id}) }}" class="custom-btn">Approuver</a>
+                                                    <a href="{{ path('refuseByExpert', {'rendezvousId': rendez_vou.id}) }}" class="custom-btn">Refuser</a>
                                                 </td>
                                             {% endif %}
                                         </tr>

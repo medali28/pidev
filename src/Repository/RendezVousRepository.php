@@ -32,13 +32,13 @@ class RendezVousRepository extends ServiceEntityRepository
         } catch (NonUniqueResultException $e) {}
     }
     public function findOneBySomeField($value): ?RendezVous
-   {
+    {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
-        ;
+            ;
     }
 
     /**
@@ -83,13 +83,13 @@ class RendezVousRepository extends ServiceEntityRepository
     public function getAppointmentsForExpert(int $expertId): array
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.expert= :expertId')
+            ->andWhere('r.expert = :expertId')
             ->setParameter('expertId', $expertId)
-            ->orderBy('r.date', 'ASC')
             ->getQuery()
             ->getResult()
             ;
     }
+
     public function findAppointmentsToRemind()
     {
         $twoDaysLater = new \DateTime('now +2 days');

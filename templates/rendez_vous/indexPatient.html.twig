@@ -1,82 +1,62 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}RendezVous index{% endblock %}
+{% extends 'base.html.twig' %}
+{% block title %}RendezVous{% endblock %}
 
 {% block body %}
     <main>
 
-        {{ include('navigation.html.twig') }}
+
         {{ include('header.html.twig') }}
 
 
-        <section class="section-padding">
-            <div >
-                <div >
-                    <div class="col-lg-8 col-12 mt-3 mx-auto">
-                        <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
-                            <div class="d-flex">
+        <div class="tabs">
+            <button id="futureTab" class="tablinks active btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'futureAppointments')">Refuses</button>
+            <button id="pastTab" class="tablinks btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'pastAppointments')">Approuves</button>
+            <button id="pendingTab" class="tablinks btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'pendingAppointments')">En attente</button>
+        </div>
 
-                                <div class="custom-block-topics-listing-info d-flex">
-                                    <div>
-                                        <h1>liste de rendez-vous</h1>
-                                        <table class="table">
-                                            <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Date</th>
-                                                <th>Heure</th>
-                                                <th>Status_rdv</th>
-                                                <th>Description</th>
+        <div id="pendingAppointments" class="tabcontent " style="display:none">
+            {% include 'rendez_vous/appointmentsTablePatient.html.twig' with {'appointments': pendingAppointments , tableTitle: 'Rendez-vous en attente', 'showButtons': true} %}
+        </div>
 
-                                                <th>Urgence</th>
-                                                <th>Nom du Patient</th>
-                                                <th>Nom du Médecin</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for key,rendez_vou in pendingAppointments %}
-                                                <tr>
-                                                    <td>{{ key + 1 }}</td>
-                                                    <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
-                                                    <td>{{ rendez_vou.time ? rendez_vou.time|date('H:i') : '' }}</td>
-                                                    <td>{{ rendez_vou.statusRdv }}</td>
-                                                    <td>{{ rendez_vou.description }}</td>
+        <div id="pastAppointments" class="tabcontent " style="display:none">
+            {% include 'rendez_vous/appointmentsTablePatient.html.twig' with {'appointments': acceptedAppointments , tableTitle: 'Rendez-vous approuvés', 'showButtons': false} %}
+        </div>
 
-                                                    <td>{{ rendez_vou.urgence ? 'oui' : 'non' }}</td>
-                                                    <td>{{ rendez_vou.patient.getFirstName() }} {{ rendez_vou.patient.getLastName() }}</td>
-                                                    <td>{{ rendez_vou.medecin.getFirstName() }} {{ rendez_vou.medecin.getLastName() }}</td>
-                                                    <td>
-                                                        <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">Afficher</a>
-                                                        <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">Modifier</a>
-                                                    </td>
-                                                </tr>
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="7">Aucun enregistrement trouvé</td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-
-{#                                        <a href="{{ path('app_rendez_vous_new') }}">Demander un rendez-vous</a>#}
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div id="futureAppointments" class="tabcontent " style="display:block">
+            {% include 'rendez_vous/appointmentsTablePatient.html.twig' with {'appointments': refusedAppointments , tableTitle: 'Rendez-vous refusés', 'showButtons': false} %}
+        </div>
 
 
 
+        <div id='calendar' style="margin: 10%"></div>
 
     </main>
 
-    {{ include('footer.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
 
 
+    <script>
+
+
+
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+    </script>
 
 {% endblock %}
