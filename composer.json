@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.18",
+        "endroid/qr-code": "^4.8",
         "enqueue/enqueue-bundle": "^0.10.19",
         "fullcalendar/fullcalendar": "^3.10",
         "knplabs/knp-paginator-bundle": "^5.9",

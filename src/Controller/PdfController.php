@@ -67,7 +67,7 @@ class PdfController extends AbstractController
             $html .= '<tr>';
             $html .= '<td>' . $consultation->getRdv()->getPatient()->getLastName() . '</td>';
             $html .= '<td>' . $consultation->getDescription() . '</td>';
-            $html .= '<td>' . ($consultation->getDureeMaladie() ? $consultation->getDureeMaladie()->format('Y-m-d H:i:s') : '') . '</td>';
+            $html .= '<td>' . $consultation->getDureeMaladie()  . '</td>';
             $html .= '<td>' . $consultation->getPoids() . '</td>';
             $html .= '<td>' . $consultation->getTaille() . '</td>';
             $html .= '<td>' . $consultation->getTemperature() . '</td>';

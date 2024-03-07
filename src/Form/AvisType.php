@@ -16,13 +16,6 @@ class AvisType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('medecin', EntityType::class ,[
-                'class' => User::class,
-                'choice_label' => function($user)  {
-                    if ($user->getRoles()[0]=='ROLE_MEDECIN')
-                        return $user->getFirstName() . ' ' . $user->getLastName();
-                },
-            ])
             ->add('sujet')
             ->add('rate')
             ->add('submit', SubmitType::class)

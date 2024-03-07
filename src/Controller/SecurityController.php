@@ -70,7 +70,8 @@ class SecurityController extends AbstractController
         }
         $email = $authenticationUtils->getLastUsername();
         if ($email != "") {
-            if (!$userRepository->findOneBy(['email' => $email])) {
+            $user = $userRepository->findOneBy(['email' => $email]);
+            if (!$user) {
                 $exception = new UserNotFoundException();
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
