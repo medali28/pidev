@@ -57,21 +57,30 @@ class AdminController extends AbstractController
     }
     #[Route('/admin2', name: 'app_admin1')]
     public function afiicherissra(rendezvousRepository  $RendezVousRepository,ambulanceRepository $ambulanceRepository): Response
-    {
-        if ($this->getUser()) {
-            if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") {
+    {$rendezVousData =$RendezVousRepository->findAll();
+        $ambulanceData=$ambulanceRepository->findAll();
+        $statuses = ['En_attente', 'Approuve_Expert', 'Approuve_Expert_Medecin','Refuse_Expert_Medecin','Refuse_Expert']; // Replace with your actual statuses
+        $data = [];
 
-                $rendezVousData = $RendezVousRepository->findAll();
-                $ambulanceData = $ambulanceRepository->findAll();
+        foreach ($statuses as $status) {
+            $count = 0;
 
-                return $this->render('admin/issra.html.twig', [
-                    'controller_name' => 'AdminController',
-                    'rendez_vouses' => $rendezVousData,
-                    'ambulances' => $ambulanceData,
-                ]);
+            foreach ($rendezVousData as $appointment) {
+                if ($appointment->getStatusRdv() === $status) {
+                    $count++;
+                }
             }
+
+            $data[] = [$status, $count];
         }
-        return $this->redirectToRoute('app_login');
+
+
+        return $this->render('admin/issra.html.twig', [
+            'controller_name' => 'AdminController',
+            'rendez_vouses' => $rendezVousData,
+            'ambulances' => $ambulanceData,
+            'chartData' => $data,
+        ]);
     }
 
     ///sami

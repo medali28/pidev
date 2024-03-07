@@ -40,17 +40,12 @@
                                             <td>{{ rendez_vou.urgence ? 'oui' : 'non' }}</td>
                                             <td>{{ rendez_vou.patient.getFirstName() }} {{ rendez_vou.patient.getLastName() }}</td>
                                             <td>{{ rendez_vou.medecin.getFirstName() }} {{ rendez_vou.medecin.getLastName() }}</td>
-                                            {% if not showButtons %}
+
                                             <td>
                                                 <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}" class="custom-btn ">Afficher</a>
 
                                             </td>
-                                            {% else %}
-                                                <td>
-                                                    <a href="{{ path('approveBymedecin', {'rendezvousId': rendez_vou.id}) }}" class="custom-btn">Approuver</a>
-                                                    <a href="{{ path('refuseBymedecin', {'rendezvousId': rendez_vou.id}) }}" class="custom-btn">Refuser</a>
-                                                </td>
-                                            {% endif %}
+
                                         </tr>
                                     {% else %}
                                         <tr>
