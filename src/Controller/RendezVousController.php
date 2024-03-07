@@ -51,7 +51,7 @@ class RendezVousController extends AbstractController
 
 
                 $rendezvous = new RendezVous();
-                $rendezvous->setStatusRdv('En attent');
+                $rendezvous->setStatusRdv('En_attente');
                 $rendezvous->setReponseRefuse('');
                 $rendezvous->setPatient($patient);
                 $rendezvous->setMedecin($medecin);
@@ -69,7 +69,7 @@ class RendezVousController extends AbstractController
                     $rendezvous->setUrgence($urgence === 'on');
                     $entityManager->persist($rendezvous);
                     $entityManager->flush();
-                    $SendAppointmentRemindersCommand->sendReminderEmail("", $rendezvous);
+
                     if ($besoinAmbulance === 'on') {
                         return $this->redirectToRoute('app_ambulance_new', ['id' => $rendezvous->getId()]);
                     }
@@ -223,19 +223,17 @@ class RendezVousController extends AbstractController
     {
         if ($this->getUser()) {
             if ($this->getUser()->getRoles()[0] == "ROLE_EXPERT") {
-                $appointments = $rendezVousRepository->getAppointmentsForExpert($expertId);
+
                 $ALLappointments=$rendezVousRepository->findAll();
                 $pendingAppointments = array_filter($ALLappointments, function (RendezVous $appointment) {
                     $status = $appointment->getStatusRdv();
                     return $status === 'En_attente';
                 });
+                $processedAppointments = $rendezVousRepository->findBy(
+                    ['expert' => $expertId]
+                );
 
 
-                $ALLappointments2=$rendezVousRepository->getAppointmentsForExpert($expertId);
-                $processedAppointments = array_filter($ALLappointments2, function (RendezVous $appointment) {
-                    $status = $appointment->getStatusRdv();
-                    return $status === 'Approuve_Expert' || $status === 'Refuse_Expert';
-                });
 
                 return $this->render('rendez_vous/indexExpert.html.twig', [
                     'pendingAppointments' => $pendingAppointments,

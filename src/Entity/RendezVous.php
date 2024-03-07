@@ -186,7 +186,7 @@ class RendezVous
     {
         $patientName = $this->getPatient() ? $this->getPatient()->getFirstName() : 'Unknown Patient';
         $medecinName = $this->getMedecin() ? $this->getMedecin()->getLastName() : 'Unknown Medecin';
-        $medecinLocation = $this->getMedecin() ? $this->getMedecin()->getAddress() : 'Unknown Location';
+        $medecinLocation = $this->getMedecin() ? $this->getMedecin()->getPays() : 'Unknown Location';
 
         return sprintf(
             'RendezVous #%d - Patient: %s, Medecin: %s, Location: %s',

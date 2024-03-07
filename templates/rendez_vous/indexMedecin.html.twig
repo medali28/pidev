@@ -1,13 +1,10 @@
-
 {% extends 'base.html.twig' %}
-{% block title %}RendezVous{% endblock %}
-
 {% block body %}
+{#  {% block footer %}{% endblock %}#}
+
     <main>
 
-
         {{ include('header.html.twig') }}
-
 
     <div class="tabs">
         <button id="futureTab" class="tablinks active btn custom-btn mt-3 mt-lg-4 " onclick="openTab(event, 'futureAppointments')">A venir</button>
@@ -25,11 +22,11 @@
 
     <div id="futureAppointments" class="tabcontent " style="display:block">
         {% include 'rendez_vous/appointmentsTable.html.twig' with {'appointments': futureAppointments , tableTitle: 'Rendez-vous approuvés', 'showButtons': false} %}
-    </div>
+    </div> <div id='calendar' style="margin: 10%"></div>
 
 
 
-        <div id='calendar' style="margin: 10%"></div>
+
 
     </main>
 

@@ -280,22 +280,12 @@ class MedicamentController extends AbstractController
     public function showallDonation(Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
     {
         if ($this->getUser()) {
-
-
-            if ($request->isMethod('GET') ) {
-                $name = $request->query->get('name_med');
+            $name = $request->query->get('name_med');
+            if ($request->isMethod('GET') && $name != null) {
                 $query = $medicamentRepository->findByName($name);
-                $medicaments = $paginator->paginate(
-                    $query,
-                    $request->query->getInt('page', 1), /*page number*/
-                    4 /*limit per page*/
-                );
-
-                return $this->render('medicament/showall_medicaments.html.twig', [
-                    'medicaments' => $medicaments,
-                ]);
+            }else{
+                $query = $medicamentRepository->findAll();
             }
-            $query = $medicamentRepository->findAll();
             $medicaments = $paginator->paginate(
                 $query,
                 $request->query->getInt('page', 1), /*page number*/

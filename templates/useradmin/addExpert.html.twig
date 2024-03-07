@@ -22,9 +22,10 @@
                             <div class="div2">
                             <div class="input-group mb-3">
                                 <span class="input-group-text">
+
                                 <svg class="icon">
                                   <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
-                                </svg>
+                                </svg><label>Nom</label>
                                 </span>
                                               {{ form_widget(form.first_name ,  {'attr': {'placeholder': 'Enter your first name' , 'class':'form-control'}}) }}
                             </div>
@@ -35,7 +36,7 @@
                                 <span class="input-group-text">
                                 <svg class="icon">
                                   <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
-                                </svg>
+                                </svg><label>Prenom</label>
                                 </span>
                                 {{ form_widget(form.last_name,  {'attr': {'placeholder': 'Enter your last name', 'class':'form-control' }} ) }}
                             </div>
@@ -45,8 +46,8 @@
                                     <div class="input-group mb-3">
                                 <span class="input-group-text">
                     <svg class="icon">
-                      <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
-                    </svg></span>
+                      <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
+                    </svg><label>Email</label></span>
                                             {{ form_widget(form.email ,  {'attr': {'placeholder': 'Enter your email' , 'class':'form-control'}}) }}
                                     </div>
                                     {{ form_errors(form.email) }}
@@ -55,8 +56,8 @@
                                 <div class="input-group mb-3">
                                 <span class="input-group-text">
                     <svg class="icon">
-                      <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
-                    </svg></span>
+                      <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
+                    </svg><label>Num Tel</label></span>
                                     {{ form_widget(form.num_tel ,  {'attr': {'placeholder': 'Enter your telephone' , 'class':'form-control'}}) }}
                                 </div>
                                 {{ form_errors(form.num_tel) }}
@@ -67,7 +68,7 @@
                                 <span class="input-group-text">
                     <svg class="icon">
                       <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
-                    </svg></span>
+                    </svg><label>Password</label></span>
                                         {{ form_widget(form.password ,  {'attr': {'placeholder': 'Enter your password' , 'class':'form-control'}}) }}
                                 </div>
                                 {{ form_errors(form.password) }}
@@ -77,7 +78,7 @@
                                 <span class="input-group-text">
                     <svg class="icon">
                       <use xlink:href="{{ asset('/user/vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}"></use>
-                    </svg></span>
+                    </svg><label>Password</label></span>
                                 {{ form_widget(form.confirm_password ,  {'attr': {'placeholder': 'Enter your password' , 'class':'form-control'}}) }}
                             </div>
                                 {{ form_errors(form.confirm_password) }}
